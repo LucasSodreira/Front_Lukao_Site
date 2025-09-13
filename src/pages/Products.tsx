@@ -81,7 +81,7 @@ const Products = () => {
     });
   };
 
-  const handleRemoveFilter = (key: keyof FilterState, value?: string | number) => {
+  const handleRemoveFilter = (key: keyof FilterState, value?: string | number | boolean | [number, number]) => {
     setFilters(prev => {
       const newFilters = { ...prev };
 

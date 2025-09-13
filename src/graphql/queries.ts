@@ -194,7 +194,9 @@ export const GET_MY_CART = gql`
           title
           price
           images {
+            id
             url
+            sortOrder
           }
         }
         quantity
@@ -271,7 +273,9 @@ export const ADD_TO_CART = gql`
           title
           price
           images {
+            id
             url
+            sortOrder
           }
         }
         quantity
@@ -289,7 +293,7 @@ export const UPDATE_CART_ITEM = gql`
       id
       items {
         id
-        product { id title price images { url } }
+        product { id title price images { id url sortOrder } }
         quantity
         totalPrice
       }
@@ -306,7 +310,7 @@ export const REMOVE_FROM_CART = gql`
       id
       items {
         id
-        product { id title price images { url } }
+        product { id title price images { id url sortOrder } }
         quantity
         totalPrice
       }

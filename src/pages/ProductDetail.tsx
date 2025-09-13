@@ -21,6 +21,7 @@ const ProductDetail = () => {
 
   const [addToCart, { loading: adding }] = useMutation(ADD_TO_CART, {
     refetchQueries: [{ query: GET_MY_CART }],
+    awaitRefetchQueries: true,
   });
 
   if (!numericId) {
@@ -56,7 +57,7 @@ const ProductDetail = () => {
             <Button
               onClick={async () => {
                 try {
-                  await addToCart({ variables: { productId: numericId, quantity: 1 } });
+                  await addToCart({ variables: { productId: Number(numericId), quantity: 1 } });
                   // feedback simples
                   alert('Adicionado ao carrinho!');
                 } catch (e) {
