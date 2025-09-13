@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@apollo/client/react';
 import { SEARCH_PRODUCTS, GET_CATEGORIES, GET_ARTISANS, GET_SIZES, GET_COLORS } from '../graphql/queries';
 import type { Product, FilterState, Category, Size, Color } from '../types';
@@ -61,48 +61,7 @@ const Products = () => {
     },
   });
 
-  // Filtrar e ordenar produtos (agora principalmente no backend)
-  const filteredProducts = useMemo(() => {
-    if (!data?.searchProducts?.products) return [];
-
-  // Clona o array vindo do Apollo (imutável) para poder ordenar sem erros
-  const filtered = [...data.searchProducts.products];
-
-    // Ordenação adicional se necessário (o backend já filtra, mas podemos ordenar localmente)
-    filtered.sort((a: Product, b: Product) => {
-      const { field, order } = filters.sortBy;
-      let aValue: string | number;
-      let bValue: string | number;
-
-      switch (field) {
-        case 'price':
-          aValue = a.price;
-          bValue = b.price;
-          break;
-        case 'createdAt':
-          aValue = new Date(a.createdAt).getTime();
-          bValue = new Date(b.createdAt).getTime();
-          break;
-        case 'title':
-          aValue = a.title.toLowerCase();
-          bValue = b.title.toLowerCase();
-          break;
-        case 'rating':
-          // Ordenação real por rating é feita no backend; aqui não reordenamos para manter consistência
-          return 0;
-        default:
-          return 0;
-      }
-
-      if (order === 'ASC') {
-        return aValue > bValue ? 1 : -1;
-      } else {
-        return aValue < bValue ? 1 : -1;
-      }
-    });
-
-    return filtered;
-  }, [data?.searchProducts?.products, filters.sortBy]);
+  const products = data?.searchProducts?.products ?? [];
 
   const handleFiltersChange = (newFilters: FilterState) => {
     setFilters(newFilters);
@@ -122,33 +81,39 @@ const Products = () => {
     });
   };
 
-  const handleRemoveFilter = (key: keyof FilterState, value?: string | number | boolean | [number, number]) => {
-    if (key === 'categoryId') {
-      setFilters(prev => ({ ...prev, categoryId: undefined }));
-    } else if (key === 'priceRange') {
-      setFilters(prev => ({ ...prev, priceRange: [0, 1000] }));
-    } else if (key === 'inStock') {
-      setFilters(prev => ({ ...prev, inStock: false }));
-    } else if (key === 'search') {
-      setFilters(prev => ({ ...prev, search: '' }));
-    } else if (key === 'sizes' && typeof value === 'string') {
-      setFilters(prev => ({
-        ...prev,
-        sizes: prev.sizes.filter(s => s !== value),
-      }));
-    } else if (key === 'colors' && typeof value === 'string') {
-      setFilters(prev => ({
-        ...prev,
-        colors: prev.colors.filter(c => c !== value),
-      }));
-    } else if (key === 'brands' && typeof value === 'string') {
-      setFilters(prev => ({
-        ...prev,
-        brands: prev.brands.filter(b => b !== value),
-      }));
-    } else if (key === 'rating') {
-      setFilters(prev => ({ ...prev, rating: undefined }));
-    }
+  const handleRemoveFilter = (key: keyof FilterState, value?: string | number) => {
+    setFilters(prev => {
+      const newFilters = { ...prev };
+
+      // Lida com filtros que são arrays
+      if (Array.isArray(newFilters[key])) {
+        // @ts-expect-error - TypeScript não consegue inferir o tipo do array corretamente aqui
+        newFilters[key] = (newFilters[key] as (string | number)[]).filter(item => item !== value);
+      }
+      // Lida com filtros de faixa de preço
+      else if (key === 'priceRange') {
+        newFilters.priceRange = [0, 1000];
+      }
+      // Lida com outros filtros (booleanos, strings, etc.)
+      else {
+        switch (key) {
+          case 'categoryId':
+            newFilters.categoryId = undefined;
+            break;
+          case 'inStock':
+            newFilters.inStock = false;
+            break;
+          case 'search':
+            newFilters.search = '';
+            break;
+          case 'rating':
+            newFilters.rating = undefined;
+            break;
+        }
+      }
+
+      return newFilters;
+    });
   };
 
   if (loading) return <div className="text-gray-600 dark:text-gray-300">Carregando produtos...</div>;
@@ -185,7 +150,7 @@ const Products = () => {
           <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">Catálogo</h1>
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-600 dark:text-gray-300">
-              {data?.searchProducts?.totalCount || filteredProducts.length} produtos encontrados
+              {data?.searchProducts?.totalCount || products.length} produtos encontrados
             </span>
             <div className="flex items-center gap-2">
               <label htmlFor="sort-select" className="text-sm text-gray-600 dark:text-gray-300">
@@ -226,12 +191,12 @@ const Products = () => {
 
         {/* Products Grid */}
         <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
-          {filteredProducts.map((product: Product) => (
+          {products.map((product: Product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
 
-        {filteredProducts.length === 0 && (
+        {products.length === 0 && (
           <div className="text-center py-12">
             <p className="text-gray-600 dark:text-gray-300">Nenhum produto encontrado com os filtros aplicados.</p>
             <Button variant="secondary" onClick={handleClearFilters} className="mt-4">
