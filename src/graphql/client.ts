@@ -22,22 +22,5 @@ const authLink = setContext((_, { headers }) => {
 // Cliente Apollo
 export const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache({
-    // Configurações para resolver possíveis problemas de cache
-    resultCaching: false,
-  }),
-  // Configurações adicionais para debugging
-  defaultOptions: {
-    watchQuery: {
-      fetchPolicy: 'cache-first' as const,
-      errorPolicy: 'all' as const,
-    },
-    query: {
-      fetchPolicy: 'cache-first' as const,
-      errorPolicy: 'all' as const,
-    },
-    mutate: {
-      errorPolicy: 'all' as const,
-    },
-  },
+  cache: new InMemoryCache(),
 });
