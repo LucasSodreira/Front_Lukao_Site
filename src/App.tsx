@@ -1,21 +1,23 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client/react';
-import { client } from './graphql/client';
-import { AuthProvider } from './context/AuthContext';
-import Navbar from './components/Navbar';
-import Container from './ui/Container';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Products from './pages/Products';
-import ProductDetail from './pages/ProductDetail';
-import CartPage from './pages/Cart';
-import Profile from './pages/Profile';
-import Orders from './pages/Orders';
-// Estilos via Tailwind em index.css
-import Footer from './components/Footer';
-import { ThemeProvider } from './context/ThemeContext';
-import ErrorBoundary from './components/ErrorBoundary';
+
+// Core
+import { client } from '@/graphql/client';
+import { AuthProvider } from '@/core/context/AuthProvider';
+import { ThemeProvider } from '@/core/context/ThemeContext';
+
+// Shared Components
+import { Navbar, Footer } from '@/shared/components/layout';
+import { ErrorBoundary } from '@/shared/components/common';
+import { Container } from '@/ui/Container';
+
+// Features - Pages
+import { LoginPage, RegisterPage } from '@/features/auth/pages';
+import { ProductsPage, ProductDetailPage } from '@/features/products/pages';
+import { CartPage } from '@/features/cart/pages';
+import { ProfilePage } from '@/features/profile/pages';
+import { OrdersPage } from '@/features/orders/pages';
+import { HomePage } from '@/features/home/pages';
 
 function App() {
   return (
@@ -28,14 +30,14 @@ function App() {
               <main className="flex-1">
                 <Container className="py-8 sm:py-10">
                   <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/products" element={<ErrorBoundary><Products /></ErrorBoundary>} />
-                    <Route path="/products/:id" element={<ProductDetail />} />
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/products" element={<ErrorBoundary><ProductsPage /></ErrorBoundary>} />
+                    <Route path="/products/:id" element={<ProductDetailPage />} />
                     <Route path="/cart" element={<CartPage />} />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/orders" element={<Orders />} />
+                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/orders" element={<OrdersPage />} />
                   </Routes>
                 </Container>
               </main>

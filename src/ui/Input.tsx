@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input as BaseInput } from '../components/ui/input';
+import { Input as BaseInput } from '@/shared/components/ui/input';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;

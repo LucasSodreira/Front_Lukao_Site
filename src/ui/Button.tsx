@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button as BaseButton } from '../components/ui/button';
+import { Button as BaseButton } from '@/shared/components/ui/button';
 
 type LegacyVariant = 'primary' | 'secondary' | 'danger' | 'ghost';
 type LegacySize = 'sm' | 'md' | 'lg';
