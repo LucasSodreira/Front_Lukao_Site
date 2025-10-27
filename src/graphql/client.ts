@@ -1,7 +1,6 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
-// Link HTTP para conectar com a API GraphQL
 const httpLink = createHttpLink({
   uri: '/graphql',
   // Inclui cookies (ex.: anon_cart) nas requisições
@@ -16,7 +15,6 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      // Só envia Authorization quando houver token
       ...(token ? { authorization: `Bearer ${token}` } : {}),
     },
   };
@@ -42,7 +40,6 @@ export const client = new ApolloClient({
         keyFields: ['id'],
         fields: {
           items: {
-            // Sempre sobrescreve itens do carrinho com o resultado mais recente
             merge: (_existing, incoming = []) => incoming,
           },
         },

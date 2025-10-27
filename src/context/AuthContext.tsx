@@ -10,8 +10,9 @@ interface MeQueryResult {
 
 interface SignInMutationResult {
   signIn: {
-    token: string;
-    user: User;
+    accessToken: string;
+    refreshToken: string;
+    expiresIn: number;
   };
 }
 
@@ -67,10 +68,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       if (data?.signIn) {
-        const { token: newToken, user: userData } = data.signIn;
-        setToken(newToken);
-        setUser(userData);
-        localStorage.setItem('authToken', newToken);
+        const { accessToken, refreshToken } = data.signIn;
+        setToken(accessToken);
+        localStorage.setItem('authToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+        
+        // Buscar dados do usuário após login
+        await fetchUserData(accessToken);
       }
     } catch (error) {
       console.error('Erro no login:', error);
@@ -82,6 +86,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUser(null);
     setToken(null);
     localStorage.removeItem('authToken');
+    localStorage.removeItem('refreshToken');
     client.clearStore();
   };
 

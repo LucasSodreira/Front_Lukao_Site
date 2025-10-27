@@ -46,12 +46,16 @@ const Register = () => {
       });
 
       if (data?.signUp) {
-        // Salvar token e redirecionar
-        localStorage.setItem('authToken', data.signUp.token);
-        navigate('/');
+        // Salvar tokens
+        localStorage.setItem('authToken', data.signUp.accessToken);
+        localStorage.setItem('refreshToken', data.signUp.refreshToken);
+        
+        // Redirecionar para login para buscar dados do usuário
+        navigate('/login');
       }
-    } catch {
-      setError('Erro ao criar conta. Tente novamente.');
+    } catch (err) {
+      console.error('Erro ao criar conta:', err);
+      setError('Erro ao criar conta. Verifique seus dados e tente novamente.');
     } finally {
       setLoading(false);
     }

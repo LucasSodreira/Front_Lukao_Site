@@ -11,6 +11,7 @@ import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
 import CartPage from './pages/Cart';
 import Profile from './pages/Profile';
+import Orders from './pages/Orders';
 // Estilos via Tailwind em index.css
 import Footer from './components/Footer';
 import { ThemeProvider } from './context/ThemeContext';
@@ -34,6 +35,7 @@ function App() {
                     <Route path="/products/:id" element={<ProductDetail />} />
                     <Route path="/cart" element={<CartPage />} />
                     <Route path="/profile" element={<Profile />} />
+                    <Route path="/orders" element={<Orders />} />
                   </Routes>
                 </Container>
               </main>

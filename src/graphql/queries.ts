@@ -229,17 +229,9 @@ export const GET_MY_ADDRESSES = gql`
 export const SIGN_UP = gql`
   mutation SignUp($input: SignUpInput!) {
     signUp(input: $input) {
-      token
-      user {
-        id
-        name
-        email
-        role
-        phone
-        status
-        createdAt
-        updatedAt
-      }
+      accessToken
+      refreshToken
+      expiresIn
     }
   }
 `;
@@ -247,17 +239,9 @@ export const SIGN_UP = gql`
 export const SIGN_IN = gql`
   mutation SignIn($email: String!, $password: String!) {
     signIn(email: $email, password: $password) {
-      token
-      user {
-        id
-        name
-        email
-        role
-        phone
-        status
-        createdAt
-        updatedAt
-      }
+      accessToken
+      refreshToken
+      expiresIn
     }
   }
 `;
@@ -330,6 +314,42 @@ export const CLEAR_CART = gql`
 export const CREATE_ADDRESS = gql`
   mutation CreateAddress($input: CreateAddressInput!) {
     createAddress(input: $input) {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      primary
+      createdAt
+    }
+  }
+`;
+
+export const UPDATE_ADDRESS = gql`
+  mutation UpdateAddress($id: ID!, $input: CreateAddressInput!) {
+    updateAddress(id: $id, input: $input) {
+      id
+      street
+      city
+      state
+      zipCode
+      country
+      primary
+      createdAt
+    }
+  }
+`;
+
+export const DELETE_ADDRESS = gql`
+  mutation DeleteAddress($id: ID!) {
+    deleteAddress(id: $id)
+  }
+`;
+
+export const SET_PRIMARY_ADDRESS = gql`
+  mutation SetPrimaryAddress($id: ID!) {
+    setPrimaryAddress(id: $id) {
       id
       street
       city

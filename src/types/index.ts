@@ -11,8 +11,9 @@ export interface User {
 }
 
 export interface AuthResponse {
-  token: string;
-  user: User;
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
 }
 
 export interface Product {

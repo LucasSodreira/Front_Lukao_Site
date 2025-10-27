@@ -3,20 +3,39 @@ import { ThemeContext } from './theme';
 import type { Theme } from './theme';
 
 function getInitialTheme(): Theme {
-  const stored = localStorage.getItem('theme');
-  if (stored === 'light' || stored === 'dark') return stored;
-  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  return prefersDark ? 'dark' : 'light';
+  if (typeof window === 'undefined') {
+    return 'dark';
+  }
+
+  const stored = window.localStorage.getItem('theme');
+  if (stored === 'light' || stored === 'dark') {
+    return stored;
+  }
+
+  return 'dark';
 }
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>(() => getInitialTheme());
+  const [theme, setThemeState] = useState<Theme>(() => {
+    const initial = getInitialTheme();
+    if (typeof document !== 'undefined') {
+      document.documentElement.classList.toggle('dark', initial === 'dark');
+    }
+    return initial;
+  });
 
   const applyThemeClass = useCallback((t: Theme) => {
+    if (typeof document === 'undefined') {
+      return;
+    }
     const root = document.documentElement;
     root.classList.toggle('dark', t === 'dark');
     // Persist
-    localStorage.setItem('theme', t);
+    try {
+      window.localStorage.setItem('theme', t);
+    } catch {
+      // ignore storage errors
+    }
   }, []);
 
   useEffect(() => {
