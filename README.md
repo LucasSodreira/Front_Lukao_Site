@@ -1,6 +1,5 @@
 # 🛍️ Frontend - Projeto Fullstack Loja
 
-**Status:** ✅ Pronto para Produção | **Build:** ✅ Sucesso | **Lint:** ✅ 0 Erros
 
 ## 📋 O que é este projeto?
 
