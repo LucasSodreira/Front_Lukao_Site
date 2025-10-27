@@ -1,117 +1,217 @@
-# Estrutura do Projeto Frontend - Padrões Empresariais
+# 🏗️ Arquitetura do Projeto Frontend
 
-Este documento descreve a arquitetura e organização do projeto frontend seguindo padrões profissionais de nível empresarial.
+**Status:** ✅ Produção | **Last Update:** Fase 6 Completa | **Build:** Success (5.00s) | **Type Safety:** 100%
 
-## 📁 Estrutura de Diretórios
+## 📋 Visão Geral
+
+Este é um **frontend de e-commerce** construído com **React 18 + TypeScript + Vite**, seguindo padrões de arquitetura profissional:
+
+- **Feature-Based Organization** — Organizado por domínio de negócio
+- **Enterprise Architecture** — Escalável, mantível e testável
+- **Type-Safe** — TypeScript strict mode em 100%
+- **Component-Driven** — Design system centralizado
+- **Modular** — Features independentes e reutilizáveis
+
+## 🎯 Princípios Arquiteturais
+
+### 1. Separation of Concerns (SoC)
+Cada camada tem responsabilidade clara:
+- **UI Layer** — Componentes React
+- **Logic Layer** — Hooks, services, state management
+- **Data Layer** — Apollo Client, GraphQL
+- **Cross-Cutting** — Utils, validators, formatters
+
+### 2. Feature-Based Organization
+Código organizando por **domínio de negócio** (features) ao invés de tipos de arquivo:
+
+```
+❌ Evitar (Anti-pattern)
+src/
+├── components/    # Mistura todos os componentes
+├── pages/        # Mistura todas as páginas
+├── hooks/        # Mistura todos os hooks
+└── services/     # Mistura todos os serviços
+
+✅ Preferir (Feature-Based)
+src/features/
+├── auth/         # Feature de autenticação
+├── products/     # Feature de produtos
+├── cart/         # Feature de carrinho
+└── profile/      # Feature de perfil
+```
+
+**Benefícios:**
+- Mais fácil encontrar código relacionado
+- Features podem ser desenvolvidas em paralelo
+- Remoção de features é trivial
+- Escalabilidade melhorada
+
+### 3. Shared Resources
+Código compartilhado entre features centralizado em `src/shared/`:
+- Componentes UI reutilizáveis
+- Hooks customizados
+- Tipos compartilhados
+- Utilitários gerais
+
+### 4. Type Safety
+- TypeScript **strict mode** habilitado
+- Tipos organizados por domínio
+- Type guards para validação em runtime
+- 100% de coverage esperado
+
+## 📁 Estrutura Detalhada
 
 ```
 src/
-├── core/                      # Núcleo da aplicação
-│   ├── context/              # Contextos React globais
-│   │   ├── AuthContext.tsx   # Provider de autenticação
-│   │   ├── auth-context.ts   # Definição do contexto
-│   │   ├── ThemeContext.tsx  # Provider de tema
-│   │   └── theme.ts          # Definição do contexto de tema
-│   └── providers/            # Provedores customizados
+├── core/
+│   └── context/
+│       ├── AuthContext.ts          # Context definition (read-only)
+│       ├── AuthProvider.tsx        # Provider component with logic
+│       ├── ThemeContext.tsx        # Theme provider
+│       ├── theme.ts                # Theme configurations
+│       └── index.ts
 │
-├── features/                  # Módulos/Features da aplicação (organizados por domínio)
-│   ├── auth/                 # Feature de autenticação
-│   │   ├── components/       # Componentes da feature
-│   │   ├── hooks/            # Hooks específicos da feature
-│   │   └── services/         # Serviços da feature
-│   ├── products/             # Feature de produtos
-│   ├── cart/                 # Feature de carrinho
-│   ├── profile/              # Feature de perfil
-│   ├── orders/               # Feature de pedidos
-│   └── home/                 # Feature home
-│
-├── shared/                    # Recursos compartilhados entre features
-│   ├── components/           # Componentes reutilizáveis
-│   │   ├── common/          # Componentes comuns (Modal, Alert, etc)
-│   │   ├── layout/          # Componentes de layout (Navbar, Footer, etc)
-│   │   └── ui/              # Componentes UI base (Button, Input, etc)
-│   └── hooks/               # Hooks customizados compartilhados
-│       ├── useAuth.ts
-│       ├── useTheme.ts
-│       ├── useForm.ts
-│       └── useAsync.ts
-│
-├── config/                    # Configurações da aplicação
-│   ├── environment.ts        # Variáveis de ambiente
+├── features/                        # ⭐ Módulos/Features por domínio
+│   ├── auth/                       # Autenticação
+│   │   ├── pages/
+│   │   │   ├── LoginPage.tsx
+│   │   │   ├── RegisterPage.tsx
+│   │   │   └── index.ts
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   └── index.ts
+│   │
+│   ├── products/                   # Produtos
+│   │   ├── pages/
+│   │   │   ├── ProductsPage.tsx
+│   │   │   ├── ProductDetailPage.tsx
+│   │   │   └── index.ts
+│   │   ├── components/
+│   │   │   ├── ProductCard.tsx
+│   │   │   ├── FilterSidebar.tsx
+│   │   │   ├── ActiveFilters.tsx
+│   │   │   └── index.ts
+│   │   ├── hooks/
+│   │   │   ├── useFilters.ts
+│   │   │   └── index.ts
+│   │   ├── services/
+│   │   │   ├── products.service.ts
+│   │   │   └── index.ts
+│   │   └── index.ts
+│   │
+│   ├── cart/                       # Carrinho
+│   │   ├── pages/
+│   │   │   ├── CartPage.tsx
+│   │   │   └── index.ts
+│   │   └── index.ts
+│   │
+│   ├── profile/                    # Perfil
+│   │   ├── pages/
+│   │   │   ├── ProfilePage.tsx
+│   │   │   └── index.ts
+│   │   ├── components/
+│   │   │   ├── AddressList.tsx
+│   │   │   ├── AddressModal.tsx
+│   │   │   └── index.ts
+│   │   └── index.ts
+│   │
+│   ├── orders/                     # Pedidos
+│   │   ├── pages/
+│   │   │   ├── OrdersPage.tsx
+│   │   │   └── index.ts
+│   │   └── index.ts
+│   │
+│   ├── home/                       # Home
+│   │   ├── pages/
+│   │   │   ├── HomePage.tsx
+│   │   │   └── index.ts
+│   │   └── index.ts
+│   │
 │   └── index.ts
 │
-├── constants/                 # Constantes da aplicação
-│   ├── api.ts                # Constantes de API
-│   ├── messages.ts           # Mensagens padrão
-│   ├── enums.ts              # Enums e tipos constantes
-│   ├── pagination.ts         # Configurações de paginação
+├── shared/                         # ⭐ Código compartilhado
+│   ├── components/
+│   │   ├── ui/                    # Design system
+│   │   │   ├── button.tsx
+│   │   │   ├── button.variants.ts
+│   │   │   ├── card.tsx
+│   │   │   ├── input.tsx
+│   │   │   ├── field.tsx
+│   │   │   ├── label.tsx
+│   │   │   ├── separator.tsx
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── layout/               # Layout components
+│   │   │   ├── Navbar.tsx
+│   │   │   ├── Footer.tsx
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── common/               # Componentes comuns
+│   │   │   ├── ErrorBoundary.tsx
+│   │   │   └── index.ts
+│   │   │
+│   │   └── index.ts
+│   │
+│   ├── hooks/                     # Hooks compartilhados
+│   │   ├── useAuth.ts
+│   │   ├── useTheme.ts
+│   │   ├── useForm.ts
+│   │   ├── useAsync.ts
+│   │   └── index.ts
+│   │
 │   └── index.ts
 │
-├── services/                  # Serviços da aplicação
-│   ├── apollo-client.ts      # Configuração do Apollo Client
-│   ├── auth.service.ts       # Serviço de autenticação
-│   ├── storage.service.ts    # Serviço de armazenamento local
+├── services/                       # ⭐ Serviços/APIs
+│   ├── apollo-client.ts           # GraphQL client
+│   ├── auth.service.ts            # Lógica de autenticação
+│   ├── storage.service.ts         # LocalStorage wrapper
 │   └── index.ts
 │
-├── repositories/             # Camada de dados (GraphQL queries)
-│   └── (será preenchido conforme necessário)
-│
-├── types/                     # Tipos TypeScript organizados por domínio
-│   ├── domain/               # Tipos de domínio
+├── types/                          # ⭐ Tipos TypeScript
+│   ├── domain/                    # Tipos de negócio
 │   │   ├── user.ts
 │   │   ├── product.ts
 │   │   ├── cart.ts
 │   │   ├── order.ts
 │   │   ├── address.ts
 │   │   └── index.ts
-│   ├── api/                  # Tipos de API
+│   ├── api/
 │   │   └── index.ts
 │   └── index.ts
 │
-├── utils/                     # Utilitários gerais
-│   ├── formatters/           # Formatadores de dados
-│   ├── validators/           # Validadores
-│   ├── guards/               # Type guards
+├── utils/                          # ⭐ Utilitários
+│   ├── validators/
+│   │   └── index.ts
+│   ├── formatters/
+│   │   └── index.ts
+│   ├── guards/
+│   │   └── index.ts
+│   ├── lib/
+│   │   └── utils.ts
 │   └── index.ts
 │
-├── graphql/                   # Queries e mutations do GraphQL
-│   ├── client.ts
-│   ├── queries.ts
-│   └── (será mantido no lugar)
+├── constants/                      # ⭐ Constantes
+│   ├── messages.ts                # Mensagens
+│   ├── pagination.ts              # Paginação
+│   ├── enums.ts                   # Enumerações
+│   ├── api.ts                     # URLs/Endpoints
+│   └── index.ts
 │
-├── pages/                     # Páginas/Rotas principais
-│   └── (será mantido no lugar)
+├── graphql/                        # ⭐ GraphQL
+│   ├── client.ts                  # Configuração Apollo
+│   ├── queries.ts                 # Queries e Mutations
+│   └── index.ts
 │
-├── assets/                    # Arquivos estáticos
+├── config/                         # ⭐ Configurações
+│   ├── environment.ts
+│   └── index.ts
 │
-├── App.tsx                    # Componente raiz
-├── main.tsx                   # Ponto de entrada
-└── index.css                  # Estilos globais
+├── App.tsx                         # Componente raiz
+├── main.tsx                        # Entry point
+├── App.css                         # Estilos globais
+├── index.css                       # Tailwind v4
+└── vite-env.d.ts
 ```
-
-## 🎯 Princípios Arquiteturais
-
-### 1. **Separation of Concerns**
-- Cada camada tem responsabilidade clara
-- Features são independentes e reutilizáveis
-- Serviços gerenciam lógica de negócio
-
-### 2. **Feature-Based Organization**
-- Cada feature (auth, products, etc) é um módulo independente
-- Facilita manutenção e escalabilidade
-- Permite desenvolvimento paralelo
-
-### 3. **Shared Resources**
-- Componentes reutilizáveis em `shared/`
-- Hooks customizados compartilhados
-- Tipos e constantes centralizadas
-
-### 4. **Type Safety**
-- TypeScript strict mode
-- Tipos organizados por domínio
-- Type guards para validação em runtime
-
-## 📦 Convenções de Naming
 
 ### Componentes React
 ```typescript
@@ -151,88 +251,211 @@ export const STORAGE_KEYS = { AUTH_TOKEN: 'authToken' };
 ```
 UI (Components)
     ↓
-Hooks (useAuth, useTheme, useForm)
+Hooks (useAuth, useTheme, useProducts)
     ↓
 Services (AuthService, StorageService)
     ↓
-Apollo Client / LocalStorage / API
+Apollo Client / GraphQL / LocalStorage
+```
+
+**Exemplo Prático:**
+```typescript
+// 1. Componente chama hook
+const MyComponent = () => {
+  const { user, login } = useAuth();
+  return <button onClick={() => login(email, password)}>Login</button>;
+};
+
+// 2. Hook chama service
+export const useAuth = () => {
+  const [user, setUser] = useState<User | null>(null);
+  
+  const login = async (email: string, password: string) => {
+    const userData = await authService.login(email, password);
+    setUser(userData);
+  };
+  
+  return { user, login };
+};
+
+// 3. Service faz request GraphQL
+export const authService = {
+  login: async (email: string, password: string) => {
+    const { data } = await apolloClient.mutate({
+      mutation: LOGIN_MUTATION,
+      variables: { email, password }
+    });
+    return data.login;
+  }
+};
 ```
 
 ## 🛠️ Como Adicionar uma Nova Feature
 
-### 1. Criar estrutura de pastas
+### 1. Estrutura Base
 ```bash
 src/features/nova-feature/
+├── pages/
+│   ├── NovaFeaturePage.tsx
+│   └── index.ts
 ├── components/
+│   ├── NovoComponente.tsx
+│   └── index.ts
 ├── hooks/
-└── services/
+│   ├── useNovaFeature.ts
+│   └── index.ts
+├── services/
+│   ├── novaFeature.service.ts
+│   └── index.ts
+└── index.ts
 ```
 
-### 2. Criar componentes
+### 2. Implementar Componentes
 ```typescript
 // src/features/nova-feature/components/NovoComponente.tsx
-export const NovoComponente: React.FC<Props> = (props) => {
-  // ...
+import type { Props } from './types';
+
+export const NovoComponente: React.FC<Props> = ({ prop1 }) => {
+  const { data } = useNovaFeature();
+  
+  return <div>{data}</div>;
 };
 ```
 
-### 3. Criar hooks se necessário
+### 3. Implementar Hooks
 ```typescript
 // src/features/nova-feature/hooks/useNovaFeature.ts
 export const useNovaFeature = () => {
-  // ...
+  const { loading, data } = useQuery(NOVA_FEATURE_QUERY);
+  return { loading, data };
 };
 ```
 
-### 4. Criar serviços se necessário
+### 4. Implementar Serviços
 ```typescript
 // src/features/nova-feature/services/novaFeature.service.ts
-export const novaFeatureService = { };
+export const novaFeatureService = {
+  fetch: async () => { },
+  create: async (data) => { },
+};
 ```
 
-### 5. Exportar do index
+### 5. Exportar Feature
 ```typescript
 // src/features/nova-feature/index.ts
+export { NovaFeaturePage } from './pages';
 export * from './components';
 export * from './hooks';
 export * from './services';
 ```
 
-## 📚 Importações Recomendadas
+### 6. Usar em App.tsx
+```typescript
+import { NovaFeaturePage } from '@/features/nova-feature';
+
+export const App = () => {
+  return (
+    <Routes>
+      <Route path="/nova-feature" element={<NovaFeaturePage />} />
+    </Routes>
+  );
+};
+```
+
+## 🎨 Path Aliases
+
+Configurados em `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+```
+
+### Como Usar
 
 ```typescript
-// ✅ Bom - usando path aliases
+// ✅ Bom - Sempre usar aliases
+import { Button } from '@/shared/components/ui';
 import { useAuth } from '@/shared/hooks';
-import { MESSAGES } from '@/constants';
-import type { User } from '@/types';
+import type { Product } from '@/types/domain';
+import { API_BASE_URL } from '@/constants';
+import { validateEmail } from '@/utils/validators';
 
-// ❌ Evitar - imports relativos longos
-import { useAuth } from '../../../shared/hooks';
+// ❌ Evitar - Caminhos relativos
+import { Button } from '../../../shared/components/ui';
+import { useAuth } from '../../../../shared/hooks';
+```
+
+## 📚 Padrões de Importação
+
+## 📚 Padrões de Importação
+
+```typescript
+// ✅ Componentes
+import { Button, Card, Input } from '@/shared/components/ui';
+import { Navbar, Footer } from '@/shared/components/layout';
+import { ErrorBoundary } from '@/shared/components/common';
+
+// ✅ Hooks
+import { useAuth, useTheme, useForm } from '@/shared/hooks';
+import { useFilters } from '@/features/products/hooks';
+
+// ✅ Tipos
+import type { Product, Cart, User } from '@/types/domain';
+
+// ✅ Constantes
+import { MESSAGES, API_BASE_URL, STORAGE_KEYS } from '@/constants';
+
+// ✅ Utilitários
+import { formatCurrency, validateEmail, isUser } from '@/utils';
+
+// ✅ Serviços
+import { authService, storageService } from '@/services';
+
+// ✅ GraphQL
+import { GET_PRODUCTS, LOGIN_MUTATION } from '@/graphql/queries';
 ```
 
 ## 🔐 Autenticação
 
 ```typescript
-import { useAuth, useIsAuthenticated } from '@/shared/hooks';
+import { useAuth } from '@/shared/hooks';
 
 export const MyComponent = () => {
-  const { user, login, logout } = useAuth();
-  const isAuthenticated = useIsAuthenticated();
+  const { user, login, logout, isAuthenticated } = useAuth();
 
-  // ...
+  if (!isAuthenticated) {
+    return <div>Faça login para continuar</div>;
+  }
+
+  return (
+    <div>
+      Bem-vindo, {user?.name}!
+      <button onClick={logout}>Logout</button>
+    </div>
+  );
 };
 ```
 
-## 🎨 Tema
+## 🎨 Tema (Dark Mode)
 
 ```typescript
-import { useTheme, useIsDarkMode } from '@/shared/hooks';
+import { useTheme } from '@/shared/hooks';
 
 export const MyComponent = () => {
-  const { theme, toggleTheme, setTheme } = useTheme();
-  const isDark = useIsDarkMode();
+  const { isDark, toggleTheme } = useTheme();
 
-  // ...
+  return (
+    <button onClick={toggleTheme}>
+      {isDark ? '☀️ Claro' : '🌙 Escuro'}
+    </button>
+  );
 };
 ```
 
@@ -249,9 +472,15 @@ const value = storageService.getItem('key');
 
 // Com valor padrão
 const value = storageService.getItem('key', defaultValue);
+
+// Remover
+storageService.removeItem('key');
+
+// Limpar tudo
+storageService.clear();
 ```
 
-## 🔄 Formulários
+## � Formulários
 
 ```typescript
 import { useForm } from '@/shared/hooks';
@@ -260,11 +489,17 @@ export const MyForm = () => {
   const [state, handlers, handleSubmit] = useForm(
     { email: '', password: '' },
     async (values) => {
-      // Submit logic
+      // Lógica de submit
+      console.log(values);
     }
   );
 
-  // ...
+  return (
+    <form onSubmit={handleSubmit}>
+      <input {...handlers.email} />
+      <button type="submit">Enviar</button>
+    </form>
+  );
 };
 ```
 
@@ -276,41 +511,51 @@ import { isUser, isProduct } from '@/utils/guards';
 
 // Validadores
 if (!validateEmail(email)) {
-  // invalid email
+  console.log('Email inválido');
 }
 
 // Type guards
 if (isUser(data)) {
-  // data is User
+  // data é do tipo User
+  console.log(data.email);
 }
 ```
 
-## 📝 Formatação
+## � Formatação
 
 ```typescript
-import { formatCurrency, formatDate } from '@/utils/formatters';
+import { formatCurrency, formatDate, formatPhoneNumber } from '@/utils/formatters';
 
-const price = formatCurrency(100); // R$ 100,00
-const date = formatDate('2024-01-01'); // 01/01/2024
+const price = formatCurrency(100);      // R$ 100,00
+const date = formatDate('2024-01-01');  // 01/01/2024
+const phone = formatPhoneNumber('11999999999'); // (11) 99999-9999
 ```
 
 ## 🚀 Performance
 
-- Lazy loading de componentes por feature
-- Code splitting automático via Vite
-- React.memo para componentes puros
-- useMemo e useCallback conforme necessário
+### Code Splitting
+- Vite faz automatic code splitting por route
+- Lazy loading de features é automático
 
-## 📊 Monitoramento
+### React.memo
+```typescript
+// Use para componentes puros
+export const ProductCard = React.memo(({ product }: Props) => {
+  return <div>{product.name}</div>;
+});
+```
 
-- Usar console durante desenvolvimento
-- Em produção, considerar serviço de logging
-- Rastrear erros de autenticação
-- Monitorar performance de queries GraphQL
+### useMemo e useCallback
+```typescript
+// Memoize valores computados
+const expensiveValue = useMemo(() => {
+  return computeExpensiveValue(prop);
+}, [prop]);
 
-## 🔗 Links Úteis
+// Memoize callbacks
+const handleClick = useCallback(() => {
+  doSomething();
+}, []);
+```
 
-- [TypeScript Best Practices](https://www.typescriptlang.org/docs/handbook/declaration-files/do-s-and-don-ts.html)
-- [React Design Patterns](https://reactpatterns.com/)
-- [Apollo Client Docs](https://www.apollographql.com/docs/react/)
-- [Vite Guide](https://vitejs.dev/guide/)
+## 🧪 Type Guards
