@@ -11,7 +11,7 @@ export * from './api';
 
 // Filter types (exportado aqui por compatibilidade)
 export interface ProductSort {
-  field: 'price' | 'createdAt' | 'title' | 'rating';
+  field: 'PRICE' | 'CREATED_AT' | 'TITLE' | 'RATING';
   order: 'ASC' | 'DESC';
 }
 

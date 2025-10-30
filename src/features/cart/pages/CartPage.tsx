@@ -36,17 +36,18 @@ export const CartPage = () => {
           <Card key={item.id}>
             <CardBody className="grid grid-cols-1 sm:grid-cols-[120px_1fr_auto] gap-4 items-center">
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-300">ID: {item.productId}</p>
+                <p className="font-medium text-gray-900 dark:text-gray-100">{item.product.title}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">ID: {item.product.id}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-300">Preço: R$ {item.price}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Preço: R$ {item.product.price}</p>
                 <p className="text-sm text-gray-600 dark:text-gray-300">Total: R$ {item.totalPrice}</p>
               </div>
               <div className="flex items-center gap-2">
                 <Button
                   variant="secondary"
                   size="sm"
-                  onClick={() => updateCartItem({ variables: { productId: item.productId, quantity: Math.max(0, item.quantity - 1) } })}
+                  onClick={() => updateCartItem({ variables: { productId: item.product.id, quantity: Math.max(0, item.quantity - 1) } })}
                 >
                   -
                 </Button>
@@ -54,14 +55,14 @@ export const CartPage = () => {
                 <Button
                   variant="secondary"
                   size="sm"
-                  onClick={() => updateCartItem({ variables: { productId: item.productId, quantity: item.quantity + 1 } })}
+                  onClick={() => updateCartItem({ variables: { productId: item.product.id, quantity: item.quantity + 1 } })}
                 >
                   +
                 </Button>
                 <Button
                   variant="danger"
                   size="sm"
-                  onClick={() => removeFromCart({ variables: { productId: item.productId } })}
+                  onClick={() => removeFromCart({ variables: { productId: item.product.id } })}
                 >
                   Remover
                 </Button>
@@ -72,7 +73,7 @@ export const CartPage = () => {
       </div>
       <Card>
         <CardBody className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Total: R$ {cart.totalPrice || 0}</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Total: R$ {cart.total || 0}</h3>
           <div className="flex items-center gap-2">
             <Button variant="secondary" onClick={() => clearCart()} disabled={clearing}>
               Limpar carrinho

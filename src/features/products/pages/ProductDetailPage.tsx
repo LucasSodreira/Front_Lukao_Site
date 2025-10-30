@@ -3,11 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client/react';
 import { GET_PRODUCT, ADD_TO_CART, GET_MY_CART, GET_PRODUCT_RATING } from '@/graphql/queries';
 import type { Product, ProductRating } from '@/types';
-import { StarIcon } from '@heroicons/react/20/solid';
 import { ShareIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/ui/Button';
 import { Container } from '@/ui/Container';
 import Badge from '@/ui/Badge';
+import { SizeSelector, ColorSelector, ProductRatingBar } from '@/features/products/components';
 
 interface ProductQueryResult {
   product: Product;
@@ -26,9 +26,14 @@ const ProductDetailPage = () => {
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedSize, setSelectedSize] = useState<string | undefined>();
+  const [selectedColor, setSelectedColor] = useState<string | undefined>();
+  const [toast, setToast] = useState<string | null>(null);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   // O backend espera ID numérico (Long). Convertemos com segurança.
   const numericId = id && /^\d+$/.test(id) ? id : undefined;
+  
   const { loading, error, data } = useQuery<ProductQueryResult>(GET_PRODUCT, {
     variables: { id: numericId },
     skip: !numericId,
@@ -45,7 +50,6 @@ const ProductDetailPage = () => {
     awaitRefetchQueries: true,
   });
 
-  const [toast, setToast] = useState<string | null>(null);
   useEffect(() => {
     if (!toast) return;
     const t = setTimeout(() => setToast(null), 2200);
@@ -78,6 +82,7 @@ const ProductDetailPage = () => {
       </Container>
     );
   }
+
   if (error) return <div className="text-red-600">Erro ao carregar produto: {error.message}</div>;
 
   const product = data?.product;
@@ -88,7 +93,7 @@ const ProductDetailPage = () => {
   const handleAddToCart = async () => {
     try {
       await addToCart({ variables: { productId: Number(numericId), quantity } });
-      setToast('Adicionado ao carrinho!');
+      setToast('✓ Adicionado ao carrinho!');
       setQuantity(1);
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
@@ -122,168 +127,164 @@ const ProductDetailPage = () => {
     <div className="bg-white dark:bg-gray-950">
       {toast && (
         <div className="fixed inset-x-0 top-2 z-50 flex justify-center px-4">
-          <div className="rounded-md bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900 px-4 py-2 text-sm shadow-lg">
+          <div className="rounded-md bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900 px-4 py-3 text-sm shadow-lg">
             {toast}
           </div>
         </div>
       )}
+
       <Container className="pt-6 pb-10">
         {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb">
-          <ol role="list" className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+        <nav aria-label="Breadcrumb" className="mb-6">
+          <ol role="list" className="flex items-center space-x-2 text-sm">
             <li>
-              <div className="flex items-center">
-                <button
-                  onClick={() => navigate('/products')}
-                  className="mr-2 text-sm font-medium text-gray-900 dark:text-gray-100 hover:text-gray-600 dark:hover:text-gray-400"
-                >
-                  Produtos
-                </button>
-                <svg
-                  fill="currentColor"
-                  width={16}
-                  height={20}
-                  viewBox="0 0 16 20"
-                  aria-hidden="true"
-                  className="h-5 w-4 text-gray-300 dark:text-gray-700"
-                >
-                  <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
-                </svg>
-              </div>
+              <button
+                onClick={() => navigate('/products')}
+                className="font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100"
+              >
+                Produtos
+              </button>
             </li>
-            <li className="text-sm">
-              <span aria-current="page" className="font-medium text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                {product.title}
-              </span>
+            <li>
+              <svg className="h-5 w-4 text-gray-400" fill="currentColor" viewBox="0 0 16 20">
+                <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
+              </svg>
             </li>
+            <li className="text-gray-500 dark:text-gray-400">{product.title}</li>
           </ol>
         </nav>
 
-        {/* Image gallery */}
-        <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-8 lg:px-8">
-          {/* Main image */}
-          <div className="lg:col-span-2">
-            <div className="group relative overflow-hidden rounded-lg">
+        {/* Main Grid */}
+        <div className="grid gap-8 lg:grid-cols-5">
+          {/* Image Gallery */}
+          <div className="lg:col-span-3 space-y-4">
+            {/* Main Image */}
+            <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 group">
               <img
                 alt={product.title}
                 src={mainImage.url}
-                className="w-full aspect-square object-cover bg-gray-100 dark:bg-gray-800 transition-transform duration-300 group-hover:scale-105"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
+              {lowStock && (
+                <div className="absolute top-3 left-3 bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                  Poucas unidades
+                </div>
+              )}
               <button
                 onClick={handleShare}
                 title="Compartilhar"
-                className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-md bg-white/80 dark:bg-gray-900/70 px-2 py-1 text-xs text-gray-700 dark:text-gray-200 shadow hover:bg-white dark:hover:bg-gray-900"
+                className="absolute right-3 top-3 inline-flex items-center gap-2 rounded-full bg-white/90 dark:bg-gray-900/90 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 shadow hover:bg-white dark:hover:bg-gray-900 transition"
               >
-                <ShareIcon className="h-4 w-4" /> Compartilhar
+                <ShareIcon className="h-4 w-4" />
+                <span className="hidden sm:inline">Compartilhar</span>
               </button>
             </div>
-          </div>
 
-          {/* Thumbnail gallery */}
-          <div className="mt-4 lg:mt-0">
-            <h3 className="sr-only">Imagens</h3>
-            <div className="grid grid-cols-4 lg:grid-cols-1 gap-2">
-              {images.map((image, index) => (
+            {/* Thumbnail Gallery */}
+            <div className="grid grid-cols-4 gap-2">
+              {images.slice(0, 4).map((image, index) => (
                 <button
                   key={image.id}
                   onClick={() => setSelectedImage(index)}
                   className={classNames(
-                    'aspect-square rounded-lg overflow-hidden border-2 transition-all',
+                    'relative aspect-square rounded-lg overflow-hidden border-3 transition-all',
                     selectedImage === index
-                      ? 'border-blue-500 dark:border-blue-400'
+                      ? 'border-blue-500 dark:border-blue-400 ring-2 ring-blue-500'
                       : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                   )}
                 >
                   <img
                     alt={product.title}
                     src={image.url}
-                    className="w-full h-full object-cover bg-gray-100 dark:bg-gray-800"
+                    className="w-full h-full object-cover"
                   />
                 </button>
               ))}
             </div>
           </div>
-        </div>
 
-        {/* Product info */}
-        <div className="mx-auto max-w-2xl px-4 pt-10 pb-16 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto_auto_1fr] lg:gap-x-8 lg:px-8 lg:pt-16 lg:pb-24">
-          <div className="lg:col-span-2 lg:border-r lg:border-gray-200 dark:lg:border-gray-700 lg:pr-8">
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-3xl">
-              {product.title}
-            </h1>
-          </div>
-
-          {/* Options */}
-          <div className="mt-4 lg:row-span-3 lg:mt-0">
-            <h2 className="sr-only">Informações do Produto</h2>
-
-            {/* Price */}
-            <div className="flex items-center gap-3">
-              <p className="text-3xl tracking-tight text-gray-900 dark:text-gray-100">
-                {priceBRL}
-              </p>
-              {lowStock && <Badge variant="warning">Poucas unidades</Badge>}
-            </div>
-
-            {/* Rating */}
-            <div className="mt-6">
-              <h3 className="sr-only">Avaliações</h3>
-              {rating && (
-                <div className="flex items-center">
-                  <div className="flex items-center">
-                    {[0, 1, 2, 3, 4].map((i) => (
-                      <StarIcon
-                        key={i}
-                        aria-hidden="true"
-                        className={classNames(
-                          (rating.averageRating ?? 0) > i ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600',
-                          'h-5 w-5 shrink-0'
-                        )}
-                      />
-                    ))}
-                  </div>
-                  <p className="sr-only">{rating.averageRating?.toFixed(1) ?? 0} de 5 estrelas</p>
-                  <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-100">
-                    {rating.totalReviews} avaliações
-                  </span>
-                </div>
+          {/* Product Details */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Header */}
+            <div>
+              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                {product.title}
+              </h1>
+              {product.brand && typeof product.brand === 'object' && 'name' in product.brand && (
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Marca: <span className="font-semibold">{product.brand.name}</span>
+                </p>
               )}
             </div>
 
-            {/* Stock Status */}
-            <div className="mt-6">
-              <div className="flex items-center">
-                <span className="text-lg font-medium text-gray-900 dark:text-gray-100">
-                  Estoque: {(product.inventory ?? 0) > 0 ? product.inventory : 'Indisponível'}
+            {/* Rating */}
+            {rating && (
+              <ProductRatingBar
+                average={rating.averageRating || 0}
+                count={rating.totalReviews || 0}
+              />
+            )}
+
+            {/* Price and Stock */}
+            <div className="border-y border-gray-200 dark:border-gray-700 py-4 space-y-3">
+              <div className="flex items-baseline gap-3">
+                <span className="text-4xl font-bold text-gray-900 dark:text-gray-100">
+                  {priceBRL}
                 </span>
-                <span className="ml-3">
-                  {(product.inventory ?? 0) > 0 ? (
-                    <Badge variant={lowStock ? 'warning' : 'success'}>
-                      {lowStock ? 'Baixo estoque' : 'Em estoque'}
-                    </Badge>
-                  ) : (
-                    <Badge variant="danger">Fora de estoque</Badge>
-                  )}
+                {(product.inventory ?? 0) > 0 && (
+                  <Badge variant="success">Em estoque</Badge>
+                )}
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-gray-600 dark:text-gray-400">
+                  {(product.inventory ?? 0) > 0 ? `${product.inventory} unidades disponíveis` : 'Fora de estoque'}
                 </span>
               </div>
             </div>
 
-            {/* Add to Cart */}
-            <div className="mt-10">
+            {/* Size Selector */}
+            {product.sizes && product.sizes.length > 0 && (
+              <div className="space-y-3">
+                <SizeSelector
+                  sizes={product.sizes}
+                  selected={selectedSize}
+                  onSelect={setSelectedSize}
+                  disabled={(product.inventory ?? 0) === 0}
+                />
+              </div>
+            )}
+
+            {/* Color Selector */}
+            {product.colors && product.colors.length > 0 && (
+              <div className="space-y-3">
+                <ColorSelector
+                  colors={product.colors}
+                  selected={selectedColor}
+                  onSelect={setSelectedColor}
+                  disabled={(product.inventory ?? 0) === 0}
+                />
+              </div>
+            )}
+
+            {/* Quantity and Add to Cart */}
+            <div className="space-y-3 pt-4">
               <div className="flex items-center gap-3">
+                <label className="text-sm font-semibold text-gray-900 dark:text-gray-100">Quantidade:</label>
                 <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                     disabled={quantity <= 1 || (product.inventory ?? 0) === 0}
-                    className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition"
                   >
                     −
                   </button>
-                  <span className="px-4 py-2 font-medium text-gray-900 dark:text-gray-100">{quantity}</span>
+                  <span className="px-4 py-2 font-semibold text-gray-900 dark:text-gray-100 w-12 text-center">
+                    {quantity}
+                  </span>
                   <button
                     onClick={() => setQuantity(Math.min((product.inventory ?? 0), quantity + 1))}
                     disabled={quantity >= (product.inventory ?? 0)}
-                    className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition"
                   >
                     +
                   </button>
@@ -293,7 +294,7 @@ const ProductDetailPage = () => {
               <Button
                 onClick={handleAddToCart}
                 disabled={adding || product.inventory === 0}
-                className="mt-4 w-full"
+                className="w-full py-3 text-lg font-semibold"
               >
                 {adding ? 'Adicionando...' : 'Adicionar ao Carrinho'}
               </Button>
@@ -302,41 +303,124 @@ const ProductDetailPage = () => {
                 variant="secondary"
                 onClick={() => navigate('/cart')}
                 disabled={product.inventory === 0}
-                className="mt-2 w-full"
+                className="w-full py-3 text-lg font-semibold"
               >
                 Comprar agora
               </Button>
+
+              <button
+                onClick={() => setIsFavorite(!isFavorite)}
+                className="w-full py-2 flex items-center justify-center gap-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-900 transition"
+              >
+                ♡ {isFavorite ? 'Remover de favoritos' : 'Adicionar a favoritos'}
+              </button>
+            </div>
+
+            {/* Shipping Info */}
+            <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg space-y-2">
+              <h3 className="font-semibold text-blue-900 dark:text-blue-100">Informações de Envio</h3>
+              <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+                <li>✓ Frete grátis para compras acima de R$ 100</li>
+                <li>✓ Entrega em até 7 dias úteis</li>
+                <li>✓ Troca grátis em 30 dias</li>
+              </ul>
             </div>
           </div>
+        </div>
 
-          {/* Description and details */}
-          <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 dark:lg:border-gray-700 lg:pt-6 lg:pr-8 lg:pb-16">
+        {/* Description and Details Section */}
+        <div className="mt-16 grid gap-8 lg:grid-cols-3">
+          {/* Description */}
+          <div className="lg:col-span-2 space-y-6">
             {product.description && (
               <div>
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Descrição</h3>
-                <div className="mt-4 space-y-4">
-                  <p className="text-base text-gray-700 dark:text-gray-300">{product.description}</p>
-                </div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+                  Descrição do Produto
+                </h2>
+                <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
+                  {product.description}
+                </p>
               </div>
             )}
 
-            {/* Product details */}
-            <div className="mt-10">
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Detalhes do Produto</h3>
-              <div className="mt-4 space-y-4">
-                <dl className="divide-y divide-gray-200 dark:divide-gray-700">
-                  <div className="py-3 flex justify-between">
-                    <dt className="font-medium text-gray-900 dark:text-gray-100">ID</dt>
-                    <dd className="text-gray-600 dark:text-gray-400">{product.id}</dd>
-                  </div>
-                  <div className="py-3 flex justify-between">
-                    <dt className="font-medium text-gray-900 dark:text-gray-100">Criado em</dt>
-                    <dd className="text-gray-600 dark:text-gray-400">
-                      {product.createdAt ? new Date(product.createdAt).toLocaleDateString('pt-BR') : 'N/A'}
-                    </dd>
-                  </div>
+            {/* Specifications */}
+            {product.specifications && Object.keys(product.specifications).length > 0 && (
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+                  Especificações
+                </h2>
+                <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {Object.entries(product.specifications).map(([key, value]) => (
+                    <div key={key} className="flex gap-4">
+                      <dt className="font-semibold text-gray-900 dark:text-gray-100 flex-shrink-0">
+                        {key}:
+                      </dt>
+                      <dd className="text-gray-700 dark:text-gray-300">{value}</dd>
+                    </div>
+                  ))}
                 </dl>
               </div>
+            )}
+
+            {/* Material and Care */}
+            {(product.material || product.careInstructions) && (
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+                  Material e Cuidados
+                </h2>
+                <div className="space-y-4">
+                  {product.material && (
+                    <div>
+                      <h3 className="font-semibold text-gray-900 dark:text-gray-100">Material</h3>
+                      <p className="text-gray-700 dark:text-gray-300">{product.material}</p>
+                    </div>
+                  )}
+                  {product.careInstructions && (
+                    <div>
+                      <h3 className="font-semibold text-gray-900 dark:text-gray-100">Como Cuidar</h3>
+                      <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+                        {product.careInstructions}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Sidebar Info */}
+          <div className="space-y-6">
+            <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg space-y-3">
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100">Informações do Produto</h3>
+              <dl className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <dt className="text-gray-600 dark:text-gray-400">ID</dt>
+                  <dd className="text-gray-900 dark:text-gray-100">{product.id}</dd>
+                </div>
+                {product.category && typeof product.category === 'object' && 'name' in product.category && (
+                  <div className="flex justify-between">
+                    <dt className="text-gray-600 dark:text-gray-400">Categoria</dt>
+                    <dd className="text-gray-900 dark:text-gray-100">{product.category.name}</dd>
+                  </div>
+                )}
+                {product.createdAt && (
+                  <div className="flex justify-between">
+                    <dt className="text-gray-600 dark:text-gray-400">Adicionado em</dt>
+                    <dd className="text-gray-900 dark:text-gray-100">
+                      {new Date(product.createdAt).toLocaleDateString('pt-BR')}
+                    </dd>
+                  </div>
+                )}
+              </dl>
+            </div>
+
+            <div className="bg-green-50 dark:bg-green-950 p-4 rounded-lg space-y-2">
+              <h3 className="font-semibold text-green-900 dark:text-green-100">Garantia de Qualidade</h3>
+              <ul className="text-sm text-green-800 dark:text-green-200 space-y-1">
+                <li>✓ Produto 100% original</li>
+                <li>✓ Embalagem premium</li>
+                <li>✓ Seguro na compra</li>
+              </ul>
             </div>
           </div>
         </div>

@@ -4,15 +4,25 @@
 
 export interface CartItem {
   id: string;
-  productId: string;
+  product: {
+    id: string;
+    title: string;
+    price: number | string;
+    images?: Array<{
+      id: string;
+      url: string;
+      sortOrder?: number;
+    }>;
+  };
   quantity: number;
-  price: number | string;
   totalPrice?: number | string;
 }
 
 export interface Cart {
   id: string;
   items: CartItem[];
-  totalPrice?: number | string;
-  totalItems?: number;
+  total?: number | string;
+  itemCount?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }

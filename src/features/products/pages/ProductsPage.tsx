@@ -3,18 +3,14 @@
  * Localização: src/features/products/pages/ProductsPage.tsx
  */
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useQuery } from '@apollo/client/react';
 import { FilterSidebar, ProductCard, ActiveFilters } from '../components';
-import { SEARCH_PRODUCTS, GET_CATEGORIES, GET_ARTISANS } from '@/graphql/queries';
+import { GET_PRODUCTS, GET_CATEGORIES, GET_ARTISANS } from '@/graphql/queries';
 import type { Product, Category, FilterState } from '@/types';
 
-interface SearchProductsQueryResult {
-  searchProducts: {
-    products: Product[];
-    totalCount: number;
-    totalPages: number;
-  };
+interface ProductsQueryResult {
+  products: Product[];
 }
 
 export const ProductsPage = () => {
@@ -27,10 +23,11 @@ export const ProductsPage = () => {
     colors: [],
     brands: [],
     rating: undefined,
-    sortBy: { field: 'createdAt', order: 'DESC' },
+    sortBy: { field: 'CREATED_AT', order: 'DESC' },
   });
 
   const [page, setPage] = useState(0);
+  const pageSize = 20;
 
   const { data: categoriesData, loading: categoriesLoading } = useQuery<{
     categories: Category[];
@@ -40,25 +37,71 @@ export const ProductsPage = () => {
     artisans: Array<{ id: string; name: string; email: string; role: string; status: string }>;
   }>(GET_ARTISANS);
 
-  const { data, loading, error } = useQuery<SearchProductsQueryResult>(SEARCH_PRODUCTS, {
-    variables: {
-      search: filters.search,
-      categoryId: filters.categoryId,
-      minPrice: filters.priceRange[0],
-      maxPrice: filters.priceRange[1],
-      inStock: filters.inStock,
-      sizes: filters.sizes,
-      colors: filters.colors,
-      brands: filters.brands,
-      rating: filters.rating,
-      page,
-      size: 20, // Default page size
-      sortBy: filters.sortBy.field,
-      sortOrder: filters.sortBy.order,
-    },
-  });
+  const { data, loading, error } = useQuery<ProductsQueryResult>(GET_PRODUCTS);
 
-  const products = data?.searchProducts.products || [];
+  // Filtrar produtos no frontend
+  const filteredProducts = useMemo(() => {
+    if (!data?.products) return [];
+    
+    let result = [...data.products];
+
+    // Filtro de busca
+    if (filters.search) {
+      const searchLower = filters.search.toLowerCase();
+      result = result.filter(p => 
+        p.title?.toLowerCase().includes(searchLower) ||
+        p.description?.toLowerCase().includes(searchLower)
+      );
+    }
+
+    // Filtro de categoria
+    if (filters.categoryId) {
+      result = result.filter(p => p.categoryId === filters.categoryId);
+    }
+
+    // Filtro de preço
+    result = result.filter(p => {
+      const price = typeof p.price === 'string' ? parseFloat(p.price) : p.price;
+      return price >= filters.priceRange[0] && price <= filters.priceRange[1];
+    });
+
+    // Filtro de estoque
+    if (filters.inStock) {
+      result = result.filter(p => (p.inventory || 0) > 0);
+    }
+
+    // Ordenação
+    result.sort((a, b) => {
+      const field = filters.sortBy.field;
+      const order = filters.sortBy.order === 'ASC' ? 1 : -1;
+
+      if (field === 'PRICE') {
+        const priceA = typeof a.price === 'string' ? parseFloat(a.price) : a.price;
+        const priceB = typeof b.price === 'string' ? parseFloat(b.price) : b.price;
+        return (priceA - priceB) * order;
+      }
+      
+      if (field === 'TITLE') {
+        return (a.title || '').localeCompare(b.title || '') * order;
+      }
+      
+      if (field === 'CREATED_AT') {
+        const dateA = new Date(a.createdAt || 0).getTime();
+        const dateB = new Date(b.createdAt || 0).getTime();
+        return (dateA - dateB) * order;
+      }
+
+      return 0;
+    });
+
+    return result;
+  }, [data?.products, filters]);
+
+  // Paginação no frontend
+  const totalPages = Math.ceil(filteredProducts.length / pageSize);
+  const paginatedProducts = filteredProducts.slice(page * pageSize, (page + 1) * pageSize);
+
+  const products = paginatedProducts;
   const categories = categoriesData?.categories || [];
   const artisans = artisansData?.artisans || [];
 
@@ -77,7 +120,7 @@ export const ProductsPage = () => {
       colors: [],
       brands: [],
       rating: undefined,
-      sortBy: { field: 'createdAt', order: 'DESC' },
+      sortBy: { field: 'CREATED_AT', order: 'DESC' },
     });
     setPage(0);
   };
@@ -91,7 +134,7 @@ export const ProductsPage = () => {
       <div>
         <h1 className="text-3xl font-bold text-foreground">Produtos</h1>
         <p className="text-muted-foreground mt-1">
-          Encontre os melhores produtos entre {data?.searchProducts.totalCount || 0} opções
+          Encontre os melhores produtos entre {filteredProducts.length} opções
         </p>
       </div>
 
@@ -140,7 +183,7 @@ export const ProductsPage = () => {
           )}
 
           {/* Paginação */}
-          {data && data.searchProducts.totalPages > 1 && (
+          {totalPages > 1 && (
             <div className="flex justify-center gap-2 mt-8">
               <button
                 onClick={() => setPage((p) => Math.max(0, p - 1))}
@@ -150,11 +193,11 @@ export const ProductsPage = () => {
                 Anterior
               </button>
               <span className="px-4 py-2">
-                Página {page + 1} de {data.searchProducts.totalPages}
+                Página {page + 1} de {totalPages}
               </span>
               <button
                 onClick={() => setPage((p) => p + 1)}
-                disabled={page === data.searchProducts.totalPages - 1}
+                disabled={page === totalPages - 1}
                 className="px-4 py-2 bg-secondary rounded hover:bg-secondary/80 disabled:opacity-50"
               >
                 Próxima

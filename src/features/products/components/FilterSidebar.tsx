@@ -116,7 +116,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   };
 
   return (
-    <div className="w-80 space-y-6">
+    <div className="w-full lg:w-80 space-y-6">
       {/* Clear Filters */}
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Filtros</h2>

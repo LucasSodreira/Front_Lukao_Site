@@ -20,6 +20,12 @@ export interface Product {
   rating?: number;
   createdAt?: string;
   updatedAt?: string;
+  sizes?: Size[];
+  colors?: Color[];
+  brand?: Brand;
+  material?: string;
+  careInstructions?: string;
+  specifications?: Record<string, string>;
 }
 
 export interface Category {

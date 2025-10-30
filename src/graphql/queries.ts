@@ -22,6 +22,28 @@ export const GET_ME = gql`
   }
 `;
 
+export const GET_PRODUCTS = gql`
+  query GetProducts {
+    products {
+      id
+      title
+      description
+      price
+      status
+      categoryId
+      artisanId
+      inventory
+      images {
+        id
+        url
+        sortOrder
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 export const SEARCH_PRODUCTS = gql`
   query SearchProducts(
     $categoryId: ID,

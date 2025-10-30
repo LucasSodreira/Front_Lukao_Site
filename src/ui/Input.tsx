@@ -13,7 +13,7 @@ export const Input: React.FC<InputProps> = ({ label, error, className = '', id, 
       {label && (
         <label
           htmlFor={inputId}
-          className="block text-sm font-medium text-[hsl(var(--foreground))] opacity-90"
+          className="block text-sm font-medium text-[color:var(--foreground)] opacity-90"
         >
           {label}
         </label>
@@ -21,12 +21,12 @@ export const Input: React.FC<InputProps> = ({ label, error, className = '', id, 
       <BaseInput
         id={inputId}
         className={[
-          error ? 'border-[hsl(var(--destructive))] focus:ring-[hsl(var(--destructive))]' : '',
+          error ? 'border-[color:var(--destructive)] focus:ring-[color:var(--destructive)]' : '',
           className,
         ].join(' ')}
         {...props}
       />
-      {error && <p className="text-sm text-[hsl(var(--destructive))]">{error}</p>}
+  {error && <p className="text-sm text-[color:var(--destructive)]">{error}</p>}
     </div>
   );
 };
