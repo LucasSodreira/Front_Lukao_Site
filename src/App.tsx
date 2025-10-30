@@ -8,7 +8,7 @@ import { ThemeProvider } from '@/core/context/ThemeContext';
 
 // Shared Components
 import { Navbar, Footer } from '@/shared/components/layout';
-import { ErrorBoundary } from '@/shared/components/common';
+import { ErrorBoundary, PrivateRoute } from '@/shared/components/common';
 import { Container } from '@/ui/Container';
 
 // Features - Pages
@@ -38,11 +38,9 @@ function App() {
                     <Route path="/products/:id" element={<ProductDetailPage />} />
                     <Route path="/cart" element={<CartPage />} />
                     <Route path="/checkout/:orderId" element={<CheckoutPage />} />
-                    <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
-                    <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
                     <Route path="/order-confirmation/:orderId" element={<OrderConfirmationPage />} />
-                    <Route path="/profile" element={<ProfilePage />} />
-                    <Route path="/orders" element={<OrdersPage />} />
+                    <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
+                    <Route path="/orders" element={<PrivateRoute><OrdersPage /></PrivateRoute>} />
                   </Routes>
                 </Container>
               </main>

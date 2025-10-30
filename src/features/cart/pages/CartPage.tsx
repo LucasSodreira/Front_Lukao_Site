@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client/react';
 import { useNavigate } from 'react-router-dom';
 import { GET_MY_CART, UPDATE_CART_ITEM, REMOVE_FROM_CART, CLEAR_CART, GET_MY_ADDRESSES } from '@/graphql/queries';
-import { AUTHENTICATED_CHECKOUT, CREATE_CHECKOUT_SESSION } from '@/graphql/checkoutQueries';
+import { AUTHENTICATED_CHECKOUT, CREATE_PAYMENT_INTENT } from '@/graphql/checkoutQueries';
 import type { Cart, CartItem } from '@/types';
 import { Card, CardBody } from '@/ui/Card';
 import { Button } from '@/ui/Button';
@@ -43,11 +43,13 @@ interface AuthenticatedCheckoutResult {
   };
 }
 
-interface CheckoutSessionResult {
-  createCheckoutSession: {
-    sessionId: string;
-    url: string;
-    orderId: string;
+interface PaymentIntentResult {
+  createPaymentIntent: {
+    paymentIntentId: string;
+    clientSecret: string;
+    status: string;
+    amount: number;
+    currency: string;
   };
 }
 
@@ -71,7 +73,7 @@ export const CartPage = () => {
   const [removeFromCart] = useMutation(REMOVE_FROM_CART, { refetchQueries: [{ query: GET_MY_CART }] });
   const [clearCart, { loading: clearing }] = useMutation(CLEAR_CART, { refetchQueries: [{ query: GET_MY_CART }] });
   const [authenticatedCheckout] = useMutation<AuthenticatedCheckoutResult>(AUTHENTICATED_CHECKOUT);
-  const [createCheckoutSession] = useMutation<CheckoutSessionResult>(CREATE_CHECKOUT_SESSION);
+  const [createPaymentIntent] = useMutation<PaymentIntentResult>(CREATE_PAYMENT_INTENT);
 
   if (loading) return <div className="text-gray-600 dark:text-gray-300">Carregando carrinho...</div>;
   if (error) return <div className="text-red-600">Erro ao carregar carrinho: {error.message}</div>;
@@ -109,36 +111,36 @@ export const CartPage = () => {
         throw new Error('Por favor, configure um endereço de entrega primário');
       }
 
-      // 1. Fazer checkout autenticado
-      const checkoutResult = await authenticatedCheckout({
+      // 1. Criar o pedido (anteriormente authenticatedCheckout)
+      const orderResult = await authenticatedCheckout({
         variables: {
           shippingAddressId: addressId,
           notes: formData.notes || '',
         },
       });
 
-      const order = checkoutResult.data?.checkout;
+      const order = orderResult.data?.checkout;
       if (!order) throw new Error('Falha ao criar pedido');
 
-      // 2. Criar Stripe Checkout Session
-      const baseUrl = window.location.origin;
-      const sessionResult = await createCheckoutSession({
+      // 2. Criar o Payment Intent para o pedido
+      const paymentIntentResult = await createPaymentIntent({
         variables: {
           orderId: order.id,
-          successUrl: `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-          cancelUrl: `${baseUrl}/checkout/cancel`,
         },
       });
 
-      const sessionData = sessionResult.data?.createCheckoutSession;
-      if (!sessionData?.url) throw new Error('Falha ao criar sessão de checkout');
+      const paymentIntent = paymentIntentResult.data?.createPaymentIntent;
+      if (!paymentIntent) throw new Error('Falha ao criar intenção de pagamento');
 
-      // 3. Limpar carrinho
-      await clearCart();
-
-      // 4. Redirecionar para Stripe Checkout
+      // 3. Navegar para a página de checkout com os dados necessários
       setIsCheckoutOpen(false);
-      window.location.href = sessionData.url;
+      navigate(`/checkout/${order.id}`, {
+        state: {
+          order,
+          paymentIntent,
+        },
+      });
+
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido';
       console.error('Erro no checkout:', err);
