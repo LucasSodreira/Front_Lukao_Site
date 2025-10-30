@@ -16,8 +16,9 @@ import { LoginPage, RegisterPage } from '@/features/auth/pages';
 import { ProductsPage, ProductDetailPage } from '@/features/products/pages';
 import { CartPage } from '@/features/cart/pages';
 import { ProfilePage } from '@/features/profile/pages';
-import { OrdersPage } from '@/features/orders/pages';
+import { OrdersPage, OrderConfirmationPage } from '@/features/orders/pages';
 import { HomePage } from '@/features/home/pages';
+import { CheckoutPage, CheckoutSuccessPage, CheckoutCancelPage } from '@/features/checkout/pages';
 
 function App() {
   return (
@@ -36,6 +37,10 @@ function App() {
                     <Route path="/products" element={<ErrorBoundary><ProductsPage /></ErrorBoundary>} />
                     <Route path="/products/:id" element={<ProductDetailPage />} />
                     <Route path="/cart" element={<CartPage />} />
+                    <Route path="/checkout/:orderId" element={<CheckoutPage />} />
+                    <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
+                    <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
+                    <Route path="/order-confirmation/:orderId" element={<OrderConfirmationPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/orders" element={<OrdersPage />} />
                   </Routes>

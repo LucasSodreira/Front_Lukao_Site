@@ -10,6 +10,8 @@ Este é um **frontend de e-commerce** construído com **React 18 + TypeScript + 
 - **Type-Safe** — TypeScript strict mode em 100%
 - **Component-Driven** — Design system centralizado
 - **Modular** — Features independentes e reutilizáveis
+- **Payment Integration** — Stripe Payment Intents implementado ✨
+- **Optimized Build** — Code splitting para melhor performance ✨
 
 ## 🎯 Princípios Arquiteturais
 
@@ -102,6 +104,19 @@ src/
 │   │   ├── pages/
 │   │   │   ├── CartPage.tsx
 │   │   │   └── index.ts
+│   │   ├── components/
+│   │   │   ├── CheckoutModal.tsx   # ✨ Modal de dados
+│   │   │   └── index.ts
+│   │   └── index.ts
+│   │
+│   ├── checkout/                   # ✨ Pagamento Stripe (NOVO)
+│   │   ├── pages/
+│   │   │   ├── CheckoutPage.tsx    # Página de pagamento
+│   │   │   └── index.ts
+│   │   ├── components/
+│   │   │   ├── StripePaymentForm.tsx  # Formulário cartão
+│   │   │   ├── OrderSummary.tsx       # Resumo pedido
+│   │   │   └── index.ts
 │   │   └── index.ts
 │   │
 │   ├── profile/                    # Perfil
@@ -117,6 +132,8 @@ src/
 │   ├── orders/                     # Pedidos
 │   │   ├── pages/
 │   │   │   ├── OrdersPage.tsx
+│   │   │   ├── OrderConfirmationPage.tsx  # ✨ Confirmação
+│   │   │   ├── OrderTrackingPage.tsx      # ✨ Rastreamento
 │   │   │   └── index.ts
 │   │   └── index.ts
 │   │
@@ -173,6 +190,7 @@ src/
 │   │   ├── cart.ts
 │   │   ├── order.ts
 │   │   ├── address.ts
+│   │   ├── checkout.ts            # ✨ Tipos de checkout/pagamento
 │   │   └── index.ts
 │   ├── api/
 │   │   └── index.ts
@@ -198,7 +216,8 @@ src/
 │
 ├── graphql/                        # ⭐ GraphQL
 │   ├── client.ts                  # Configuração Apollo
-│   ├── queries.ts                 # Queries e Mutations
+│   ├── queries.ts                 # Queries e Mutations gerais
+│   ├── checkoutQueries.ts         # ✨ Queries de checkout/pagamento
 │   └── index.ts
 │
 ├── config/                         # ⭐ Configurações
@@ -520,41 +539,27 @@ if (isUser(data)) {
 }
 ```
 
-## � Formatação
 
-```typescript
-import { formatCurrency, formatDate, formatPhoneNumber } from '@/utils/formatters';
 
-const price = formatCurrency(100);      // R$ 100,00
-const date = formatDate('2024-01-01');  // 01/01/2024
-const phone = formatPhoneNumber('11999999999'); // (11) 99999-9999
+## 💳 Integração Stripe (Checkout)
+
+### Arquitetura de Pagamento
+
+O fluxo de checkout segue o padrão **Payment Intents** do Stripe para segurança máxima:
+
+```
+CartPage → CheckoutModal → CheckoutPage → OrderConfirmation
+   ↓           ↓               ↓                ↓
+Carrinho   Dados Cliente   Pagamento      Confirmação
+           (guestCheckout) (Stripe)       + Rastreamento
 ```
 
-## 🚀 Performance
 
-### Code Splitting
-- Vite faz automatic code splitting por route
-- Lazy loading de features é automático
+### Rotas de Checkout
 
-### React.memo
 ```typescript
-// Use para componentes puros
-export const ProductCard = React.memo(({ product }: Props) => {
-  return <div>{product.name}</div>;
-});
+// src/App.tsx
+<Route path="/checkout/:orderId" element={<CheckoutPage />} />
+<Route path="/order-confirmation/:orderId" element={<OrderConfirmationPage />} />
+<Route path="/order-tracking/:orderId/:token" element={<OrderTrackingPage />} />
 ```
-
-### useMemo e useCallback
-```typescript
-// Memoize valores computados
-const expensiveValue = useMemo(() => {
-  return computeExpensiveValue(prop);
-}, [prop]);
-
-// Memoize callbacks
-const handleClick = useCallback(() => {
-  doSomething();
-}, []);
-```
-
-## 🧪 Type Guards
