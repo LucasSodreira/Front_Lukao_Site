@@ -1,2 +1,8 @@
 export { default as ErrorBoundary } from './ErrorBoundary';
 export { default as PrivateRoute } from './PrivateRoute';
+export { default as PublicRoute } from './PublicRoute';
+export { default as NotFoundPage } from './NotFoundPage';
+export { default as Breadcrumb } from './Breadcrumb';
+export { default as QuantitySelector } from './QuantitySelector';
+export { default as SortButtons } from './SortButtons';
+export { default as Pagination } from './Pagination';

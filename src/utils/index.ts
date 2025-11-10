@@ -3,6 +3,12 @@
  * Funções comuns reutilizáveis em toda a aplicação
  */
 
+export { logger } from './logger';
+export { rateLimiter } from './rate-limiter';
+export { ErrorHandler } from './error-handler';
+export { InputValidator } from './validators/input-validator';
+export { InputSanitizer } from './input-sanitizer';
+
 /**
  * Aguarda um tempo determinado (em ms)
  */

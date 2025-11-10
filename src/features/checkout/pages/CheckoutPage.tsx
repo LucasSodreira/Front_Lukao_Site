@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
-import { useMutation } from '@apollo/client/react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import { PROCESS_STRIPE_PAYMENT } from '@/graphql/checkoutQueries';
+import { PROCESS_STRIPE_PAYMENT, GET_ORDER_BY_ID, CREATE_PAYMENT_INTENT } from '@/graphql/checkoutQueries';
 import type { PaymentIntentResponse, StripePaymentResponse } from '@/types/domain';
 import { OrderSummary, StripePaymentForm } from '../components';
 import { Container } from '@/ui/Container';
 import { Button } from '@/ui/Button';
+import { logger } from '@/utils';
 
 interface Order {
   id: string;
@@ -26,36 +27,87 @@ interface Order {
   createdAt: string;
 }
 
-interface LocationState {
+interface OrderQueryResult {
   order: Order;
-  paymentIntent: PaymentIntentResponse;
+}
+
+interface PaymentIntentMutationResult {
+  createPaymentIntent: PaymentIntentResponse;
 }
 
 interface StripePaymentResult {
   processStripePayment: StripePaymentResponse;
 }
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_placeholder');
+// Validar chave do Stripe
+const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+if (!stripeKey) {
+  throw new Error('VITE_STRIPE_PUBLISHABLE_KEY não configurada');
+}
+const stripePromise = loadStripe(stripeKey);
 
 export const CheckoutPage = () => {
   const { orderId } = useParams<{ orderId: string }>();
-  const location = useLocation();
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentIntent, setPaymentIntent] = useState<PaymentIntentResponse | null>(null);
 
-  const state = location.state as LocationState | undefined;
-  const order = state?.order;
-  const paymentIntent = state?.paymentIntent;
+  // Buscar dados do pedido do backend (mais seguro)
+  const { data: orderData, loading: orderLoading, error: orderError } = useQuery<OrderQueryResult>(
+    GET_ORDER_BY_ID,
+    {
+      variables: { orderId },
+      skip: !orderId,
+      fetchPolicy: 'network-only',
+    }
+  );
+
+  const order = orderData?.order;
+
+  // Mutation para criar payment intent
+  const [createPaymentIntent, { loading: paymentLoading }] = useMutation<PaymentIntentMutationResult>(
+    CREATE_PAYMENT_INTENT,
+    {
+      variables: { orderId },
+      onCompleted: (data) => {
+        if (data?.createPaymentIntent) {
+          setPaymentIntent(data.createPaymentIntent);
+          logger.info('Payment intent criado com sucesso', { paymentIntentId: data.createPaymentIntent.paymentIntentId });
+        }
+      },
+      onError: (err) => {
+        logger.error('Erro ao criar payment intent', { orderId, error: err.message });
+        setError('Erro ao criar intenção de pagamento. Tente novamente.');
+      },
+    }
+  );
 
   const [processStripePayment] = useMutation<StripePaymentResult>(PROCESS_STRIPE_PAYMENT);
 
-  // Validar que temos os dados necessários
+  // Validar que temos o orderId
   useEffect(() => {
-    if (!order || !paymentIntent || !orderId) {
+    if (!orderId) {
+      logger.warn('Tentativa de acesso ao checkout sem orderId');
       navigate('/cart');
     }
-  }, [order, paymentIntent, orderId, navigate]);
+  }, [orderId, navigate]);
+
+  // Criar payment intent quando o pedido for carregado 
+  useEffect(() => {
+    if (order && !paymentIntent && !paymentLoading) {
+      createPaymentIntent();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order?.id]); // Só executa quando o orderId mudar
+
+  // Lidar com erros de carregamento
+  useEffect(() => {
+    if (orderError) {
+      logger.error('Erro ao carregar pedido', { orderId, error: orderError.message });
+      setError('Erro ao carregar dados do pedido. Tente novamente.');
+    }
+  }, [orderError, orderId]);
 
   const handlePaymentSuccess = async (paymentIntentId: string) => {
     if (!orderId) {
@@ -98,12 +150,27 @@ export const CheckoutPage = () => {
     setError(error);
   };
 
+  // Mostrar loading enquanto carrega os dados
+  if (orderLoading || paymentLoading) {
+    return (
+      <Container>
+        <div className="text-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Carregando dados do pedido...</h1>
+          <p className="text-gray-600 dark:text-gray-300">Aguarde um momento</p>
+        </div>
+      </Container>
+    );
+  }
+
+  // Se não tem dados, redirecionar para carrinho
   if (!order || !paymentIntent) {
     return (
       <Container>
         <div className="text-center space-y-4">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Carregando...</h1>
-          <p className="text-gray-600 dark:text-gray-300">Redirecionando...</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Pedido não encontrado</h1>
+          <p className="text-gray-600 dark:text-gray-300">Redirecionando para o carrinho...</p>
+          <Button onClick={() => navigate('/cart')}>Voltar ao Carrinho</Button>
         </div>
       </Container>
     );

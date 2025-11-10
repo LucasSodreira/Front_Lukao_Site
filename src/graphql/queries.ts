@@ -38,6 +38,21 @@ export const GET_PRODUCTS = gql`
         url
         sortOrder
       }
+      variations {
+        id
+        sku
+        size {
+          id
+          name
+          code
+        }
+        color {
+          id
+          name
+          hexCode
+        }
+        quantity
+      }
       createdAt
       updatedAt
     }
@@ -89,6 +104,21 @@ export const SEARCH_PRODUCTS = gql`
           url
           sortOrder
         }
+        variations {
+          id
+          sku
+          size {
+            id
+            name
+            code
+          }
+          color {
+            id
+            name
+            hexCode
+          }
+          quantity
+        }
         createdAt
         updatedAt
       }
@@ -113,6 +143,23 @@ export const GET_PRODUCT = gql`
         id
         url
         sortOrder
+      }
+      variations {
+        id
+        sku
+        size {
+          id
+          name
+          code
+        }
+        color {
+          id
+          name
+          hexCode
+        }
+        quantity
+        createdAt
+        updatedAt
       }
       createdAt
       updatedAt
@@ -268,6 +315,12 @@ export const SIGN_IN = gql`
   }
 `;
 
+export const LOGOUT = gql`
+  mutation Logout {
+    logout
+  }
+`;
+
 export const ADD_TO_CART = gql`
   mutation AddToCart($productId: ID!, $quantity: Int!) {
     addToCart(productId: $productId, quantity: $quantity) {
@@ -380,6 +433,57 @@ export const SET_PRIMARY_ADDRESS = gql`
       country
       primary
       createdAt
+    }
+  }
+`;
+
+export const CREATE_PRODUCT_WITH_VARIATIONS = gql`
+  mutation CreateProductWithVariations(
+    $categoryId: ID!
+    $title: String!
+    $description: String
+    $price: Float!
+    $variations: [ProductVariationInput!]!
+  ) {
+    createProductWithVariations(
+      categoryId: $categoryId
+      title: $title
+      description: $description
+      price: $price
+      variations: $variations
+    ) {
+      id
+      title
+      description
+      price
+      status
+      categoryId
+      artisanId
+      inventory
+      images {
+        id
+        url
+        sortOrder
+      }
+      variations {
+        id
+        sku
+        size {
+          id
+          name
+          code
+        }
+        color {
+          id
+          name
+          hexCode
+        }
+        quantity
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
     }
   }
 `;

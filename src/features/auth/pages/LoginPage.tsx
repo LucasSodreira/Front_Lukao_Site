@@ -6,13 +6,14 @@
  */
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/shared/hooks';
 import { Card, CardBody, CardTitle } from '@/ui/Card';
 import { Button } from '@/ui/Button';
 import { Input } from '@/ui/Input';
 import { MESSAGES } from '@/constants';
 import { validateEmail, validatePassword } from '@/utils/validators';
+import { rateLimiter, InputSanitizer, logger } from '@/utils';
 
 export const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -23,6 +24,10 @@ export const LoginPage = () => {
 
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Pega a rota de origem se existir, para redirecionar após login
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/';
 
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {};
@@ -50,13 +55,26 @@ export const LoginPage = () => {
       return;
     }
 
+    // Rate limiting - máximo 5 tentativas em 15 minutos
+    const rateLimitKey = `login:${email}`;
+    if (!rateLimiter.canExecute(rateLimitKey, 5, 900000)) {
+      const timeLeft = rateLimiter.getTimeUntilReset(rateLimitKey);
+      const minutes = Math.ceil(timeLeft / 60);
+      setError(`Muitas tentativas. Tente novamente em ${minutes} minuto${minutes > 1 ? 's' : ''}.`);
+      return;
+    }
+
     setLoading(true);
     setError('');
 
     try {
       await login(email, password);
-      navigate('/');
+      // Reset rate limit em caso de sucesso
+      rateLimiter.reset(rateLimitKey);
+      // Redireciona para a rota original ou para home
+      navigate(from, { replace: true });
     } catch {
+      logger.error('Erro no login', { email });
       setError(MESSAGES.ERRORS.INVALID_CREDENTIALS);
     } finally {
       setLoading(false);
@@ -81,7 +99,7 @@ export const LoginPage = () => {
                 type="email"
                 placeholder="Email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(InputSanitizer.sanitizeEmail(e.target.value))}
                 disabled={loading}
                 className={fieldErrors.email ? 'border-destructive' : ''}
               />

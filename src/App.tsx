@@ -8,12 +8,12 @@ import { ThemeProvider } from '@/core/context/ThemeContext';
 
 // Shared Components
 import { Navbar, Footer } from '@/shared/components/layout';
-import { ErrorBoundary, PrivateRoute } from '@/shared/components/common';
+import { ErrorBoundary, PrivateRoute, PublicRoute, NotFoundPage } from '@/shared/components/common';
 import { Container } from '@/ui/Container';
 
 // Features - Pages
 import { LoginPage, RegisterPage } from '@/features/auth/pages';
-import { ProductsPage, ProductDetailPage } from '@/features/products/pages';
+import { ProductsPage, ProductDetailPage, CreateProductPage } from '@/features/products/pages';
 import { CartPage } from '@/features/cart/pages';
 import { ProfilePage } from '@/features/profile/pages';
 import { OrdersPage, OrderConfirmationPage } from '@/features/orders/pages';
@@ -31,16 +31,27 @@ function App() {
               <main className="flex-1">
                 <Container className="py-8 sm:py-10">
                   <Routes>
+                    {/* Rotas públicas */}
                     <Route path="/" element={<HomePage />} />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/register" element={<RegisterPage />} />
                     <Route path="/products" element={<ErrorBoundary><ProductsPage /></ErrorBoundary>} />
                     <Route path="/products/:id" element={<ProductDetailPage />} />
                     <Route path="/cart" element={<CartPage />} />
-                    <Route path="/checkout/:orderId" element={<CheckoutPage />} />
-                    <Route path="/order-confirmation/:orderId" element={<OrderConfirmationPage />} />
+                    
+                    {/* Rotas de autenticação - redireciona se já estiver logado */}
+                    <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+                    <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
+                    
+                    {/* Rotas protegidas - requer autenticação */}
+                    <Route path="/products/create" element={<PrivateRoute><CreateProductPage /></PrivateRoute>} />
+                    <Route path="/checkout/:orderId" element={<PrivateRoute><CheckoutPage /></PrivateRoute>} />
+                    <Route path="/checkout/success" element={<PrivateRoute><CheckoutSuccessPage /></PrivateRoute>} />
+                    <Route path="/checkout/cancel" element={<PrivateRoute><CheckoutCancelPage /></PrivateRoute>} />
+                    <Route path="/order-confirmation/:orderId" element={<PrivateRoute><OrderConfirmationPage /></PrivateRoute>} />
                     <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
                     <Route path="/orders" element={<PrivateRoute><OrdersPage /></PrivateRoute>} />
+                    
+                    {/* Rota 404 - Página não encontrada */}
+                    <Route path="*" element={<NotFoundPage />} />
                   </Routes>
                 </Container>
               </main>

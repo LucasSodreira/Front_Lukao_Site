@@ -1,8 +1,11 @@
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
 import { Container } from '@/ui/Container';
 import { Card, CardBody, CardTitle } from '@/ui/Card';
 import Badge from '@/ui/Badge';
+import { Button } from '@/ui/Button';
+import { ErrorHandler, logger } from '@/utils';
 
 const GET_MY_ORDERS = gql`
   query GetMyOrders($page: Int, $size: Int) {
@@ -57,6 +60,7 @@ interface OrdersData {
 }
 
 const OrdersPage = () => {
+  const navigate = useNavigate();
   const { loading, error, data } = useQuery<OrdersData>(GET_MY_ORDERS, {
     variables: { page: 0, size: 10 }
   });
@@ -94,15 +98,26 @@ const OrdersPage = () => {
   if (loading) {
     return (
       <Container className="py-8">
-        <div className="text-center text-gray-600 dark:text-gray-400">Carregando pedidos...</div>
+        <div className="text-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <div className="text-gray-600 dark:text-gray-400">Carregando pedidos...</div>
+        </div>
       </Container>
     );
   }
 
   if (error) {
+    logger.error('Erro ao carregar pedidos', { error: error.message });
     return (
       <Container className="py-8">
-        <div className="text-center text-red-600">Erro ao carregar pedidos: {error.message}</div>
+        <div className="text-center space-y-4">
+          <div className="text-red-600 dark:text-red-400 text-lg font-semibold">
+            {ErrorHandler.getUserFriendlyMessage(error)}
+          </div>
+          <Button onClick={() => window.location.reload()}>
+            Tentar Novamente
+          </Button>
+        </div>
       </Container>
     );
   }
@@ -182,6 +197,18 @@ const OrdersPage = () => {
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       <span className="font-medium">Observações:</span> {order.notes}
                     </p>
+                  </div>
+                )}
+
+                {/* Botão para continuar pagamento se o pedido está pendente */}
+                {order.status === 'CREATED' && (
+                  <div className="mt-4">
+                    <Button
+                      onClick={() => navigate(`/checkout/${order.id}`)}
+                      className="w-full"
+                    >
+                      Continuar Pagamento
+                    </Button>
                   </div>
                 )}
               </CardBody>

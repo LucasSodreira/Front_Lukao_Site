@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR"><head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>ModaMasculina - Detalhes do Produto</title>
+        <script
+            src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+        <link href="https://fonts.googleapis.com" rel="preconnect" />
+        <link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+            rel="stylesheet" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+            rel="stylesheet" />
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#195de6",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    }
+                },
+            },
+        }
+    </script>
+        <style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+    </style>
+    </head>
+    <body
+        class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-white">
+        <div
+            class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+            <header
+                class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700">
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                  <div
+                    class="flex h-20 items-center justify-between whitespace-nowrap">
+                    <div class="flex items-center gap-10">
+                      <a class="flex items-center gap-2 text-gray-800 dark:text-white"
+                        href="#">
+                        <div class="size-7 text-primary dark:text-white">
+                          <svg fill="none" viewBox="0 0 48 48"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z"
+                              fill="currentColor"></path>
+                          </svg>
+                        </div>
+                        <h1 class="text-2xl font-bold tracking-tight">THREADS</h1>
+                      </a>
+                      <nav class="hidden md:flex items-center gap-8">
+                        <a
+                          class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition-colors"
+                          href="#">Novidades</a>
+                        <a
+                          class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition-colors"
+                          href="#">Roupas</a>
+                        <a
+                          class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition-colors"
+                          href="#">Acessórios</a>
+                        <a
+                          class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition-colors"
+                          href="#">Marcas</a>
+                        <a
+                          class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition-colors"
+                          href="#">Promoções</a>
+                      </nav>
+                    </div>
+                    <div class="flex flex-1 justify-end items-center gap-4">
+                      <div class="hidden sm:flex relative items-center">
+                        <span
+                          class="material-symbols-outlined absolute left-3 text-gray-500 dark:text-gray-400">search</span>
+                        <input
+                          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-800 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border-none bg-gray-100 dark:bg-gray-800 h-10 placeholder:text-gray-500 dark:placeholder:text-gray-400 pl-10 pr-4 text-sm font-normal leading-normal"
+                          placeholder="Buscar" value />
+                      </div>
+                      <div class="flex gap-2">
+                        <button
+                          class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white dark:hover:bg-gray-700 min-w-0 px-2.5">
+                          <span class="material-symbols-outlined">favorite</span>
+                        </button>
+                        <button
+                          class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white dark:hover:bg-gray-700 min-w-0 px-2.5">
+                          <span class="material-symbols-outlined">shopping_cart</span>
+                        </button>
+                      </div>
+                      <div
+                        class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+                        data-alt="Avatar do usuário"
+                        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC52EDZXOpoeh2RcaCa5y38UKAtURhObxkr9jzI9wiF3SjzgyAKE1818wMl02fQDG21nlH-mvj09Y5c60Y1-5iOGAFwJ9ZIv0bJbhmbHzoqdPqLsXJS0fqj-OqFnw-_oC576tYmQjLrwVxfqKH5POe0_DefDZJWOxewfup8P3qB1Icyxej34l2Tg7SQYUw32D-XLdd2RGzYTvjAM0k8uwYc_hIRQn6Y5BybdRJjf_tiUGj82t2bvhJAmQJh9R9tECZdAtqtLWMtLtY');"></div>
+                    </div>
+                  </div>
+                </div>
+              </header>
+            <main class="layout-container flex h-full grow flex-col">
+                <div class="container mx-auto px-4 py-8">
+                    <div class="layout-content-container flex flex-col w-full">
+                        <div class="flex flex-wrap gap-2 pb-8">
+                            <a
+                                class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal hover:text-primary"
+                                href="#">Home</a>
+                            <span
+                                class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal">/</span>
+                            <a
+                                class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal hover:text-primary"
+                                href="#">Roupas</a>
+                            <span
+                                class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal">/</span>
+                            <a
+                                class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal hover:text-primary"
+                                href="#">Camisetas</a>
+                            <span
+                                class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal">/</span>
+                            <span
+                                class="text-text-light dark:text-text-dark text-sm font-medium leading-normal">Camiseta
+                                Básica Premium</span>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                            <div class="flex flex-col gap-4">
+                                <div
+                                    class="w-full bg-center bg-no-repeat bg-cover aspect-[4/5] rounded-xl bg-gray-200 dark:bg-gray-700"
+                                    data-alt="Model wearing the premium basic t-shirt in white"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA_X_yRyyLhjTWOf34SLYmEehARPzREF_7lTsQgns05ApDWMeRjY7DuIJWGEmXpVqjcagKJu4JXYkLAEeJo0gT8sLAHaroYGHXAh8gd7KIiPzmksi5bYdDBsKfUFh1Mii543DxtXOPnTBOI55qBKi7fm4596A46D7Oun7gauPbxWD68BWEAdREMhxmF9o6i9WnE0pL-kGtvQ4Y_Glisjh1z5YTZ89-DdI9Bfu5kb4ydp3Ev-gFrx_L1CxN7nceM7dShb-PdY3QyW5U");'></div>
+                                <div class="grid grid-cols-4 gap-4">
+                                    <div class="flex flex-col"><div
+                                            class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg border-2 border-primary"
+                                            data-alt="T-shirt thumbnail view 1"
+                                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB_GLmuttFu3BbjOvrLbIIgMrAOQmE8NMTL3Jo0w5K729_sPkjpn0WWLu6yHeqG4N6DmeowNziZSb8qPqi1F9v2NYl_S6CyhO1Vf9FV7V7E1zEI4ovi2r31kdkrTizFsOqvDKJHhrf5n0qZoHMIr6sisDI6Btj4iNs4Us_6juwMZnLDZZrZ-4NZhJz38LbcR5oJg0JFW4Ht4Fl09ASSPHgLTjKB2acWMTiMsgHAzyzI-4ZlwzBIa2AIgqm0CkcTHQ6FJGyEu_lCPE4");'></div></div>
+                                    <div class="flex flex-col"><div
+                                            class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg cursor-pointer opacity-70 hover:opacity-100 transition-opacity bg-gray-200 dark:bg-gray-700"
+                                            data-alt="T-shirt thumbnail view 2"
+                                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBHIuekZsIkIX1H6jw-2hI2lmHRqCA3hzqMRQAWDoPeI-4MTnNNXV55Y4SYiy1mTPvDT2Em-1npHcJ_bJ9mn9g-RHCB-zWc-4VtZbW-1U2BExKPesY2NclyudJjg-KhJi9frw_H2Il23vKxyNA3h8Lg1N7f5Yx_XXqjDYTby0RAXeLCD69GY1DLCIEESdhSGMxdPJ3wQNIywmT8NpMwlTYum52YaUeXlDjahoaG3VT53w_mSNj9whSbHWZaxi9YhLtzL1NmOhCoYBo");'></div></div>
+                                    <div class="flex flex-col"><div
+                                            class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg cursor-pointer opacity-70 hover:opacity-100 transition-opacity bg-gray-200 dark:bg-gray-700"
+                                            data-alt="T-shirt thumbnail view 3"
+                                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBuq5E0c0ge8Axu4PAPfjMqZKDVskOnzr1L2RrIzDzl0EugfS5yx8AJk0Ork55-EAd6TOzpsTUgklAAVp64bR69ZaY2kxupEvs5vcYvnfITvy41DsiTnXeh-n3YyihxvL3-qR3aAJgeLGdcAOSoWjlHGTpureO3Up-tgN50K9Q0M-kFCv1-3ACdJ6n200ex9Pgf5SA8BPBkCJJBh1LD1RAbnlO-WjochvJz3RwLgtRooexu_aAUM9-O7uJsrmiYdoSkYgqfn9njkWE");'></div></div>
+                                    <div class="flex flex-col"><div
+                                            class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg cursor-pointer opacity-70 hover:opacity-100 transition-opacity bg-gray-200 dark:bg-gray-700"
+                                            data-alt="T-shirt thumbnail view 4"
+                                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBACNk4hOARCwN9dnsYE4JqrLxb4GnGYwpaARRoRstX4Ax8grxztUoJYmqJB1j2NsebP8HX5_0hwNEu71HORK5KufVKDMVerYx_PuU4inIc8i03mde3TQhmBwNVv84UAJU__xL4R5GFiFGYFzsrQ0aUYmJZE4LU3KJ2UMaYTa-W4EXKaFEDFarVpqVx-heHyF0G7I5l-pWflGyC4bsPgA75OF43-fdl2Np5l0xNS5ij0TZn8QwX7Vycn2AAbNruggUT7dzggoJlKG4");'></div></div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-6">
+                                <div>
+                                    <p
+                                        class="text-sm font-semibold text-primary">Marca
+                                        Exemplo</p>
+                                    <h1
+                                        class="text-text-light dark:text-text-dark text-4xl font-bold leading-tight tracking-tight mt-1">Camiseta
+                                        Básica Premium</h1>
+                                    <div class="flex items-center gap-2 mt-3">
+                                        <div class="flex text-primary">
+                                            <span
+                                                class="material-symbols-outlined !text-xl">star</span>
+                                            <span
+                                                class="material-symbols-outlined !text-xl">star</span>
+                                            <span
+                                                class="material-symbols-outlined !text-xl">star</span>
+                                            <span
+                                                class="material-symbols-outlined !text-xl">star</span>
+                                            <span
+                                                class="material-symbols-outlined !text-xl text-subtle-light dark:text-subtle-dark">star_half</span>
+                                        </div>
+                                        <p
+                                            class="text-sm text-subtle-light dark:text-subtle-dark">(123
+                                            avaliações)</p>
+                                    </div>
+                                </div>
+                                <p
+                                    class="text-4xl font-bold text-text-light dark:text-text-dark">R$
+                                    119,90</p>
+                                <div class="flex flex-col gap-4">
+                                    <div>
+                                        <label
+                                            class="text-sm font-medium text-text-light dark:text-text-dark">Cor:
+                                            <span
+                                                class="font-bold">Branco</span></label>
+                                        <div class="flex gap-3 mt-2">
+                                            <button
+                                                class="size-8 rounded-full bg-white border-2 border-primary shadow-md"
+                                                data-alt="Color swatch for white"></button>
+                                            <button
+                                                class="size-8 rounded-full bg-black border-2 border-transparent hover:border-primary"
+                                                data-alt="Color swatch for black"></button>
+                                            <button
+                                                class="size-8 rounded-full bg-slate-500 border-2 border-transparent hover:border-primary"
+                                                data-alt="Color swatch for gray"></button>
+                                            <button
+                                                class="size-8 rounded-full bg-blue-900 border-2 border-transparent hover:border-primary"
+                                                data-alt="Color swatch for navy blue"></button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div
+                                            class="flex justify-between items-baseline">
+                                            <label
+                                                class="text-sm font-medium text-text-light dark:text-text-dark">Tamanho</label>
+                                            <a
+                                                class="text-sm font-medium text-primary hover:underline"
+                                                href="#">Guia de Medidas</a>
+                                        </div>
+                                        <div class="flex flex-wrap gap-3 mt-2">
+                                            <button
+                                                class="flex items-center justify-center rounded-lg h-10 px-4 text-sm font-bold border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark hover:border-primary">P</button>
+                                            <button
+                                                class="flex items-center justify-center rounded-lg h-10 px-4 text-sm font-bold border-2 border-primary bg-primary/10 text-primary">M</button>
+                                            <button
+                                                class="flex items-center justify-center rounded-lg h-10 px-4 text-sm font-bold border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark hover:border-primary">G</button>
+                                            <button
+                                                class="flex items-center justify-center rounded-lg h-10 px-4 text-sm font-bold border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark hover:border-primary">GG</button>
+                                            <button
+                                                class="flex items-center justify-center rounded-lg h-10 px-4 text-sm font-bold border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-subtle-light dark:text-subtle-dark cursor-not-allowed opacity-50"
+                                                disabled>XG</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label
+                                        class="text-sm font-normal text-text-light dark:text-text-dark mb-2">Quantidade</label>
+                                    <div
+                                        class="flex items-stretch h-10 rounded-lg border border-border-light dark:border-border-dark w-32">
+                                        <button
+                                            class="flex items-center justify-center w-10 text-subtle-light dark:text-subtle-dark hover:bg-border-light/50 dark:hover:bg-border-dark/50 rounded-l-lg transition-colors">
+                                            <span
+                                                class="material-symbols-outlined !text-base">remove</span>
+                                        </button>
+                                        <input
+                                            class="form-input flex flex-1 min-w-0 resize-none overflow-hidden text-center text-text-light dark:text-text-dark focus:outline-0 focus:ring-0 border-none bg-transparent px-2 text-sm font-medium leading-normal [appearance:textfield] [&amp;::-webkit-outer-spin-button]:appearance-none [&amp;::-webkit-inner-spin-button]:appearance-none"
+                                            min="1" type="number" value="1" />
+                                        <button
+                                            class="flex items-center justify-center w-10 text-subtle-light dark:text-subtle-dark hover:bg-border-light/50 dark:hover:bg-border-dark/50 rounded-r-lg transition-colors">
+                                            <span
+                                                class="material-symbols-outlined !text-base">add</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex flex-col gap-3 pt-4 border-t border-border-light dark:border-border-dark">
+                                    <button
+                                        class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-primary text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+                                        <span
+                                            class="material-symbols-outlined">shopping_bag</span>
+                                        Adicionar ao Carrinho
+                                    </button>
+                                    <button
+                                        class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-transparent text-primary border-2 border-primary gap-2 text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/10 transition-colors">
+                                        <span
+                                            class="material-symbols-outlined">favorite</span>
+                                        Adicionar à Lista de Desejos
+                                    </button>
+                                </div>
+                                <div
+                                    class="border-t border-border-light dark:border-border-dark pt-4">
+                                    <p
+                                        class="text-sm font-medium text-text-light dark:text-text-dark">Calcular
+                                        frete e prazo</p>
+                                    <div class="flex items-start gap-2 mt-2">
+                                        <div class="relative flex-grow">
+                                            <span
+                                                class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-subtle-light dark:text-subtle-dark !text-xl">local_shipping</span>
+                                            <input
+                                                class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-light dark:text-text-dark focus:outline-0 focus:ring-2 focus:ring-primary h-12 placeholder:text-subtle-light dark:placeholder:text-subtle-dark pl-10 text-sm font-normal leading-normal border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark"
+                                                placeholder="Digite seu CEP"
+                                                value />
+                                        </div>
+                                        <button
+                                            class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 shrink-0 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">Simular</button>
+                                    </div>
+                                    <a
+                                        class="text-xs text-subtle-light dark:text-subtle-dark hover:text-primary mt-1 inline-block"
+                                        href="#">Não sei meu CEP</a>
+                                </div>
+                                <p
+                                    class="text-base text-subtle-light dark:text-subtle-dark leading-relaxed pt-4">
+                                    A Camiseta Básica Premium é a peça essencial
+                                    que faltava no seu guarda-roupa. Feita com
+                                    algodão pima peruano, oferece um toque ultra
+                                    macio e um caimento perfeito.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="py-16">
+                            <div
+                                class="border-t border-border-light dark:border-border-dark">
+                                <details class="group py-4" open>
+                                    <summary
+                                        class="flex cursor-pointer list-none items-center justify-between font-medium">
+                                        <span
+                                            class="text-lg font-semibold">Detalhes
+                                            do Produto</span>
+                                        <span
+                                            class="transition group-open:rotate-180">
+                                            <span
+                                                class="material-symbols-outlined">expand_more</span>
+                                        </span>
+                                    </summary>
+                                    <div
+                                        class="mt-4 text-subtle-light dark:text-subtle-dark prose prose-sm max-w-none">
+                                        <p>Nossa camiseta premium redefine o
+                                            conceito de básico. Com modelagem
+                                            comfort, gola canelada e costura
+                                            reforçada ombro a ombro, ela é
+                                            sinônimo de durabilidade e estilo
+                                            atemporal. Perfeita para compor
+                                            looks casuais e sofisticados.</p>
+                                    </div>
+                                </details>
+                            </div>
+                            <div
+                                class="border-t border-border-light dark:border-border-dark">
+                                <details class="group py-4">
+                                    <summary
+                                        class="flex cursor-pointer list-none items-center justify-between font-medium">
+                                        <span
+                                            class="text-lg font-semibold">Composição
+                                            e Cuidados</span>
+                                        <span
+                                            class="transition group-open:rotate-180">
+                                            <span
+                                                class="material-symbols-outlined">expand_more</span>
+                                        </span>
+                                    </summary>
+                                    <div
+                                        class="mt-4 text-subtle-light dark:text-subtle-dark prose prose-sm max-w-none">
+                                        <ul>
+                                            <li>100% Algodão Pima</li>
+                                            <li>Lavar à máquina com água
+                                                fria</li>
+                                            <li>Não usar alvejante</li>
+                                            <li>Secar em temperatura baixa</li>
+                                            <li>Passar a ferro em temperatura
+                                                média</li>
+                                        </ul>
+                                    </div>
+                                </details>
+                            </div>
+                            <div
+                                class="border-t border-b border-border-light dark:border-border-dark">
+                                <details class="group py-4">
+                                    <summary
+                                        class="flex cursor-pointer list-none items-center justify-between font-medium">
+                                        <span
+                                            class="text-lg font-semibold">Avaliações
+                                            de Clientes (123)</span>
+                                        <span
+                                            class="transition group-open:rotate-180">
+                                            <span
+                                                class="material-symbols-outlined">expand_more</span>
+                                        </span>
+                                    </summary>
+                                    <div
+                                        class="mt-4 text-subtle-light dark:text-subtle-dark prose prose-sm max-w-none">
+                                        <p>Veja o que nossos clientes estão
+                                            dizendo sobre este produto.</p>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+                        <div class="pb-16">
+                            <h2 class="text-2xl font-bold mb-6">Produtos
+                                Relacionados</h2>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                                <div class="flex flex-col gap-3 group">
+                                    <div
+                                        class="w-full bg-center bg-no-repeat aspect-[4/5] bg-cover rounded-xl bg-gray-200 dark:bg-gray-700 overflow-hidden"
+                                        data-alt="Model wearing a black hoodie"
+                                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBtzasMGW7f-krs9TLSZWI7FAqvrtD31ICgSK5BzfyAR311uDp6v0AWaY8A3tZ3TiAlQ2vdOD8K0nM5Poogi9lXfTCBf031l11w8WVCr6Rgl6aS8qGO5KmjXhu1-lRrV5Rm1oZ3bz50JL4MRPjeT2vCSI_Xy74x4oyDhKN0L2-wRnUudlgDGEMa7u8Papzhv91yPLcoozNBAhr6zT65Mz2Hi3LEfkkxfGCD9ECgungx2vnWnqgAMuqCye2UJbaEkYoeCALKHRSK5MU");'></div>
+                                    <div class="flex flex-col">
+                                        <h3
+                                            class="font-semibold group-hover:text-primary transition-colors">Moletom
+                                            Essencial</h3>
+                                        <p
+                                            class="text-subtle-light dark:text-subtle-dark text-sm">R$
+                                            249,90</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-3 group">
+                                    <div
+                                        class="w-full bg-center bg-no-repeat aspect-[4/5] bg-cover rounded-xl bg-gray-200 dark:bg-gray-700 overflow-hidden"
+                                        data-alt="Dark wash denim jeans"
+                                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBVjGJ4UO-zkbhvu8vxbAoQVhvrmgY98T24tqzC8D9wSSNOapVJ9PqNXyCghiaknw_cP6PYzFtwJgJXZQL49wTtblyTvA2EEP_BlCc3Jas-JdAYV7WW42_iCOiL2Q8iFP7RtdImIwBJIAdpC_mlj6LEkLAhyFyXSN1Szv8n6G4ovpAOLOGfTLtmDun1GEA0znxZugfF6cOqclVQlkAZwDxGLpi4_KpBPAy9xZSriFRexm63z6S6gTFfjlAZ7ohb5NZUDorvIOiWqnE");'></div>
+                                    <div class="flex flex-col">
+                                        <h3
+                                            class="font-semibold group-hover:text-primary transition-colors">Calça
+                                            Jeans Slim Fit</h3>
+                                        <p
+                                            class="text-subtle-light dark:text-subtle-dark text-sm">R$
+                                            199,90</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-3 group">
+                                    <div
+                                        class="w-full bg-center bg-no-repeat aspect-[4/5] bg-cover rounded-xl bg-gray-200 dark:bg-gray-700 overflow-hidden"
+                                        data-alt="White leather sneakers"
+                                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBLNaZlHXC1PfCOjK3DQK1qCjI1boW0Lo04yyhBP1dl1WwK4Fw-jUf9Fmbk_AOFMxKB2VyFIQKjF_h2msdxGKa_cdNFlhTZoLk1nlGJ3l6SYYrvhGVS4__6TfQU3pIeAU8tL9NQ1gQTk5yd5lAssJLPLz91yaLxL53ShI-Bw4MGL0Gi2JBLcoK9j3HSh3BkhtnqH34OHElZ4jw2DN4pycaQWXc496yf5sg7JhbTODOFF_I-J5OgwZ9W1Pvx6tdJB9uVX1TJz0djYQQ");'></div>
+                                    <div class="flex flex-col">
+                                        <h3
+                                            class="font-semibold group-hover:text-primary transition-colors">Tênis
+                                            Casual Couro</h3>
+                                        <p
+                                            class="text-subtle-light dark:text-subtle-dark text-sm">R$
+                                            329,90</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-3 group">
+                                    <div
+                                        class="w-full bg-center bg-no-repeat aspect-[4/5] bg-cover rounded-xl bg-gray-200 dark:bg-gray-700 overflow-hidden"
+                                        data-alt="Man wearing a classic watch"
+                                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAy6-VGemLtgNmw72Y7iq-mtGi04O69JsgH1CT8GAZF1khNeRf7F4e5TJGieEcR0feE9vSD81iWlypmLzSf8Kz_Qg71sECnBmqTEziC7W37bCNtSMBcnYxv92j2OU2UZaLyYvavThz4LRiCRJ9uMUGfk3cMQf2CRc6vNUh_0aZn1dyXPYxOYb2Vdnat_4iHZQ0HPsMxZom5Ij-ZZYe7DcVpHU86kJQsBQPWUuTv-P1mJK5-lyn0gvJtw6syDM4S_wZE_F_EG-GDbBs");'></div>
+                                    <div class="flex flex-col">
+                                        <h3
+                                            class="font-semibold group-hover:text-primary transition-colors">Relógio
+                                            Clássico</h3>
+                                        <p
+                                            class="text-subtle-light dark:text-subtle-dark text-sm">R$
+                                            499,90</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </body></html>

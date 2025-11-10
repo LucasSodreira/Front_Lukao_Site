@@ -2,12 +2,13 @@ import { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client/react';
 import { useNavigate } from 'react-router-dom';
 import { GET_MY_CART, UPDATE_CART_ITEM, REMOVE_FROM_CART, CLEAR_CART, GET_MY_ADDRESSES } from '@/graphql/queries';
-import { AUTHENTICATED_CHECKOUT, CREATE_PAYMENT_INTENT } from '@/graphql/checkoutQueries';
+import { AUTHENTICATED_CHECKOUT } from '@/graphql/checkoutQueries';
 import type { Cart, CartItem } from '@/types';
 import { Card, CardBody } from '@/ui/Card';
 import { Button } from '@/ui/Button';
 import { CheckoutModal } from '../components/CheckoutModal';
 import { useAuth } from '@/shared/hooks';
+import { logger, ErrorHandler, InputValidator } from '@/utils';
 
 interface CartQueryResult {
   myCart: Cart;
@@ -43,16 +44,6 @@ interface AuthenticatedCheckoutResult {
   };
 }
 
-interface PaymentIntentResult {
-  createPaymentIntent: {
-    paymentIntentId: string;
-    clientSecret: string;
-    status: string;
-    amount: number;
-    currency: string;
-  };
-}
-
 const SHIPPING_COST = 15.0; // Frete fixo por enquanto
 
 export const CartPage = () => {
@@ -73,10 +64,19 @@ export const CartPage = () => {
   const [removeFromCart] = useMutation(REMOVE_FROM_CART, { refetchQueries: [{ query: GET_MY_CART }] });
   const [clearCart, { loading: clearing }] = useMutation(CLEAR_CART, { refetchQueries: [{ query: GET_MY_CART }] });
   const [authenticatedCheckout] = useMutation<AuthenticatedCheckoutResult>(AUTHENTICATED_CHECKOUT);
-  const [createPaymentIntent] = useMutation<PaymentIntentResult>(CREATE_PAYMENT_INTENT);
 
   if (loading) return <div className="text-gray-600 dark:text-gray-300">Carregando carrinho...</div>;
-  if (error) return <div className="text-red-600">Erro ao carregar carrinho: {error.message}</div>;
+  if (error) {
+    logger.error('Erro ao carregar carrinho', { error: error.message });
+    return (
+      <div className="text-center space-y-4 py-8">
+        <div className="text-red-600 dark:text-red-400 text-lg font-semibold">
+          {ErrorHandler.getUserFriendlyMessage(error)}
+        </div>
+        <Button onClick={() => window.location.reload()}>Tentar Novamente</Button>
+      </div>
+    );
+  }
 
   const cart = data?.myCart;
 
@@ -122,32 +122,37 @@ export const CartPage = () => {
       const order = orderResult.data?.checkout;
       if (!order) throw new Error('Falha ao criar pedido');
 
-      // 2. Criar o Payment Intent para o pedido
-      const paymentIntentResult = await createPaymentIntent({
-        variables: {
-          orderId: order.id,
-        },
-      });
-
-      const paymentIntent = paymentIntentResult.data?.createPaymentIntent;
-      if (!paymentIntent) throw new Error('Falha ao criar intenção de pagamento');
-
-      // 3. Navegar para a página de checkout com os dados necessários
+      
+      // Navegar para a página de checkout com o ID do pedido
       setIsCheckoutOpen(false);
-      navigate(`/checkout/${order.id}`, {
-        state: {
-          order,
-          paymentIntent,
-        },
-      });
+      navigate(`/checkout/${order.id}`);
 
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido';
-      console.error('Erro no checkout:', err);
-      alert(`Erro ao processar checkout: ${errorMessage}`);
+      logger.error('Erro no checkout', { error: err });
+      const friendlyMessage = ErrorHandler.getUserFriendlyMessage(err);
+      alert(friendlyMessage);
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const handleUpdateQuantity = (productId: string, newQuantity: number) => {
+    // Validar ID do produto
+    if (!InputValidator.validateProductId(productId)) {
+      logger.error('ID de produto inválido', { productId });
+      alert('Erro: ID de produto inválido');
+      return;
+    }
+
+    // Validar quantidade
+    if (!InputValidator.validateQuantity(newQuantity)) {
+      alert('Quantidade inválida. Mínimo: 1, Máximo: 999');
+      return;
+    }
+
+    updateCartItem({
+      variables: { productId, quantity: newQuantity },
+    });
   };
 
   return (
@@ -170,11 +175,8 @@ export const CartPage = () => {
                 <Button
                   variant="secondary"
                   size="sm"
-                  onClick={() =>
-                    updateCartItem({
-                      variables: { productId: item.product.id, quantity: Math.max(0, item.quantity - 1) },
-                    })
-                  }
+                  onClick={() => handleUpdateQuantity(item.product.id, Math.max(1, item.quantity - 1))}
+                  disabled={item.quantity <= 1}
                 >
                   -
                 </Button>
@@ -182,11 +184,8 @@ export const CartPage = () => {
                 <Button
                   variant="secondary"
                   size="sm"
-                  onClick={() =>
-                    updateCartItem({
-                      variables: { productId: item.product.id, quantity: item.quantity + 1 },
-                    })
-                  }
+                  onClick={() => handleUpdateQuantity(item.product.id, item.quantity + 1)}
+                  disabled={item.quantity >= 999}
                 >
                   +
                 </Button>

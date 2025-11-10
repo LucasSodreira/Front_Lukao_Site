@@ -3,6 +3,8 @@ import { GET_ME } from '@/graphql/queries';
 import type { User } from '@/types';
 import { Card, CardBody, CardTitle } from '@/ui/Card';
 import { AddressList } from '@/features/profile/components';
+import { Button } from '@/ui/Button';
+import { ErrorHandler, logger } from '@/utils';
 
 interface MeQueryResult {
   me: User;
@@ -11,8 +13,28 @@ interface MeQueryResult {
 const ProfilePage = () => {
   const { loading: userLoading, error: userError, data: userData } = useQuery<MeQueryResult>(GET_ME);
 
-  if (userLoading) return <div className="text-gray-600 dark:text-gray-300">Carregando perfil...</div>;
-  if (userError) return <div className="text-red-600">Erro ao carregar perfil: {userError.message}</div>;
+  if (userLoading) {
+    return (
+      <div className="text-center space-y-4 py-8">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+        <div className="text-gray-600 dark:text-gray-300">Carregando perfil...</div>
+      </div>
+    );
+  }
+  
+  if (userError) {
+    logger.error('Erro ao carregar perfil', { error: userError.message });
+    return (
+      <div className="text-center space-y-4 py-8">
+        <div className="text-red-600 dark:text-red-400 text-lg font-semibold">
+          {ErrorHandler.getUserFriendlyMessage(userError)}
+        </div>
+        <Button onClick={() => window.location.reload()}>
+          Tentar Novamente
+        </Button>
+      </div>
+    );
+  }
 
   const user = userData?.me;
 

@@ -56,3 +56,25 @@ export const CREATE_CHECKOUT_SESSION = gql`
     }
   }
 `;
+
+// Query para buscar dados do pedido (correção de segurança)
+export const GET_ORDER_BY_ID = gql`
+  query GetOrderById($orderId: ID!) {
+    order(id: $orderId) {
+      id
+      status
+      totalAmount
+      shippingCost
+      items {
+        id
+        product {
+          id
+          title
+        }
+        quantity
+        totalPrice
+      }
+      createdAt
+    }
+  }
+`;

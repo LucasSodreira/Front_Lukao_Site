@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR"><head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Moda Masculina - Loja de Roupas e Acessórios</title>
+    <script
+      src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet" />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#195de6",
+              "background-light": "#f6f6f8",
+              "background-dark": "#111621",
+            },
+            fontFamily: {
+              "display": ["Manrope", "sans-serif"]
+            },
+            borderRadius: {
+              "DEFAULT": "0.25rem",
+              "lg": "0.5rem",
+              "xl": "0.75rem",
+              "full": "9999px"
+            },
+          },
+        },
+      }
+    </script>
+  </head>
+  <body
+    class="font-display bg-background-light dark:bg-background-dark text-gray-800 dark:text-white">
+    <div
+      class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+      <div class="layout-container flex h-full grow flex-col">
+        <header
+          class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700">
+          <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div
+              class="flex h-20 items-center justify-between whitespace-nowrap">
+              <div class="flex items-center gap-10">
+                <a class="flex items-center gap-2 text-gray-800 dark:text-white"
+                  href="#">
+                  <div class="size-7 text-primary dark:text-text-dark">
+                    <svg fill="none" viewBox="0 0 48 48"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z"
+                        fill="currentColor"></path>
+                    </svg>
+                  </div>
+                  <h1 class="text-2xl font-bold tracking-tight">THREADS</h1>
+                </a>
+                <nav class="hidden md:flex items-center gap-8">
+                  <a
+                    class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                    href="#">Novidades</a>
+                  <a
+                    class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                    href="#">Roupas</a>
+                  <a
+                    class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                    href="#">Acessórios</a>
+                  <a
+                    class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                    href="#">Marcas</a>
+                  <a
+                    class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                    href="#">Promoções</a>
+                </nav>
+              </div>
+              <div class="flex flex-1 justify-end items-center gap-4">
+                <div class="hidden sm:flex relative items-center">
+                  <span
+                    class="material-symbols-outlined absolute left-3 text-gray-500 dark:text-gray-400">search</span>
+                  <input
+                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-800 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border-none bg-gray-100 dark:bg-gray-800 h-10 placeholder:text-gray-500 dark:placeholder:text-gray-400 pl-10 pr-4 text-sm font-normal leading-normal"
+                    placeholder="Buscar" value />
+                </div>
+                <div class="flex gap-2">
+                  <button
+                    class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white dark:hover:bg-gray-700 min-w-0 px-2.5">
+                    <span class="material-symbols-outlined">favorite</span>
+                  </button>
+                  <button
+                    class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white dark:hover:bg-gray-700 min-w-0 px-2.5">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                  </button>
+                </div>
+                <div
+                  class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+                  data-alt="Avatar do usuário"
+                  style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC52EDZXOpoeh2RcaCa5y38UKAtURhObxkr9jzI9wiF3SjzgyAKE1818wMl02fQDG21nlH-mvj09Y5c60Y1-5iOGAFwJ9ZIv0bJbhmbHzoqdPqLsXJS0fqj-OqFnw-_oC576tYmQjLrwVxfqKH5POe0_DefDZJWOxewfup8P3qB1Icyxej34l2Tg7SQYUw32D-XLdd2RGzYTvjAM0k8uwYc_hIRQn6Y5BybdRJjf_tiUGj82t2bvhJAmQJh9R9tECZdAtqtLWMtLtY');"></div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <main class="flex-1">
+          <section
+            class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+            <div
+              class="flex overflow-x-auto [-ms-scrollbar-style:none] [scrollbar-width:none] [&amp;::-webkit-scrollbar]:hidden">
+              <div class="flex w-full items-stretch p-1 gap-6 md:gap-8">
+                <div
+                  class="relative flex h-auto flex-1 flex-col rounded-xl bg-white dark:bg-gray-800 min-w-[300px] sm:min-w-[400px] md:min-w-[500px] aspect-[4/3] overflow-hidden group">
+                  <div
+                    class="absolute inset-0 bg-center bg-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
+                    data-alt="Modelo masculino vestindo um conjunto de moletom cinza em um ambiente urbano."
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDPmBfUWwkqvBC-JkgaVDk3w9N3mD3ew3w3EBa-UgseHryrAUeSIAWyW38x5hRVjk7RlwAdTgZHoVh5vj3hoGazApCYhz-NVj9rUgjdq3sQ4C7VU0h6wFR2RwmrXuKmI2LfkQFTPXIfJOHg5bEEyuED-4ADgZjATUdCC5zTvX134eitZviZrCnHluFtyhnFwAWu6rZa7MBUb17DqZpdqHlkic24kGCbp3aEYkHUBcHVTqtTzsymg7WahWr8iWiHdJZtwu-dlLF4RoY");'></div>
+                  <div
+                    class="relative flex flex-col flex-1 justify-end p-6 md:p-8 bg-gradient-to-t from-black/60 to-transparent text-white">
+                    <div>
+                      <h2
+                        class="text-3xl md:text-4xl font-bold tracking-tight">Kits
+                        da Semana</h2>
+                      <p
+                        class="text-base font-normal mt-2 max-w-md text-slate-200">Combinações
+                        perfeitas para o seu estilo, prontas para usar.</p>
+                    </div>
+                    <button
+                      class="flex mt-6 w-fit min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-white text-black text-sm font-bold tracking-wide hover:bg-slate-200 transition-colors">
+                      <span class="truncate">Comprar Agora</span>
+                    </button>
+                  </div>
+                </div>
+                <div
+                  class="relative flex h-auto flex-1 flex-col rounded-xl bg-white dark:bg-gray-800 min-w-[300px] sm:min-w-[400px] md:min-w-[500px] aspect-[4/3] overflow-hidden group">
+                  <div
+                    class="absolute inset-0 bg-center bg-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
+                    data-alt="Homem na praia vestindo uma camisa de linho e bermuda, representando a coleção de verão."
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCuFJutGUFjeQWh5sSsG23Nq8DNgUysOVjXejDepTF6-QDfNWmUxfmlP8bqU25BSDwluwC5rcJSqaYkkv_scBBW-pBVh6v44r3SKMxBaYE0pSIlh9yCxbRivBvifLp3YUW-yk8rQ7vUMLos2Bg0G7H0i0zgyveIWDO6sbdjZYlU-o8dlT18LcBV61D64wkJN2PAJExmce79-uBqWAmfNaUo26XVnZkfnXInwzi_nerhT-ARFcK-sFJzF3rM3G3BJ_u0U0nrPorE2bs");'></div>
+                  <div
+                    class="relative flex flex-col flex-1 justify-end p-6 md:p-8 bg-gradient-to-t from-black/60 to-transparent text-white">
+                    <div>
+                      <h2
+                        class="text-3xl md:text-4xl font-bold tracking-tight">Coleção
+                        de Verão</h2>
+                      <p
+                        class="text-base font-normal mt-2 max-w-md text-slate-200">Peças
+                        leves e versáteis para os dias mais quentes.</p>
+                    </div>
+                    <button
+                      class="flex mt-6 w-fit min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-white text-black text-sm font-bold tracking-wide hover:bg-slate-200 transition-colors">
+                      <span class="truncate">Ver Coleção</span>
+                    </button>
+                  </div>
+                </div>
+                <div
+                  class="relative flex h-auto flex-1 flex-col rounded-xl bg-white dark:bg-gray-800 min-w-[300px] sm:min-w-[400px] md:min-w-[500px] aspect-[4/3] overflow-hidden group">
+                  <div
+                    class="absolute inset-0 bg-center bg-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
+                    data-alt="Close-up de diversos acessórios masculinos como relógio, óculos de sol e cinto de couro."
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAidZOwAZkitN5nM-wpzLQxuy0P8UYwYmwg6XjNEYzOY0ZPy-yY1gu_OZLxbrRwnWzOGtehpMJEW_YpW8NzsxAJh88DOsP0lQ6l0LU3avgogtJpESSI3fOGqSY0krosYlMvNTwySntCTQKB3b7K6Q4gdOUrofyp-3BqkZIIMAbwrwbWaTOY8decVbGxq0seqO3VSTTWnhwoBGF6dgiP6tGtuxAoj5Q-gmlNBQjlkwtk74CoQqumDN9vl32qYhJG8TnlYQewbYf3214");'></div>
+                  <div
+                    class="relative flex flex-col flex-1 justify-end p-6 md:p-8 bg-gradient-to-t from-black/60 to-transparent text-white">
+                    <div>
+                      <h2
+                        class="text-3xl md:text-4xl font-bold tracking-tight">Novos
+                        Acessórios</h2>
+                      <p
+                        class="text-base font-normal mt-2 max-w-md text-slate-200">Complete
+                        seu visual com os detalhes que fazem a diferença.</p>
+                    </div>
+                    <button
+                      class="flex mt-6 w-fit min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-6 bg-white text-black text-sm font-bold tracking-wide hover:bg-slate-200 transition-colors">
+                      <span class="truncate">Ver Acessórios</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section
+            class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+            <div class="flex justify-between items-center pb-8">
+              <h2 class="text-3xl font-bold tracking-tight">Novidades</h2>
+              <a
+                class="flex items-center gap-2 text-sm font-medium tracking-wide text-gray-800 dark:text-white hover:text-subtle-light dark:hover:text-subtle-dark transition-colors group"
+                href="#">
+                <span>Ver tudo</span>
+                <span
+                  class="material-symbols-outlined transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+              </a>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+              <div class="flex flex-col gap-4 group cursor-pointer">
+                <div
+                  class="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-xl overflow-hidden"
+                  data-alt="Modelo masculino vestindo uma jaqueta bomber de cor verde oliva sobre uma camiseta branca."
+                  style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDZspN4SsDRK3ktBRpLt-VYJGpuRICWDq2lwmXIEUqs-kRFh0pnOseM6QZqtDQx81dpOW17ykUR5NHljTdjntURMqr-sX0vEEr07Nqvhk7j_vwlH7LIh8Lslh1TJU5OlH14Uhp_y_shUcNU-GXM_Wk4flnqtcLzmviQJQiU4OIRKRYBYy32iE_rrWk7weckR6ZfYnsU2HD_WUwK7OeeN5wzOzd4SAZ-7znr64ua_Xdmvr0BG2oNLcdwiJ2alYQxeL8OakuyK2ziaPM");'></div>
+                <div class="flex flex-col items-start">
+                  <h3 class="text-base font-semibold leading-snug">Jaqueta
+                    Bomber Verde</h3>
+                  <p
+                    class="text-sm font-normal leading-normal text-gray-500 dark:text-gray-400 mt-1">R$
+                    349,90</p>
+                </div>
+              </div>
+              <div class="flex flex-col gap-4 group cursor-pointer">
+                <div
+                  class="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-xl overflow-hidden"
+                  data-alt="Camisa de linho de manga curta com listras verticais em azul e branco."
+                  style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCftokoezCBis3H3vGweZzj526aOtQNG_TnAj_GH3kzRy0zZE5rNy9i7ll3QK7P8B6crrM83zQ1jy-RvmZ65ilAkX-yh52iDupcPIkorJd2lXiG0HcgpYDtgQ4RedpmwOM0N2sLcNiYSHX9aH-ydseO9SkfGNbG_SNPMMKHx1hOnpyVzT8-E_UVhCj5DOvZN9tDWo3-9FMbwG1tCyW357Zq4d-AwUZ-pym-_u-KZPZJE_DwiAE2Wn5DawIEPmVM8wCA_ROQBTTCrlQ");'></div>
+                <div class="flex flex-col items-start">
+                  <h3 class="text-base font-semibold leading-snug">Camisa de
+                    Linho Listrada</h3>
+                  <p
+                    class="text-sm font-normal leading-normal text-gray-500 dark:text-gray-400 mt-1">R$
+                    189,90</p>
+                </div>
+              </div>
+              <div class="flex flex-col gap-4 group cursor-pointer">
+                <div
+                  class="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-xl overflow-hidden"
+                  data-alt="Bermuda de sarja na cor cáqui com um cinto de couro."
+                  style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCvkk7jS32y9nbiUjKlXFVe0lve42ttAf3PdnCNlsEF1Wml_tX0NIOkqfN-WJJiMWcqaw_BkKLEz783Xot4Fw-dxYiswmuP_nCCrxYU55hSSiN3hzWyfJVvKPp6h5veMIqutAdSGi2etH0Hv7rT3dhDX1jrllNtlGFSoNydztgXOUQGa2XeFgwBpIDf4Zb3eOsEhzFKKtH6dbebRuuQigb1vufYh05Wqfat8H8xqR2RmMhyZKrSz_Fp-xZdwZ9pHH_FxLLszf-jsfc");'></div>
+                <div class="flex flex-col items-start">
+                  <h3 class="text-base font-semibold leading-snug">Bermuda Sarja
+                    Cáqui</h3>
+                  <p
+                    class="text-sm font-normal leading-normal text-gray-500 dark:text-gray-400 mt-1">R$
+                    159,90</p>
+                </div>
+              </div>
+              <div class="flex flex-col gap-4 group cursor-pointer">
+                <div
+                  class="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-xl overflow-hidden"
+                  data-alt="Óculos de sol estilo aviador com armação de metal dourada e lentes escuras."
+                  style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCEE388E_--ufYiVjh83VD0BX0R8w39Fz9FwgQRrcIX_Ow7_wzvdy6NTxcIxoR_f6gcdtkimwCwltjvqmfQthET99pWEwt-M-dKuwRAZ0nv0DIhOW5MJJ0MAZGO-PoieGqGThR5kRViL45lvYccBiXzrf9xvjiJVai3dY3D-PhsQSW0UvhDjv4xrPysjUPpavn1qhyYY1DIkZcUViU6TaSybWaQiN6U1ixKj7Wp6gi_SAVUIXaDyyzCoNovYiK4VjBRgTZgp-Ocfuk");'></div>
+                <div class="flex flex-col items-start">
+                  <h3 class="text-base font-semibold leading-snug">Óculos de Sol
+                    Aviador</h3>
+                  <p
+                    class="text-sm font-normal leading-normal text-gray-500 dark:text-gray-400 mt-1">R$
+                    299,90</p>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section
+            class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+            <div
+              class="bg-white dark:bg-gray-800 rounded-xl p-8 md:p-16 text-center">
+              <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Junte-se
+                ao nosso clube</h2>
+              <p
+                class="mt-4 max-w-2xl mx-auto text-gray-500 dark:text-gray-400">Fique
+                por dentro das últimas tendências, novidades e ofertas
+                exclusivas. Inscreva-se na nossa newsletter.</p>
+              <form class="flex max-w-md mx-auto mt-8">
+                <input
+                  class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-none rounded-full text-gray-800 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-200 dark:border-gray-700 bg-background-light dark:bg-background-dark focus:border-primary/50 h-12 placeholder:text-subtle-light dark:placeholder:text-subtle-dark px-6 text-base font-normal leading-normal"
+                  placeholder="Seu melhor e-mail" type="email" />
+                <button
+                  class="flex min-w-[100px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-l-none rounded-full h-12 px-6 bg-primary text-background-light dark:bg-text-dark dark:text-background-dark text-sm font-bold tracking-wide hover:bg-primary/90 dark:hover:bg-slate-200 transition-colors"
+                  type="submit">
+                  <span class="truncate">Inscrever</span>
+                </button>
+              </form>
+            </div>
+          </section>
+        </main>
+        <footer
+          class="bg-white dark:bg-gray-800 mt-12 border-t border-gray-200 dark:border-gray-700">
+          <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
+              <div class="col-span-2 lg:col-span-1">
+                <h3 class="font-bold text-lg mb-4">THREADS</h3>
+                <p class="text-gray-500 dark:text-gray-400 text-sm">Estilo e
+                  sofisticação para o homem moderno.</p>
+              </div>
+              <div>
+                <h3 class="font-semibold mb-4">Loja</h3>
+                <ul class="space-y-3 text-sm text-gray-500 dark:text-gray-400">
+                  <li><a
+                      class="hover:text-text-light dark:hover:text-text-dark transition-colors"
+                      href="#">Novidades</a></li>
+                  <li><a
+                      class="hover:text-text-light dark:hover:text-text-dark transition-colors"
+                      href="#">Roupas</a></li>
+                  <li><a
+                      class="hover:text-text-light dark:hover:text-text-dark transition-colors"
+                      href="#">Acessórios</a></li>
+                  <li><a
+                      class="hover:text-text-light dark:hover:text-text-dark transition-colors"
+                      href="#">Promoções</a></li>
+                </ul>
+              </div>
+              <div>
+                <h3 class="font-semibold mb-4">Institucional</h3>
+                <ul class="space-y-3 text-sm text-gray-500 dark:text-gray-400">
+                  <li><a
+                      class="hover:text-text-light dark:hover:text-text-dark transition-colors"
+                      href="#">Sobre Nós</a></li>
+                  <li><a
+                      class="hover:text-text-light dark:hover:text-text-dark transition-colors"
+                      href="#">Contato</a></li>
+                  <li><a
+                      class="hover:text-text-light dark:hover:text-text-dark transition-colors"
+                      href="#">Trabalhe Conosco</a></li>
+                </ul>
+              </div>
+              <div>
+                <h3 class="font-semibold mb-4">Suporte</h3>
+                <ul class="space-y-3 text-sm text-gray-500 dark:text-gray-400">
+                  <li><a
+                      class="hover:text-text-light dark:hover:text-text-dark transition-colors"
+                      href="#">FAQ</a></li>
+                  <li><a
+                      class="hover:text-text-light dark:hover:text-text-dark transition-colors"
+                      href="#">Trocas e Devoluções</a></li>
+                  <li><a
+                      class="hover:text-text-light dark:hover:text-text-dark transition-colors"
+                      href="#">Política de Privacidade</a></li>
+                </ul>
+              </div>
+              <div class="col-span-2 md:col-span-4 lg:col-span-1">
+                <h3 class="font-semibold mb-4">Siga-nos</h3>
+                <div class="flex gap-4">
+                  <a
+                    class="hover:text-text-light dark:hover:text-text-dark transition-colors text-gray-500 dark:text-gray-400"
+                    href="#">FB</a>
+                  <a
+                    class="hover:text-text-light dark:hover:text-text-dark transition-colors text-gray-500 dark:text-gray-400"
+                    href="#">IG</a>
+                  <a
+                    class="hover:text-text-light dark:hover:text-text-dark transition-colors text-gray-500 dark:text-gray-400"
+                    href="#">TT</a>
+                </div>
+              </div>
+            </div>
+            <div
+              class="mt-16 border-t border-gray-200 dark:border-gray-700 pt-8 flex flex-col sm:flex-row justify-between items-center text-sm text-gray-500 dark:text-gray-400">
+              <p>© 2024 Threads. Todos os direitos reservados.</p>
+              <p class="mt-4 sm:mt-0">Design &amp; Development</p>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+  </body></html>

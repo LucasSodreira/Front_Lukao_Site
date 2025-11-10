@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ModaMasculina - Meu Carrinho</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#195de6",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-gray-800 dark:text-white">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header
+          class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700">
+          <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div
+              class="flex h-20 items-center justify-between whitespace-nowrap">
+              <div class="flex items-center gap-10">
+                <a class="flex items-center gap-2 text-gray-800 dark:text-white"
+                  href="#">
+                  <div class="size-7 text-primary dark:text-text-dark">
+                    <svg fill="none" viewBox="0 0 48 48"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z"
+                        fill="currentColor"></path>
+                    </svg>
+                  </div>
+                  <h1 class="text-2xl font-bold tracking-tight">THREADS</h1>
+                </a>
+                <nav class="hidden md:flex items-center gap-8">
+                  <a
+                    class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                    href="#">Novidades</a>
+                  <a
+                    class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                    href="#">Roupas</a>
+                  <a
+                    class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                    href="#">Acessórios</a>
+                  <a
+                    class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                    href="#">Marcas</a>
+                  <a
+                    class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                    href="#">Promoções</a>
+                </nav>
+              </div>
+              <div class="flex flex-1 justify-end items-center gap-4">
+                <div class="hidden sm:flex relative items-center">
+                  <span
+                    class="material-symbols-outlined absolute left-3 text-gray-500 dark:text-gray-400">search</span>
+                  <input
+                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-800 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border-none bg-gray-100 dark:bg-gray-800 h-10 placeholder:text-gray-500 dark:placeholder:text-gray-400 pl-10 pr-4 text-sm font-normal leading-normal"
+                    placeholder="Buscar" value />
+                </div>
+                <div class="flex gap-2">
+                  <button
+                    class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white dark:hover:bg-gray-700 min-w-0 px-2.5">
+                    <span class="material-symbols-outlined">favorite</span>
+                  </button>
+                  <button
+                    class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white dark:hover:bg-gray-700 min-w-0 px-2.5">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                  </button>
+                </div>
+                <div
+                  class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+                  data-alt="Avatar do usuário"
+                  style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC52EDZXOpoeh2RcaCa5y38UKAtURhObxkr9jzI9wiF3SjzgyAKE1818wMl02fQDG21nlH-mvj09Y5c60Y1-5iOGAFwJ9ZIv0bJbhmbHzoqdPqLsXJS0fqj-OqFnw-_oC576tYmQjLrwVxfqKH5POe0_DefDZJWOxewfup8P3qB1Icyxej34l2Tg7SQYUw32D-XLdd2RGzYTvjAM0k8uwYc_hIRQn6Y5BybdRJjf_tiUGj82t2bvhJAmQJh9R9tECZdAtqtLWMtLtY');"></div>
+              </div>
+            </div>
+          </div>
+        </header>
+<main class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-18">
+<div class="mb-10">
+<h1 class="text-gray-800 dark:text-white text-4xl md:text-5xl font-bold">Carrinho de Compras</h1>
+<p class="mt-2 text-lg text-gray-500 dark:text-gray-400">Você tem 2 itens no seu carrinho.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+<div class="lg:col-span-8 space-y-6">
+<div class="flex flex-col sm:flex-row gap-6 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg w-full sm:w-[120px] sm:h-[120px] flex-shrink-0" data-alt="T-shirt preta em fundo cinza" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDDqeqlWwev6IHFjVmLEimLVeUn8z6BkjJY-rve_PxdG5EX-qK-xaIGNqiWzLoiacRHTWgrwUwrof5ZaWiS0qSvXkLebxdslOFgJdt4KAcnCesIqumFHZSMFhZWO_M8IeqRgAvRAtTXUng6sXPa4k9zLvHbYyRR__sHq1SiCRfxy2je3BaDkImt2pgfg2jG_brELkHsK6gvzSnbDgL0HM8XsgvZZCb7CUm8m3sQlYMRXu8y3fFz0NXgC5_T3r4EcNzOhDW534b5ujE");'></div>
+<div class="flex flex-1 flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<h2 class="text-lg font-bold text-gray-800 dark:text-white pr-4">Camiseta Básica Premium</h2>
+<p class="text-lg font-semibold text-gray-800 dark:text-white whitespace-nowrap">R$ 89,90</p>
+</div>
+<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Marca Exemplo</p>
+<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Cor: Preto | Tamanho: M</p>
+</div>
+<div class="flex items-center justify-between mt-4">
+<div class="flex items-center gap-3 text-gray-800 dark:text-white bg-gray-100 dark:bg-gray-700 rounded-full py-1 px-2">
+<button class="text-xl font-medium flex h-7 w-7 items-center justify-center rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">-</button>
+<span class="text-base font-medium w-6 text-center">1</span>
+<button class="text-xl font-medium flex h-7 w-7 items-center justify-center rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">+</button>
+</div>
+<button class="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-500 transition-colors font-medium">
+<span class="material-symbols-outlined text-base">delete</span>
+                                        Remover
+                                    </button>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-6 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg w-full sm:w-[120px] sm:h-[120px] flex-shrink-0" data-alt="Calça jeans azul dobrada" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDt1aY88fVdiuhvp-lDJ7Ky9NOJjLKOkz2MB4O0zjxbeh1eT1ewmG8arLsA5opkabnC_ZiTR1NUoGa3Kh-zPLmAHDZXI3a-NEP6wUe-RhRgyOv7Wpp1xGiKvUutYCmC_T3ce3HnGiAkiP_tQxToVYCawDKkkFimwpWYvRPp2wYOoP_Z1Fxn5KccLVEYY4wSY0PQfdIM_6UFiONIIX0HpiNHL4hAyzdU4eBQF78KWzJyGEbohywolDIz0l-vdtpfcZSt5NKtnqBq0xQ");'></div>
+<div class="flex flex-1 flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<h2 class="text-lg font-bold text-gray-800 dark:text-white pr-4">Calça Jeans Slim Fit</h2>
+<p class="text-lg font-semibold text-gray-800 dark:text-white whitespace-nowrap">R$ 199,90</p>
+</div>
+<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Marca Urbana</p>
+<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Cor: Azul Escuro | Tamanho: 42</p>
+</div>
+<div class="flex items-center justify-between mt-4">
+<div class="flex items-center gap-3 text-gray-800 dark:text-white bg-gray-100 dark:bg-gray-700 rounded-full py-1 px-2">
+<button class="text-xl font-medium flex h-7 w-7 items-center justify-center rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">-</button>
+<span class="text-base font-medium w-6 text-center">1</span>
+<button class="text-xl font-medium flex h-7 w-7 items-center justify-center rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">+</button>
+</div>
+<button class="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-500 transition-colors font-medium">
+<span class="material-symbols-outlined text-base">delete</span>
+                                        Remover
+                                    </button>
+</div>
+</div>
+</div>
+<div class="pt-4 text-center">
+<a class="inline-flex items-center gap-2 text-primary dark:text-blue-400 font-semibold text-sm hover:underline" href="#">
+<span class="material-symbols-outlined">arrow_back</span>
+                                Continuar comprando
+                            </a>
+</div>
+</div>
+<aside class="lg:col-span-4 w-full lg:sticky lg:top-28">
+<div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+<h2 class="text-gray-800 dark:text-white text-2xl font-bold tracking-tight pb-4 border-b border-gray-200 dark:border-gray-700">Resumo do Pedido</h2>
+<div class="space-y-3 py-5 border-b border-gray-200 dark:border-gray-700">
+<div class="flex justify-between text-base">
+<span class="text-gray-500 dark:text-gray-400">Subtotal</span>
+<span class="font-semibold text-gray-800 dark:text-white">R$ 289,80</span>
+</div>
+<div class="flex justify-between text-base">
+<span class="text-gray-500 dark:text-gray-400">Descontos</span>
+<span class="font-semibold text-gray-800 dark:text-white">- R$ 0,00</span>
+</div>
+<div class="flex justify-between text-base">
+<span class="text-gray-500 dark:text-gray-400">Frete</span>
+<span class="font-semibold text-gray-800 dark:text-white">R$ 15,00</span>
+</div>
+</div>
+<div class="flex justify-between text-xl font-bold pt-4">
+<span class="text-gray-800 dark:text-white">Total</span>
+<span class="text-gray-800 dark:text-white">R$ 304,80</span>
+</div>
+<button class="mt-6 w-full flex items-center justify-center overflow-hidden rounded-lg h-12 bg-primary text-white gap-2 text-base font-bold tracking-wide hover:bg-primary/90 transition-colors focus:outline-none focus:ring-4 focus:ring-primary/30 dark:focus:ring-primary/50">
+                                Finalizar Compra
+                                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="mt-6 bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-semibold text-gray-800 dark:text-gray-300 mb-2" for="coupon">Cupom de Desconto</label>
+<div class="flex gap-2">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-800 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 h-11 placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 text-base font-normal leading-normal" id="coupon" placeholder="Insira seu cupom" type="text"/>
+<button class="flex-shrink-0 flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-11 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white text-sm font-bold tracking-wide min-w-0 px-4 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">Aplicar</button>
+</div>
+</div>
+<div class="!mt-6">
+<label class="block text-sm font-semibold text-gray-800 dark:text-gray-300 mb-2" for="shipping">Calcular Frete</label>
+<div class="flex gap-2">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-800 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 h-11 placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 text-base font-normal leading-normal" id="shipping" placeholder="Insira seu CEP" type="text"/>
+<button class="flex-shrink-0 flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-11 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white text-sm font-bold tracking-wide min-w-0 px-4 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">Calcular</button>
+</div>
+</div>
+<div class="space-y-4 pt-2">
+<div class="flex items-center gap-4 p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/30">
+<input class="form-radio h-5 w-5 text-primary focus:ring-primary/50 border-gray-400 dark:border-gray-500 bg-transparent dark:checked:bg-primary" id="sedex" name="shipping-option" type="radio"/>
+<label class="flex justify-between items-center w-full cursor-pointer" for="sedex">
+<span class="text-sm">
+<span class="font-semibold text-gray-800 dark:text-white">Sedex</span><br/>
+<span class="text-gray-500 dark:text-gray-400">3 dias úteis</span>
+</span>
+<span class="font-bold text-gray-800 dark:text-white text-sm">R$ 25,00</span>
+</label>
+</div>
+<div class="flex items-center gap-4 p-3 rounded-lg border-2 border-primary bg-blue-50 dark:bg-blue-900/20 dark:border-blue-500">
+<input checked="" class="form-radio h-5 w-5 text-primary focus:ring-primary/50 border-gray-400 dark:border-blue-400 bg-transparent dark:checked:bg-primary" id="pac" name="shipping-option" type="radio"/>
+<label class="flex justify-between items-center w-full cursor-pointer" for="pac">
+<span class="text-sm">
+<span class="font-semibold text-gray-800 dark:text-white">PAC</span><br/>
+<span class="text-gray-500 dark:text-gray-400">7 dias úteis</span>
+</span>
+<span class="font-bold text-gray-800 dark:text-white text-sm">R$ 15,00</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<footer class="w-full bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-auto">
+<div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+<div class="flex justify-center space-x-8">
+<a class="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white text-sm font-medium transition-colors" href="#">Contato</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white text-sm font-medium transition-colors" href="#">Trocas e Devoluções</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white text-sm font-medium transition-colors" href="#">Política de Privacidade</a>
+</div>
+<p class="mt-6 text-center text-xs text-gray-500 dark:text-gray-500">© 2024 ModaMasculina. Todos os direitos reservados.</p>
+</div>
+</footer>
+</div>
+</div>
+
+</body></html>

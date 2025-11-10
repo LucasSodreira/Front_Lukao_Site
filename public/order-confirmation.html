@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Confirmação de Pedido - ModernMan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#195de6",
+            "background-light": "#f6f6f8",
+            "background-dark": "#111621",
+          },
+          fontFamily: {
+            "display": ["Manrope", "sans-serif"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header
+          class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700">
+          <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div
+              class="flex h-20 items-center justify-between whitespace-nowrap">
+              <div class="flex items-center gap-10">
+                <a class="flex items-center gap-2 text-gray-800 dark:text-white"
+                  href="#">
+                  <div class="size-7 text-primary dark:text-text-dark">
+                    <svg fill="none" viewBox="0 0 48 48"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z"
+                        fill="currentColor"></path>
+                    </svg>
+                  </div>
+                  <h1 class="text-2xl font-bold tracking-tight">THREADS</h1>
+                </a>
+                <nav class="hidden md:flex items-center gap-8">
+                  <a
+                    class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                    href="#">Novidades</a>
+                  <a
+                    class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                    href="#">Roupas</a>
+                  <a
+                    class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                    href="#">Acessórios</a>
+                  <a
+                    class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                    href="#">Marcas</a>
+                  <a
+                    class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                    href="#">Promoções</a>
+                </nav>
+              </div>
+              <div class="flex flex-1 justify-end items-center gap-4">
+                <div class="hidden sm:flex relative items-center">
+                  <span
+                    class="material-symbols-outlined absolute left-3 text-gray-500 dark:text-gray-400">search</span>
+                  <input
+                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-800 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border-none bg-gray-100 dark:bg-gray-800 h-10 placeholder:text-gray-500 dark:placeholder:text-gray-400 pl-10 pr-4 text-sm font-normal leading-normal"
+                    placeholder="Buscar" value />
+                </div>
+                <div class="flex gap-2">
+                  <button
+                    class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white dark:hover:bg-gray-700 min-w-0 px-2.5">
+                    <span class="material-symbols-outlined">favorite</span>
+                  </button>
+                  <button
+                    class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white dark:hover:bg-gray-700 min-w-0 px-2.5">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                  </button>
+                </div>
+                <div
+                  class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+                  data-alt="Avatar do usuário"
+                  style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC52EDZXOpoeh2RcaCa5y38UKAtURhObxkr9jzI9wiF3SjzgyAKE1818wMl02fQDG21nlH-mvj09Y5c60Y1-5iOGAFwJ9ZIv0bJbhmbHzoqdPqLsXJS0fqj-OqFnw-_oC576tYmQjLrwVxfqKH5POe0_DefDZJWOxewfup8P3qB1Icyxej34l2Tg7SQYUw32D-XLdd2RGzYTvjAM0k8uwYc_hIRQn6Y5BybdRJjf_tiUGj82t2bvhJAmQJh9R9tECZdAtqtLWMtLtY');"></div>
+              </div>
+            </div>
+          </div>
+        </header>
+<main class="flex flex-1 justify-center py-8 px-4 sm:px-6 lg:px-8">
+<div class="layout-content-container flex flex-col max-w-2xl flex-1">
+<div class="bg-white dark:bg-gray-900/50 rounded-xl shadow-sm p-6 sm:p-10 text-center flex flex-col items-center">
+<div class="flex items-center justify-center size-16 bg-green-100 dark:bg-green-900/50 rounded-full mb-5">
+<span class="material-symbols-outlined text-4xl text-green-600 dark:text-green-400">check</span>
+</div>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal pb-1 pt-1">Seu Pedido #BR12345678</p>
+<h1 class="text-gray-800 dark:text-white tracking-tight text-3xl font-bold leading-tight pb-2">Obrigado pelo seu pedido!</h1>
+<p class="text-gray-800 dark:text-gray-300 text-base font-normal leading-normal max-w-md">Um e-mail de confirmação com todos os detalhes foi enviado para o seu endereço.</p>
+</div>
+<div class="bg-white dark:bg-gray-900/50 rounded-xl shadow-sm mt-6 p-6 sm:p-8">
+<h3 class="text-gray-800 dark:text-white text-lg font-bold leading-tight tracking-tight pb-4 border-b border-gray-200 dark:border-gray-700">Resumo do Pedido</h3>
+<div class="divide-y divide-gray-200 dark:divide-gray-700">
+<div class="flex items-center py-4">
+<img class="size-16 rounded-lg object-cover mr-4" data-alt="Tênis de corrida branco com detalhes em cinza" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpJPQTlz5ZJej9LSsAjoJVMEY44DJBnk3pZGoGRIi43tdwPQuvSo57w9jJq_mk6O9OcrpyEFl3GoYuz6K0GaPA7s9PJ0tmIn0IeBvm41N_rPBygaU-rKLC3p4oVMZDsE5YqPbURq0z8-EUj3ooUEJq8_HnITUeuqZMXmqJpGC16nXcujqa4bY5s0RKpqSPoEsDM7aijk2svKzvc0xAprc3WoDhd4q9NIL5KcOVnrJh4Vs69AGNxdaArcVDOYVcP8VAqfA-WIAunCc"/>
+<div class="flex-grow">
+<p class="font-semibold text-gray-800 dark:text-gray-200">Tênis Urban Runner</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">Quantidade: 1</p>
+</div>
+<p class="font-semibold text-gray-800 dark:text-gray-200">R$ 349,90</p>
+</div>
+<div class="flex items-center py-4">
+<img class="size-16 rounded-lg object-cover mr-4" data-alt="Relógio de pulso clássico com pulseira de couro marrom" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATaVqbEJTomk9kLyy18m--mxvIi3NRu18lxe1GB3D4vi4x5RkI86D0Q7EiyRHmy00dt7wWx8d8DzELzmKYNR1MsRvDYAdZJsO2wCw5FOXZYGDkT5XNiCKd6TItfVxxSORpCmG7DP_4k1a-KOhbJYQvV_ZWqqNtejafB2OXF61vA3aN8vL2qR4usjVnOzjHUHuUntA4eZE75GXNwm32iXxdQQrvSldfQ3dvJSvdJaS0OcjDg-WQsOcem_aOBnuJ97z2Gd3xx85idro"/>
+<div class="flex-grow">
+<p class="font-semibold text-gray-800 dark:text-gray-200">Relógio Clássico de Couro</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">Quantidade: 1</p>
+</div>
+<p class="font-semibold text-gray-800 dark:text-gray-200">R$ 599,00</p>
+</div>
+</div>
+<div class="border-t border-gray-200 dark:border-gray-700 mt-4 pt-4 space-y-2">
+<div class="flex justify-between text-sm text-gray-600 dark:text-gray-300">
+<span>Subtotal</span>
+<span>R$ 948,90</span>
+</div>
+<div class="flex justify-between text-sm text-gray-600 dark:text-gray-300">
+<span>Frete</span>
+<span>R$ 15,00</span>
+</div>
+<div class="flex justify-between text-lg font-bold text-gray-900 dark:text-white">
+<span>Total</span>
+<span>R$ 963,90</span>
+</div>
+</div>
+</div>
+<div class="grid md:grid-cols-2 gap-6 mt-6">
+<div class="bg-white dark:bg-gray-900/50 rounded-xl shadow-sm p-6">
+<h4 class="text-md font-bold text-gray-800 dark:text-white mb-3">Endereço de Entrega</h4>
+<p class="text-sm text-gray-600 dark:text-gray-300">
+                João da Silva<br/>
+                Rua das Flores, 123, Apto 4B<br/>
+                Jardim Primavera, São Paulo - SP<br/>
+                CEP: 01234-567
+              </p>
+</div>
+<div class="bg-white dark:bg-gray-900/50 rounded-xl shadow-sm p-6">
+<h4 class="text-md font-bold text-gray-800 dark:text-white mb-3">Pagamento</h4>
+<p class="text-sm text-gray-600 dark:text-gray-300">Cartão de Crédito</p>
+<p class="text-sm text-gray-600 dark:text-gray-300">Final: **** 1234</p>
+<p class="text-sm text-gray-600 dark:text-gray-300 mt-3">
+<strong>Estimativa de Entrega:</strong> 5-7 dias úteis
+              </p>
+</div>
+</div>
+<div class="text-center mt-8">
+<p class="text-sm text-gray-500 dark:text-gray-400">Você receberá um e-mail de notificação quando seu pedido for enviado.</p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+<button class="flex w-full sm:w-auto max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-primary text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 px-6">Continuar Comprando</button>
+<button class="flex w-full sm:w-auto max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-gray-200 dark:bg-gray-700 text-[#111318] dark:text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 px-6">Ir para Meus Pedidos</button>
+</div>
+</div>
+</div>
+</main>
+<footer class="text-center py-6 border-t border-gray-200 dark:border-gray-800 mt-10">
+<p class="text-sm text-gray-500 dark:text-gray-400">© 2024 ModernMan. Todos os direitos reservados.</p>
+</footer>
+</div>
+</div>
+</body></html>

@@ -1,11 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import type { Product } from '@/types';
-import { Card, CardBody, CardTitle } from '@/ui/Card';
-import { Button } from '@/ui/Button';
 
 export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
-  const image = product.images?.[0]?.url || '/placeholder.jpg';
+  const image = product.images?.[0]?.url || 'https://via.placeholder.com/400x500?text=Sem+Imagem';
   const isNumericId = product.id && /^\d+$/.test(String(product.id));
   const detailsHref = isNumericId ? `/products/${product.id}` : undefined;
   const priceBRL = Number(product.price || 0).toLocaleString('pt-BR', {
@@ -13,46 +11,45 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
     currency: 'BRL',
     minimumFractionDigits: 2,
   });
+  
+  const brandName = typeof product.brand === 'object' && product.brand && 'name' in product.brand 
+    ? product.brand.name 
+    : 'Marca';
+
   return (
-    <Card className="overflow-hidden h-full flex flex-col">
-      <div className="relative w-full aspect-[4/3] bg-gray-100 dark:bg-gray-900/30">
-        {detailsHref ? (
-          <Link to={detailsHref} className="absolute inset-0">
-            <img
-              src={image}
-              alt={product.title}
-              className="absolute inset-0 w-full h-full object-cover"
-              loading="lazy"
-            />
-          </Link>
-        ) : (
-          <img
-            src={image}
-            alt={product.title}
-            className="absolute inset-0 w-full h-full object-cover"
-            loading="lazy"
+    <div className="group flex flex-col gap-3 relative">
+      <Link to={detailsHref || '#'}>
+        <div className="relative overflow-hidden rounded-xl">
+          <div
+            className="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover"
+            style={{ backgroundImage: `url("${image}")` }}
+            role="img"
+            aria-label={product.title}
           />
-        )}
-      </div>
-      <CardBody className="flex flex-1 flex-col">
-        <CardTitle className="line-clamp-2 min-h-[3rem]">{product.title}</CardTitle>
-        {product.description && (
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 line-clamp-2 min-h-[2.5rem]">{product.description}</p>
-        )}
-        <div className="mt-auto pt-3 flex items-center justify-between">
-          <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">{priceBRL}</span>
-          {detailsHref ? (
-            <Link to={detailsHref}>
-              <Button variant="secondary">Ver detalhes</Button>
-            </Link>
-          ) : (
-            <Button variant="secondary" disabled>
-              Indisponível
-            </Button>
-          )}
+          <button
+            className="absolute top-3 right-3 h-9 w-9 rounded-full bg-white/80 dark:bg-black/50 backdrop-blur-sm flex items-center justify-center text-gray-800 dark:text-white hover:text-primary transition-colors opacity-0 group-hover:opacity-100"
+            aria-label="Adicionar aos favoritos"
+            onClick={(e) => {
+              e.preventDefault();
+              // TODO: Implementar lógica de favoritos
+            }}
+          >
+            <span className="material-symbols-outlined text-xl">favorite</span>
+          </button>
         </div>
-      </CardBody>
-    </Card>
+      </Link>
+      <div className="flex flex-col gap-1">
+        <p className="text-sm font-normal text-gray-500 dark:text-gray-400">{brandName}</p>
+        <Link to={detailsHref || '#'} className="hover:underline">
+          <h3 className="text-base font-bold leading-normal text-gray-900 dark:text-white">
+            {product.title}
+          </h3>
+        </Link>
+        <p className="text-gray-800 dark:text-white text-base font-semibold leading-normal mt-1">
+          {priceBRL}
+        </p>
+      </div>
+    </div>
   );
 };
 

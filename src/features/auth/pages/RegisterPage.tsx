@@ -8,6 +8,7 @@ import Input from '@/ui/Input';
 import { Button } from '@/ui/Button';
 import { MESSAGES } from '@/constants';
 import { validateEmail, validatePassword } from '@/utils/validators';
+import { logger, InputSanitizer, rateLimiter, ErrorHandler } from '@/utils';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -48,9 +49,27 @@ const RegisterPage = () => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    let sanitizedValue = value;
+
+    // Sanitizar baseado no tipo de campo
+    switch (name) {
+      case 'email':
+        sanitizedValue = InputSanitizer.sanitizeEmail(value);
+        break;
+      case 'phone':
+        sanitizedValue = InputSanitizer.sanitizePhone(value);
+        break;
+      case 'name':
+        sanitizedValue = InputSanitizer.sanitizeText(value);
+        break;
+      default:
+        sanitizedValue = value;
+    }
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: sanitizedValue
     });
   };
 
@@ -58,6 +77,15 @@ const RegisterPage = () => {
     e.preventDefault();
 
     if (!validateForm()) {
+      return;
+    }
+
+    // Rate limiting - máximo 3 tentativas em 15 minutos
+    const rateLimitKey = `register:${formData.email}`;
+    if (!rateLimiter.canExecute(rateLimitKey, 3, 900000)) {
+      const timeLeft = rateLimiter.getTimeUntilReset(rateLimitKey);
+      const minutes = Math.ceil(timeLeft / 60);
+      setError(`Muitas tentativas. Tente novamente em ${minutes} minuto${minutes > 1 ? 's' : ''}.`);
       return;
     }
 
@@ -81,12 +109,15 @@ const RegisterPage = () => {
         localStorage.setItem('authToken', data.signUp.accessToken);
         localStorage.setItem('refreshToken', data.signUp.refreshToken);
         
+        // Reset rate limit em caso de sucesso
+        rateLimiter.reset(rateLimitKey);
+        
         // Redirecionar para login para buscar dados do usuário
         navigate('/login');
       }
     } catch (err) {
-      console.error('Erro ao criar conta:', err);
-      setError('Erro ao criar conta. Verifique seus dados e tente novamente.');
+      logger.error('Erro ao criar conta', { email: formData.email, error: err });
+      setError(ErrorHandler.getUserFriendlyMessage(err));
     } finally {
       setLoading(false);
     }

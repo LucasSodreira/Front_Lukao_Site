@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
+import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
 import { Button } from '@/ui/Button';
 import { Card, CardBody } from '@/ui/Card';
 
@@ -39,8 +39,8 @@ export const StripePaymentForm: React.FC<StripePaymentFormProps> = ({
       return;
     }
 
-    const cardElement = elements.getElement(CardElement);
-    if (!cardElement) {
+    const cardNumberElement = elements.getElement(CardNumberElement);
+    if (!cardNumberElement) {
       onError('Elemento de cartão não encontrado');
       return;
     }
@@ -52,7 +52,7 @@ export const StripePaymentForm: React.FC<StripePaymentFormProps> = ({
       // Confirmar pagamento com Stripe
       const result = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
-          card: cardElement,
+          card: cardNumberElement,
           billing_details: {
             name: `Order ${orderId}`,
           },
@@ -85,24 +85,81 @@ export const StripePaymentForm: React.FC<StripePaymentFormProps> = ({
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">Dados do Cartão de Crédito</h3>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Elemento do Cartão */}
-          <div className="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md p-4">
-            <CardElement
-              options={{
-                style: {
-                  base: {
-                    fontSize: '16px',
-                    color: '#1f2937',
-                    '::placeholder': {
-                      color: '#9ca3af',
+          {/* Número do Cartão */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Número do Cartão
+            </label>
+            <div className="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md p-3">
+              <CardNumberElement
+                options={{
+                  showIcon: true,
+                  style: {
+                    base: {
+                      fontSize: '16px',
+                      color: '#1f2937',
+                      '::placeholder': {
+                        color: '#9ca3af',
+                      },
+                    },
+                    invalid: {
+                      color: '#dc2626',
                     },
                   },
-                  invalid: {
-                    color: '#dc2626',
-                  },
-                },
-              }}
-            />
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Data de Validade e CVC */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Validade (MM/AA)
+              </label>
+              <div className="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md p-3">
+                <CardExpiryElement
+                  options={{
+                    style: {
+                      base: {
+                        fontSize: '16px',
+                        color: '#1f2937',
+                        '::placeholder': {
+                          color: '#9ca3af',
+                        },
+                      },
+                      invalid: {
+                        color: '#dc2626',
+                      },
+                    },
+                  }}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                CVC
+              </label>
+              <div className="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md p-3">
+                <CardCvcElement
+                  options={{
+                    style: {
+                      base: {
+                        fontSize: '16px',
+                        color: '#1f2937',
+                        '::placeholder': {
+                          color: '#9ca3af',
+                        },
+                      },
+                      invalid: {
+                        color: '#dc2626',
+                      },
+                    },
+                  }}
+                />
+              </div>
+            </div>
           </div>
 
           {/* Erro */}

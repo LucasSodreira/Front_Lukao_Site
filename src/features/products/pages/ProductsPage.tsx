@@ -1,22 +1,38 @@
 /**
- * Página de Produtos (exemplo de refatoração)
+ * Página de Produtos - Listagem com Filtros e Paginação
  * Localização: src/features/products/pages/ProductsPage.tsx
  */
 
 import { useState, useMemo } from 'react';
 import { useQuery } from '@apollo/client/react';
 import { FilterSidebar, ProductCard, ActiveFilters } from '../components';
-import { GET_PRODUCTS, GET_CATEGORIES, GET_ARTISANS } from '@/graphql/queries';
-import type { Product, Category, FilterState } from '@/types';
+import { Breadcrumb, Pagination } from '@/shared/components/common';
+import { GET_PRODUCTS, GET_SIZES, GET_COLORS, GET_CATEGORIES } from '@/graphql/queries';
+import type { Product, FilterState, Size, Color, Category } from '@/types';
+import { ErrorHandler, logger } from '@/utils';
+import { Button } from '@/ui/Button';
 
 interface ProductsQueryResult {
   products: Product[];
 }
 
+interface SortOption {
+  label: string;
+  field: 'CREATED_AT' | 'PRICE' | 'TITLE';
+  order: 'ASC' | 'DESC';
+}
+
+const SORT_OPTIONS: SortOption[] = [
+  { label: 'Relevância', field: 'CREATED_AT', order: 'DESC' },
+  { label: 'Novidades', field: 'CREATED_AT', order: 'DESC' },
+  { label: 'Maior Preço', field: 'PRICE', order: 'DESC' },
+  { label: 'Menor Preço', field: 'PRICE', order: 'ASC' },
+];
+
 export const ProductsPage = () => {
   const [filters, setFilters] = useState<FilterState>({
     categoryId: undefined,
-    priceRange: [0, 1000],
+    priceRange: [0, 10000],
     inStock: false,
     search: '',
     sizes: [],
@@ -27,19 +43,19 @@ export const ProductsPage = () => {
   });
 
   const [page, setPage] = useState(0);
-  const pageSize = 20;
-
-  const { data: categoriesData, loading: categoriesLoading } = useQuery<{
-    categories: Category[];
-  }>(GET_CATEGORIES);
-
-  const { data: artisansData } = useQuery<{
-    artisans: Array<{ id: string; name: string; email: string; role: string; status: string }>;
-  }>(GET_ARTISANS);
+  const [selectedSort, setSelectedSort] = useState<SortOption>(SORT_OPTIONS[0]);
+  const pageSize = 12;
 
   const { data, loading, error } = useQuery<ProductsQueryResult>(GET_PRODUCTS);
+  const { data: sizesData } = useQuery<{ sizes: Size[] }>(GET_SIZES);
+  const { data: colorsData } = useQuery<{ colors: Color[] }>(GET_COLORS);
+  const { data: categoriesData } = useQuery<{ categories: Category[] }>(GET_CATEGORIES);
 
-  // Filtrar produtos no frontend
+  const sizes = sizesData?.sizes || [];
+  const colors = colorsData?.colors || [];
+  const categories = categoriesData?.categories || [];
+
+  // Filtrar e ordenar produtos no frontend
   const filteredProducts = useMemo(() => {
     if (!data?.products) return [];
     
@@ -72,8 +88,8 @@ export const ProductsPage = () => {
 
     // Ordenação
     result.sort((a, b) => {
-      const field = filters.sortBy.field;
-      const order = filters.sortBy.order === 'ASC' ? 1 : -1;
+      const field = selectedSort.field;
+      const order = selectedSort.order === 'ASC' ? 1 : -1;
 
       if (field === 'PRICE') {
         const priceA = typeof a.price === 'string' ? parseFloat(a.price) : a.price;
@@ -95,15 +111,11 @@ export const ProductsPage = () => {
     });
 
     return result;
-  }, [data?.products, filters]);
+  }, [data?.products, filters, selectedSort]);
 
   // Paginação no frontend
   const totalPages = Math.ceil(filteredProducts.length / pageSize);
   const paginatedProducts = filteredProducts.slice(page * pageSize, (page + 1) * pageSize);
-
-  const products = paginatedProducts;
-  const categories = categoriesData?.categories || [];
-  const artisans = artisansData?.artisans || [];
 
   const handleFiltersChange = (newFilters: FilterState) => {
     setFilters(newFilters);
@@ -113,7 +125,7 @@ export const ProductsPage = () => {
   const handleClearFilters = () => {
     setFilters({
       categoryId: undefined,
-      priceRange: [0, 1000],
+      priceRange: [0, 10000],
       inStock: false,
       search: '',
       sizes: [],
@@ -125,85 +137,127 @@ export const ProductsPage = () => {
     setPage(0);
   };
 
-  if (categoriesLoading) {
-    return <div className="text-center py-8">Carregando categorias...</div>;
-  }
+  const handleRemoveFilter = (key: keyof FilterState, value?: string | number | boolean | [number, number]) => {
+    const newFilters = { ...filters };
+    
+    if (key === 'sizes' && typeof value === 'string') {
+      newFilters.sizes = newFilters.sizes.filter(s => s !== value);
+    } else if (key === 'colors' && typeof value === 'string') {
+      newFilters.colors = newFilters.colors.filter(c => c !== value);
+    } else if (key === 'brands' && typeof value === 'string') {
+      newFilters.brands = newFilters.brands.filter(b => b !== value);
+    } else if (key === 'categoryId') {
+      newFilters.categoryId = undefined;
+    } else if (key === 'priceRange') {
+      newFilters.priceRange = [0, 10000];
+    } else if (key === 'inStock') {
+      newFilters.inStock = false;
+    } else if (key === 'search') {
+      newFilters.search = '';
+    } else if (key === 'rating') {
+      newFilters.rating = undefined;
+    }
+    
+    setFilters(newFilters);
+    setPage(0);
+  };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-foreground">Produtos</h1>
-        <p className="text-muted-foreground mt-1">
-          Encontre os melhores produtos entre {filteredProducts.length} opções
-        </p>
-      </div>
+    <div className="container mx-auto px-4 py-8">
+      {/* Breadcrumb */}
+      <Breadcrumb
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Produtos' },
+        ]}
+      />
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      {/* Página principal */}
+      <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
         {/* Sidebar de Filtros */}
-        <div className="lg:col-span-1">
-          <FilterSidebar
-            filters={filters}
-            onFiltersChange={handleFiltersChange}
-            onClearFilters={handleClearFilters}
-            categories={categories}
-            artisans={artisans}
-          />
-        </div>
+        <FilterSidebar
+          filters={filters}
+          onFiltersChange={handleFiltersChange}
+          onClearFilters={handleClearFilters}
+          categories={categories}
+        />
 
-        {/* Produtos */}
-        <div className="lg:col-span-3 space-y-6">
+        {/* Conteúdo Principal */}
+        <div className="flex-1">
+          {/* Header com Título */}
+          <div className="mb-6">
+            <h1 className="text-3xl lg:text-4xl font-black tracking-tight text-gray-900 dark:text-white">
+              Coleção Outono/Inverno
+            </h1>
+          </div>
+
           {/* Filtros Ativos */}
           <ActiveFilters
             filters={filters}
             categories={categories}
-            sizes={[]} // Get from API
-            colors={[]} // Get from API
-            onRemoveFilter={() => {
-              // Implementar lógica de remoção de filtro
-            }}
+            sizes={sizes}
+            colors={colors}
+            onRemoveFilter={handleRemoveFilter}
           />
+
+          {/* Controles de Ordenação */}
+          <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
+            <div className="flex gap-2 items-center flex-wrap">
+              {SORT_OPTIONS.map((option) => (
+                <button
+                  key={option.label}
+                  onClick={() => setSelectedSort(option)}
+                  className={`flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full px-4 transition-colors text-sm font-medium ${
+                    selectedSort.label === option.label
+                      ? 'bg-primary text-white'
+                      : 'bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-white'
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+            <p className="text-gray-500 dark:text-gray-400 text-sm font-normal">
+              Exibindo {paginatedProducts.length > 0 ? (page * pageSize) + 1 : 0} de {filteredProducts.length} produtos
+            </p>
+          </div>
 
           {/* Grid de Produtos */}
           {loading ? (
-            <div className="text-center py-8">Carregando produtos...</div>
-          ) : error ? (
-            <div className="text-center text-destructive py-8">
-              Erro ao carregar produtos
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+              <p className="text-gray-600 dark:text-gray-400">Carregando produtos...</p>
             </div>
-          ) : products.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              Nenhum produto encontrado
+          ) : error ? (
+            <div className="text-center py-12 space-y-4">
+              <div className="text-red-600 dark:text-red-400 text-lg font-semibold">
+                {(() => {
+                  logger.error('Erro ao carregar produtos', { error: error.message });
+                  return ErrorHandler.getUserFriendlyMessage(error);
+                })()}
+              </div>
+              <Button onClick={() => window.location.reload()}>
+                Tentar Novamente
+              </Button>
+            </div>
+          ) : paginatedProducts.length === 0 ? (
+            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+              Nenhum produto encontrado com os filtros selecionados
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {products.map((product: Product) => (
+            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-x-6 gap-y-10">
+              {paginatedProducts.map((product: Product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
           )}
 
           {/* Paginação */}
-          {totalPages > 1 && (
-            <div className="flex justify-center gap-2 mt-8">
-              <button
-                onClick={() => setPage((p) => Math.max(0, p - 1))}
-                disabled={page === 0}
-                className="px-4 py-2 bg-secondary rounded hover:bg-secondary/80 disabled:opacity-50"
-              >
-                Anterior
-              </button>
-              <span className="px-4 py-2">
-                Página {page + 1} de {totalPages}
-              </span>
-              <button
-                onClick={() => setPage((p) => p + 1)}
-                disabled={page === totalPages - 1}
-                className="px-4 py-2 bg-secondary rounded hover:bg-secondary/80 disabled:opacity-50"
-              >
-                Próxima
-              </button>
-            </div>
-          )}
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
         </div>
       </div>
     </div>

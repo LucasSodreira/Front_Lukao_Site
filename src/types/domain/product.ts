@@ -8,6 +8,33 @@ export interface ProductImage {
   altText?: string;
 }
 
+export interface Size {
+  id: string;
+  name: string;
+  code: string;
+  sortOrder?: number;
+  isActive?: boolean;
+}
+
+export interface Color {
+  id: string;
+  name: string;
+  code?: string;
+  hexCode?: string;
+  sortOrder?: number;
+  isActive?: boolean;
+}
+
+export interface ProductVariation {
+  id: string;
+  sku: string;
+  size: Size;
+  color: Color;
+  quantity: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface Product {
   id: string | number;
   title: string;
@@ -17,9 +44,11 @@ export interface Product {
   inventory?: number;
   categoryId?: string;
   category?: Category;
+  artisanId?: string;
   rating?: number;
   createdAt?: string;
   updatedAt?: string;
+  variations?: ProductVariation[];
   sizes?: Size[];
   colors?: Color[];
   brand?: Brand;
@@ -32,18 +61,6 @@ export interface Category {
   id: string;
   name: string;
   description?: string;
-}
-
-export interface Size {
-  id: string;
-  name: string;
-  code: string;
-}
-
-export interface Color {
-  id: string;
-  name: string;
-  code: string;
 }
 
 export interface Brand {
