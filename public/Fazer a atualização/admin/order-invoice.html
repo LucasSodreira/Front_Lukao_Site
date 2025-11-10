@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Detalhes do Pedido #INV-2024-001</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#195de6",
+              "background-light": "#f6f6f8",
+              "background-dark": "#111621",
+            },
+            fontFamily: {
+              "display": ["Manrope", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111318] dark:text-gray-200">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="w-64 flex-shrink-0 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 sticky top-0 h-screen overflow-y-auto p-6 flex flex-col">
+<!-- Logo -->
+<div class="flex items-center gap-3 mb-8">
+  <div class="bg-primary/20 text-primary rounded-lg p-2">
+    <span class="material-symbols-outlined text-xl">shield</span>
+  </div>
+  <span class="font-bold text-gray-900 dark:text-white text-lg">Admin</span>
+</div>
+
+<!-- Menu Items -->
+<nav class="flex-1 space-y-2">
+  <!-- Dashboard -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">dashboard</span>
+    <p class="text-sm font-medium leading-normal">Dashboard</p>
+  </a>
+  
+  <!-- Pedidos -->
+  <a class="active flex items-center gap-3 px-4 py-2 rounded-lg bg-primary/10 text-primary dark:bg-primary/20 dark:text-white" href="#">
+    <span class="material-symbols-outlined">shopping_cart</span>
+    <p class="text-sm font-medium leading-normal">Pedidos</p>
+  </a>
+  
+  <!-- Produtos -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">inventory_2</span>
+    <p class="text-sm font-medium leading-normal">Produtos</p>
+  </a>
+  
+  <!-- Clientes -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">group</span>
+    <p class="text-sm font-medium leading-normal">Clientes</p>
+  </a>
+  
+  <!-- Relatórios -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">bar_chart</span>
+    <p class="text-sm font-medium leading-normal">Relatórios</p>
+  </a>
+</nav>
+
+<!-- Configurações -->
+<div class="flex flex-col gap-2">
+          <button
+            class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90">
+            <span class="material-symbols-outlined">add_circle</span>
+            <span class="truncate">Adicionar Produto</span>
+          </button>
+          <div
+            class="border-t border-slate-200 dark:border-slate-800 my-2"></div>
+          <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+            href="#">
+            <span class="material-symbols-outlined">settings</span>
+            <p class="text-sm font-medium leading-normal">Configurações</p>
+          </a>
+          <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+            href="#">
+            <span class="material-symbols-outlined">logout</span>
+            <p class="text-sm font-medium leading-normal">Sair</p>
+          </a>
+        </div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 p-8 overflow-y-auto">
+<div class="max-w-7xl mx-auto">
+<!-- Breadcrumbs -->
+<div class="flex flex-wrap gap-2 mb-6">
+<a class="text-[#636f88] dark:text-gray-400 text-base font-medium leading-normal hover:text-primary dark:hover:text-primary" href="#">Dashboard</a>
+<span class="text-[#636f88] dark:text-gray-400 text-base font-medium leading-normal">/</span>
+<a class="text-[#636f88] dark:text-gray-400 text-base font-medium leading-normal hover:text-primary dark:hover:text-primary" href="#">Pedidos</a>
+<span class="text-[#636f88] dark:text-gray-400 text-base font-medium leading-normal">/</span>
+<span class="text-[#111318] dark:text-white text-base font-medium leading-normal">#INV-2024-001</span>
+</div>
+<!-- Page Header -->
+<div class="flex flex-wrap justify-between items-start gap-4 mb-8">
+<div class="flex flex-col gap-2">
+<h1 class="text-[#111318] dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">Fatura #INV-2024-001</h1>
+<p class="text-[#636f88] dark:text-gray-400 text-base font-normal leading-normal">Data do pedido: 24 de Maio, 2024</p>
+</div>
+<div class="flex flex-1 gap-3 flex-wrap justify-end min-w-[200px]">
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 bg-[#f0f2f4] dark:bg-gray-800 dark:text-white text-[#111318] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-gray-200 dark:hover:bg-gray-700">
+<span class="material-symbols-outlined text-lg">print</span>
+<span class="truncate">Imprimir</span>
+</button>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90">
+<span class="material-symbols-outlined text-lg">send</span>
+<span class="truncate">Enviar Fatura</span>
+</button>
+</div>
+</div>
+<!-- Information Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<!-- Customer Information Card -->
+<div class="bg-white dark:bg-gray-800/50 p-6 rounded-xl border border-gray-200 dark:border-gray-800">
+<h3 class="text-lg font-bold text-[#111318] dark:text-white mb-4">Cliente</h3>
+<div class="flex flex-col gap-3 text-sm">
+<p class="text-[#111318] dark:text-gray-200 font-medium">João da Silva</p>
+<p class="text-[#636f88] dark:text-gray-400">joao.silva@email.com</p>
+<p class="text-[#636f88] dark:text-gray-400">+55 11 98765-4321</p>
+<p class="text-[#636f88] dark:text-gray-400">Rua das Flores, 123, São Paulo, SP, 01234-567</p>
+</div>
+</div>
+<!-- Invoice Details Card -->
+<div class="bg-white dark:bg-gray-800/50 p-6 rounded-xl border border-gray-200 dark:border-gray-800">
+<h3 class="text-lg font-bold text-[#111318] dark:text-white mb-4">Detalhes da Fatura</h3>
+<div class="flex flex-col gap-3 text-sm">
+<p class="text-[#636f88] dark:text-gray-400">Método de Pagamento: <span class="font-medium text-[#111318] dark:text-gray-200">Cartão de Crédito (Visa **** 4321)</span></p>
+<p class="text-[#636f88] dark:text-gray-400">Código da Transação: <span class="font-medium text-[#111318] dark:text-gray-200">TXN_9876543210</span></p>
+<p class="text-[#636f88] dark:text-gray-400">Data de Vencimento: <span class="font-medium text-[#111318] dark:text-gray-200">30 de Maio, 2024</span></p>
+</div>
+</div>
+<!-- Order Status Card -->
+<div class="bg-white dark:bg-gray-800/50 p-6 rounded-xl border border-gray-200 dark:border-gray-800">
+<h3 class="text-lg font-bold text-[#111318] dark:text-white mb-4">Status do Pedido</h3>
+<div class="flex items-center gap-2 mb-4">
+<span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-800/30 dark:text-yellow-500">Pendente</span>
+</div>
+<label class="block text-sm font-medium text-[#636f88] dark:text-gray-400 mb-2" for="status">Alterar Status</label>
+<select class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-primary focus:ring-primary text-sm" id="status" name="status">
+<option>Pendente</option>
+<option>Processando</option>
+<option>Enviado</option>
+<option>Entregue</option>
+<option>Cancelado</option>
+</select>
+</div>
+</div>
+<!-- Order Items Table -->
+<div class="bg-white dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
+<div class="p-6">
+<h3 class="text-lg font-bold text-[#111318] dark:text-white">Itens do Pedido</h3>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-sm text-left">
+<thead class="bg-[#f0f2f4] dark:bg-gray-800 text-xs text-[#636f88] dark:text-gray-400 uppercase">
+<tr>
+<th class="px-6 py-3" scope="col">Produto</th>
+<th class="px-6 py-3 text-center" scope="col">Quantidade</th>
+<th class="px-6 py-3 text-right" scope="col">Preço Unit.</th>
+<th class="px-6 py-3 text-right" scope="col">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b dark:border-gray-700">
+<th class="px-6 py-4 font-medium whitespace-nowrap" scope="row">
+<div class="flex items-center gap-4">
+<img class="w-12 h-12 object-cover rounded-md" data-alt="White T-shirt with a graphic design" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdLcAR7c1JnUC0t0glANX8BB5y8IEvTNriylwvxIAkD9NRYGz7gL4hh4Z-nt-GP4e1LY49lU1ClYCKQHHDsqDbFkpQXnLkcTt_o_ptKi3XXt7jxBnv1mEIn9rTbGedKvXcBerkCDoZdei1hRjoIeLa6qJ-N0Ezmm7eqrm4-Kl7TLILZv2DqCxeT4c6aKCwoQg2w1t2aDPpBaHZ-DQDcNEP1wqU3iQBW1OmMgE_jaITlUUda4ovFWcShisTB5ecCfYRDEsBnMjuDJc"/>
+<div>
+<p class="text-[#111318] dark:text-white">Camiseta Básica Branca</p>
+<p class="text-xs text-[#636f88] dark:text-gray-400">SKU: TS-WHT-M</p>
+</div>
+</div>
+</th>
+<td class="px-6 py-4 text-center">2</td>
+<td class="px-6 py-4 text-right">R$ 89,90</td>
+<td class="px-6 py-4 text-right">R$ 179,80</td>
+</tr>
+<tr class="border-b dark:border-gray-700">
+<th class="px-6 py-4 font-medium whitespace-nowrap" scope="row">
+<div class="flex items-center gap-4">
+<img class="w-12 h-12 object-cover rounded-md" data-alt="Dark denim jeans" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOu4AeodGroitNycah83xeN0V_gPkZYNrtKuYRNQk_kkpzNHAyNKEq0Bf-UYty8ZoNIOfqBoDe7ethVaJvxIeWLCLq_5_6-7AjdemRzshR_ivE5E7AVuNrKb-Popv46Q9k0UMYHMAcbqVBthIA71UVfzRxp7dlZSltEFugOIYS9T5cdXfcATZGhnoX5yyFwo7xd0Dv42P8th7V1cnll4WZ4Qo7isu63o1Kwm9mMFuVkMXIpJrqsJvMvRT4M5pfaYfx_YyhlSSHU_4"/>
+<div>
+<p class="text-[#111318] dark:text-white">Calça Jeans Slim</p>
+<p class="text-xs text-[#636f88] dark:text-gray-400">SKU: JN-SLM-32</p>
+</div>
+</div>
+</th>
+<td class="px-6 py-4 text-center">1</td>
+<td class="px-6 py-4 text-right">R$ 249,90</td>
+<td class="px-6 py-4 text-right">R$ 249,90</td>
+</tr>
+<tr class="border-b dark:border-gray-700">
+<th class="px-6 py-4 font-medium whitespace-nowrap" scope="row">
+<div class="flex items-center gap-4">
+<img class="w-12 h-12 object-cover rounded-md" data-alt="Brown leather sneakers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVpaAtBevy2nC9gYJKOrNpqPpmduWopgmD1XrzRfUvvoGJl_vIZUDynyKaY-Aj-Y7uSIpXeh6oDsMRnnNKMVPl-3A_tupLDOvtn1aa1XPvo2ERZGBPuq03xd0LYnCt3_3gBz7MiU1FhrvsHIkjMYIVMqqQUf0NcuXr0TkrUpuxiffqs3311CBtY5tB3nXZh4pvohamWF7riwVI0ZMq4IEEMMmIyjVoOuT0ju_gXoUyUDiKfonAjxJQrCCryTl3C0CaP9mCZVSG-yU"/>
+<div>
+<p class="text-[#111318] dark:text-white">Tênis de Couro Marrom</p>
+<p class="text-xs text-[#636f88] dark:text-gray-400">SKU: SNK-BRN-42</p>
+</div>
+</div>
+</th>
+<td class="px-6 py-4 text-center">1</td>
+<td class="px-6 py-4 text-right">R$ 320,00</td>
+<td class="px-6 py-4 text-right">R$ 320,00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Totals Section -->
+<div class="p-6 flex justify-end">
+<div class="w-full max-w-sm space-y-3">
+<div class="flex justify-between text-sm">
+<span class="text-[#636f88] dark:text-gray-400">Subtotal</span>
+<span class="text-[#111318] dark:text-gray-200">R$ 749,70</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-[#636f88] dark:text-gray-400">Frete</span>
+<span class="text-[#111318] dark:text-gray-200">R$ 25,00</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-[#636f88] dark:text-gray-400">Descontos</span>
+<span class="text-[#111318] dark:text-gray-200">- R$ 0,00</span>
+</div>
+<div class="border-t border-dashed dark:border-gray-700 my-2"></div>
+<div class="flex justify-between font-bold text-base">
+<span class="text-[#111318] dark:text-white">Total</span>
+<span class="text-primary dark:text-primary-400">R$ 774,70</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

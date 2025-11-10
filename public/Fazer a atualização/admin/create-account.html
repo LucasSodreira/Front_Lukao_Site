@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Criar Novo Administrador</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#195de6",
+            "background-light": "#f6f6f8",
+            "background-dark": "#111621",
+          },
+          fontFamily: {
+            "display": ["Manrope", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+  </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex min-h-screen w-full">
+<!-- SideNavBar -->
+<aside class="flex w-64 flex-col bg-white p-6 dark:bg-gray-800 dark:border-r dark:border-gray-700 border-r border-gray-200 flex-shrink-0 sticky top-0 h-screen overflow-y-auto">
+<!-- Logo -->
+<div class="flex items-center gap-3 mb-8">
+  <div class="bg-primary/20 text-primary rounded-lg p-2">
+    <span class="material-symbols-outlined text-xl">shield</span>
+  </div>
+  <span class="font-bold text-gray-900 dark:text-white text-lg">Admin</span>
+</div>
+
+<!-- Menu Items -->
+<nav class="flex-1 space-y-2">
+  <!-- Dashboard -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">dashboard</span>
+    <p class="text-sm font-medium leading-normal">Dashboard</p>
+  </a>
+  
+  <!-- Pedidos -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">shopping_cart</span>
+    <p class="text-sm font-medium leading-normal">Pedidos</p>
+  </a>
+  
+  <!-- Produtos -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">package_2</span>
+    <p class="text-sm font-medium leading-normal">Produtos</p>
+  </a>
+  
+  <!-- Clientes -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">group</span>
+    <p class="text-sm font-medium leading-normal">Clientes</p>
+  </a>
+  
+  <!-- Usuários -->
+  <a class="active flex items-center gap-3 px-4 py-2 rounded-lg bg-primary/10 text-primary dark:bg-primary/20" href="#">
+    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person_add</span>
+    <p class="text-sm font-medium leading-normal">Usuários</p>
+  </a>
+</nav>
+
+<!-- Configurações -->
+<div class="flex flex-col gap-2">
+          <button
+            class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90">
+            <span class="material-symbols-outlined">add_circle</span>
+            <span class="truncate">Adicionar Produto</span>
+          </button>
+          
+          <div
+            class="border-t border-slate-200 dark:border-slate-800 my-2"></div>
+          <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+            href="#">
+            <span class="material-symbols-outlined">settings</span>
+            <p class="text-sm font-medium leading-normal">Configurações</p>
+          </a>
+          <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+            href="#">
+            <span class="material-symbols-outlined">logout</span>
+            <p class="text-sm font-medium leading-normal">Sair</p>
+          </a>
+        </div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 p-8">
+<div class="mx-auto max-w-4xl">
+<!-- Breadcrumbs -->
+<div class="flex flex-wrap gap-2 mb-6">
+<a class="text-[#636f88] dark:text-gray-400 text-sm font-medium leading-normal" href="#">Usuários</a>
+<span class="text-[#636f88] dark:text-gray-400 text-sm font-medium leading-normal">/</span>
+<span class="text-[#111318] dark:text-gray-200 text-sm font-medium leading-normal">Adicionar Administrador</span>
+</div>
+<!-- PageHeading -->
+<div class="flex flex-wrap justify-between gap-3 mb-8">
+<div class="flex min-w-72 flex-col gap-2">
+<p class="text-[#111318] dark:text-gray-100 text-3xl font-bold leading-tight tracking-tight">Criar Novo Administrador</p>
+<p class="text-[#636f88] dark:text-gray-400 text-base font-normal leading-normal">Preencha os campos abaixo para criar uma nova conta de administrador.</p>
+</div>
+</div>
+<!-- Form Container -->
+<div class="bg-white dark:bg-gray-900/50 rounded-xl shadow-sm border border-gray-200/80 dark:border-gray-800">
+<!-- SectionHeader -->
+<div class="border-b border-gray-200/80 dark:border-gray-800">
+<h3 class="text-[#111318] dark:text-gray-200 text-lg font-bold leading-tight tracking-[-0.015em] px-6 py-4">Informações da Conta</h3>
+</div>
+<!-- Form Fields -->
+<form class="p-6 space-y-6">
+<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+<!-- Full Name Field -->
+<div class="flex flex-col">
+<label class="text-[#111318] dark:text-gray-200 text-sm font-medium leading-normal pb-2" for="fullName">Nome Completo</label>
+<input class="form-input flex w-full resize-none rounded-lg text-[#111318] focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#dcdfe5] bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 focus:border-primary dark:focus:border-primary h-12 placeholder:text-[#636f88] px-4 text-sm font-normal leading-normal" id="fullName" placeholder="Digite o nome completo" type="text"/>
+</div>
+<!-- Email Field -->
+<div class="flex flex-col">
+<label class="text-[#111318] dark:text-gray-200 text-sm font-medium leading-normal pb-2" for="email">Endereço de E-mail</label>
+<input class="form-input flex w-full resize-none rounded-lg text-[#111318] focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#dcdfe5] bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 focus:border-primary dark:focus:border-primary h-12 placeholder:text-[#636f88] px-4 text-sm font-normal leading-normal" id="email" placeholder="exemplo@email.com" type="email"/>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+<!-- Password Field -->
+<div class="flex flex-col">
+<label class="text-[#111318] dark:text-gray-200 text-sm font-medium leading-normal pb-2" for="password">Senha</label>
+<div class="relative">
+<input class="form-input flex w-full resize-none rounded-lg text-[#111318] focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#dcdfe5] bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 focus:border-primary dark:focus:border-primary h-12 placeholder:text-[#636f88] px-4 pr-10 text-sm font-normal leading-normal" id="password" placeholder="Digite uma senha forte" type="password"/>
+<button class="absolute inset-y-0 right-0 flex items-center pr-3 text-[#636f88] dark:text-gray-400" type="button">
+<span class="material-symbols-outlined text-xl">visibility_off</span>
+</button>
+</div>
+<p class="text-[#636f88] dark:text-gray-500 text-xs mt-2">Mínimo 8 caracteres, com 1 letra maiúscula e 1 número.</p>
+</div>
+<!-- Confirm Password Field -->
+<div class="flex flex-col">
+<label class="text-[#111318] dark:text-gray-200 text-sm font-medium leading-normal pb-2" for="confirmPassword">Confirmar Senha</label>
+<div class="relative">
+<input class="form-input flex w-full resize-none rounded-lg text-[#111318] focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#dcdfe5] bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 focus:border-primary dark:focus:border-primary h-12 placeholder:text-[#636f88] px-4 pr-10 text-sm font-normal leading-normal" id="confirmPassword" placeholder="Repita a senha" type="password"/>
+</div>
+</div>
+</div>
+</form>
+<!-- Action Buttons -->
+<div class="flex justify-end gap-3 px-6 py-4 border-t border-gray-200/80 dark:border-gray-800">
+<button class="flex items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800 px-4 h-10 text-sm font-semibold text-[#111318] dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700">Cancelar</button>
+<button class="flex items-center justify-center rounded-lg bg-primary px-4 h-10 text-sm font-semibold text-white hover:bg-primary/90">Criar Conta</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

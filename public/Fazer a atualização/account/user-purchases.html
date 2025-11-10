@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR"><head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Minhas Compras - ModaMasculina</title>
+        <script
+            src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap"
+            rel="stylesheet" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+            rel="stylesheet" />
+        <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#195de6",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+        <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+    </head>
+    <body
+        class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
+        <div
+            class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+            <header
+      class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          class="flex h-20 items-center justify-between whitespace-nowrap">
+          <div class="flex items-center gap-10">
+            <a class="flex items-center gap-2 text-gray-800 dark:text-white"
+              href="#">
+              <div class="size-7 text-primary dark:text-text-dark">
+                <svg fill="none" viewBox="0 0 48 48"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z"
+                    fill="currentColor"></path>
+                </svg>
+              </div>
+              <h1 class="text-2xl font-bold tracking-tight">THREADS</h1>
+            </a>
+            <nav class="hidden md:flex items-center gap-8">
+              <a
+                class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                href="#">Novidades</a>
+              <a
+                class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                href="#">Roupas</a>
+              <a
+                class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                href="#">Acessórios</a>
+              <a
+                class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                href="#">Marcas</a>
+              <a
+                class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                href="#">Promoções</a>
+            </nav>
+          </div>
+          <div class="flex flex-1 justify-end items-center gap-4">
+            <div class="hidden sm:flex relative items-center">
+              <span
+                class="material-symbols-outlined absolute left-3 text-gray-500 dark:text-gray-400">search</span>
+              <input
+                class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-800 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border-none bg-gray-100 dark:bg-gray-800 h-10 placeholder:text-gray-500 dark:placeholder:text-gray-400 pl-10 pr-4 text-sm font-normal leading-normal"
+                placeholder="Buscar" value />
+            </div>
+            <div class="flex gap-2">
+              <button
+                class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white dark:hover:bg-gray-700 min-w-0 px-2.5">
+                <span class="material-symbols-outlined">favorite</span>
+              </button>
+              <button
+                class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white dark:hover:bg-gray-700 min-w-0 px-2.5">
+                <span class="material-symbols-outlined">shopping_cart</span>
+              </button>
+            </div>
+            <div
+              class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+              data-alt="Avatar do usuário"
+              style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC52EDZXOpoeh2RcaCa5y38UKAtURhObxkr9jzI9wiF3SjzgyAKE1818wMl02fQDG21nlH-mvj09Y5c60Y1-5iOGAFwJ9ZIv0bJbhmbHzoqdPqLsXJS0fqj-OqFnw-_oC576tYmQjLrwVxfqKH5POe0_DefDZJWOxewfup8P3qB1Icyxej34l2Tg7SQYUw32D-XLdd2RGzYTvjAM0k8uwYc_hIRQn6Y5BybdRJjf_tiUGj82t2bvhJAmQJh9R9tECZdAtqtLWMtLtY');"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+            <main class="layout-container flex h-full grow flex-col">
+                <div class="container mx-auto px-4 py-8 md:py-12">
+                    <div
+                        class="layout-content-container flex flex-col lg:flex-row gap-8 lg:gap-12">
+                        <aside class="w-full lg:w-64 flex-shrink-0">
+                            <nav class="flex flex-col gap-2">
+                                <h3
+                                    class="text-sm font-semibold text-gray-500 dark:text-gray-400 px-4 mb-1">Minha
+                                    Conta</h3>
+                                <a
+                                    class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                                    href="#">
+                                    <span
+                                        class="material-symbols-outlined text-xl">person</span>
+                                    <span class="text-sm font-medium">Meus
+                                        Dados</span>
+                                </a>
+                                <a
+                                    class="flex items-center gap-3 px-4 py-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary dark:text-white"
+                                    href="#">
+                                    <span
+                                        class="material-symbols-outlined text-xl">receipt_long</span>
+                                    <span class="text-sm font-bold">Meus
+                                        Pedidos</span>
+                                </a>
+                                <a
+                                    class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                                    href="#">
+                                    <span
+                                        class="material-symbols-outlined text-xl">shield</span>
+                                    <span
+                                        class="text-sm font-medium">Segurança</span>
+                                </a>
+                                <a
+                                    class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                                    href="#">
+                                    <span
+                                        class="material-symbols-outlined text-xl">location_on</span>
+                                    <span
+                                        class="text-sm font-medium">Endereços</span>
+                                </a>
+                                <a
+                                    class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                                    href="#">
+                                    <span
+                                        class="material-symbols-outlined text-xl">logout</span>
+                                    <span
+                                        class="text-sm font-medium">Sair</span>
+                                </a>
+                            </nav>
+                        </aside>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <a
+                                    class="text-gray-500 dark:text-gray-400 text-sm font-medium hover:text-primary dark:hover:text-primary"
+                                    href="#">Minha Conta</a>
+                                <span
+                                    class="text-gray-500 dark:text-gray-400 text-sm font-medium">/</span>
+                                <span
+                                    class="text-gray-800 dark:text-white text-sm font-medium">Compras</span>
+                            </div>
+                            <div
+                                class="flex flex-wrap items-center justify-between gap-3 mb-6">
+                                <p
+                                    class="text-gray-800 dark:text-white text-3xl md:text-4xl font-black tracking-tighter">Compras</p>
+                            </div>
+                            <div
+                                class="flex flex-col sm:flex-row flex-wrap items-center gap-4 mb-8">
+                                <label
+                                    class="relative w-full sm:w-auto sm:flex-1">
+                                    <div
+                                        class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <span
+                                            class="material-symbols-outlined text-xl text-gray-500">search</span>
+                                    </div>
+                                    <input
+                                        class="form-input flex w-full min-w-0 resize-none overflow-hidden rounded-lg text-gray-800 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800/50 focus:border-primary/50 h-12 placeholder:text-gray-500 dark:placeholder:text-gray-400 pl-10 pr-4 text-base font-normal leading-normal"
+                                        placeholder="Busque por compra, marca e mais..."
+                                        value />
+                                </label>
+                                <div
+                                    class="flex items-center gap-4 w-full sm:w-auto">
+                                    <button
+                                        class="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 px-4 w-1/2 sm:w-auto hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                        <p
+                                            class="text-gray-800 dark:text-gray-200 text-base font-medium">Categoria</p>
+                                        <span
+                                            class="material-symbols-outlined text-xl text-gray-500">expand_more</span>
+                                    </button>
+                                    <button
+                                        class="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 px-4 w-1/2 sm:w-auto hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                        <p
+                                            class="text-gray-800 dark:text-gray-200 text-base font-medium">Data</p>
+                                        <span
+                                            class="material-symbols-outlined text-xl text-gray-500">expand_more</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="space-y-8">
+                                <div>
+                                    <h3
+                                        class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">15
+                                        de outubro</h3>
+                                    <div class="space-y-6">
+                                        <div
+                                            class="flex flex-col sm:flex-row items-start gap-4">
+                                            <div
+                                                class="flex items-start gap-4 flex-1">
+                                                <div
+                                                    class="w-16 h-16 sm:w-20 sm:h-20 rounded-lg bg-cover bg-center flex-shrink-0"
+                                                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBmY6ssKEi4948YC3N17XKQ9AGvXmbT7PFUgZUHV2HqFTV_0NegLun2mqV6Ba7VHAN1zInoCA73HoTM8wx6fCJq5aGKkzgtIp7r0o3iAeJUpxjUUWOg_YSPwMeqPCiZV2x1bWCNNtdCdQk-x2aLflx3Y9pFeNia-T1eBXYi1f9Sw2GRCNXNHmPzKCBujCWr1U_mEWyBtQ_zpJWPVrxW_1tCddkdnbeBhfH5tmOe8oC8KB8G_Q2bhjGcwALFwOu_IW2ohXjXeeukxQ0')"></div>
+                                                <div
+                                                    class="flex flex-col gap-1">
+                                                    <p
+                                                        class="text-green-600 dark:text-green-400 text-sm font-bold">Entregue</p>
+                                                    <p
+                                                        class="text-sm text-gray-600 dark:text-gray-300 font-medium">Chegou
+                                                        no dia 15 de outubro</p>
+                                                    <p
+                                                        class="text-gray-800 dark:text-white font-semibold">Camisa
+                                                        Casual de Linho</p>
+                                                    <p
+                                                        class="text-gray-500 dark:text-gray-400 text-sm">1
+                                                        unidade</p>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="flex flex-col items-stretch sm:items-end gap-2 w-full sm:w-auto">
+                                                <a
+                                                    class="flex h-12 items-center justify-center gap-x-2 rounded-lg bg-primary text-white px-6 text-base font-bold w-full hover:bg-primary/90 transition-colors"
+                                                    href="#">Ver compra</a>
+                                                <a
+                                                    class="flex h-12 items-center justify-center gap-x-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800/50 px-6 text-base font-bold text-primary dark:text-primary w-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                                    href="#">Comprar
+                                                    novamente</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3
+                                        class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">02
+                                        de setembro</h3>
+                                    <div class="space-y-6">
+                                        <div
+                                            class="flex flex-col sm:flex-row items-start gap-4">
+                                            <div
+                                                class="flex items-start gap-4 flex-1">
+                                                <div
+                                                    class="w-16 h-16 sm:w-20 sm:h-20 rounded-lg bg-cover bg-center flex-shrink-0"
+                                                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBmY6ssKEi4948YC3N17XKQ9AGvXmbT7PFUgZUHV2HqFTV_0NegLun2mqV6Ba7VHAN1zInoCA73HoTM8wx6fCJq5aGKkzgtIp7r0o3iAeJUpxjUUWOg_YSPwMeqPCiZV2x1bWCNNtdCdQk-x2aLflx3Y9pFeNia-T1eBXYi1f9Sw2GRCNXNHmPzKCBujCWr1U_mEWyBtQ_zpJWPVrxW_1tCddkdnbeBhfH5tmOe8oC8KB8G_Q2bhjGcwALFwOu_IW2ohXjXeeukxQ0')"></div>
+                                                <div
+                                                    class="flex flex-col gap-1">
+                                                    <p
+                                                        class="text-yellow-600 dark:text-yellow-400 text-sm font-bold">Em
+                                                        trânsito</p>
+                                                    <p
+                                                        class="text-sm text-gray-600 dark:text-gray-300 font-medium">Chega
+                                                        até 20 de setembro</p>
+                                                    <p
+                                                        class="text-gray-800 dark:text-white font-semibold">Tênis
+                                                        Esportivo
+                                                        Performance</p>
+                                                    <p
+                                                        class="text-gray-500 dark:text-gray-400 text-sm">1
+                                                        unidade</p>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="flex flex-col items-stretch sm:items-end gap-2 w-full sm:w-auto">
+                                                <a
+                                                    class="flex h-12 items-center justify-center gap-x-2 rounded-lg bg-primary text-white px-6 text-base font-bold w-full hover:bg-primary/90 transition-colors"
+                                                    href="#">Acompanhar
+                                                    entrega</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3
+                                        class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">18
+                                        de agosto</h3>
+                                    <div class="space-y-6">
+                                        <div
+                                            class="flex flex-col sm:flex-row items-start gap-4">
+                                            <div
+                                                class="flex items-start gap-4 flex-1">
+                                                <div
+                                                    class="w-16 h-16 sm:w-20 sm:h-20 rounded-lg bg-cover bg-center flex-shrink-0"
+                                                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBmY6ssKEi4948YC3N17XKQ9AGvXmbT7PFUgZUHV2HqFTV_0NegLun2mqV6Ba7VHAN1zInoCA73HoTM8wx6fCJq5aGKkzgtIp7r0o3iAeJUpxjUUWOg_YSPwMeqPCiZV2x1bWCNNtdCdQk-x2aLflx3Y9pFeNia-T1eBXYi1f9Sw2GRCNXNHmPzKCBujCWr1U_mEWyBtQ_zpJWPVrxW_1tCddkdnbeBhfH5tmOe8oC8KB8G_Q2bhjGcwALFwOu_IW2ohXjXeeukxQ0')"></div>
+                                                <div
+                                                    class="flex flex-col gap-1">
+                                                    <p
+                                                        class="text-green-600 dark:text-green-400 text-sm font-bold">Entregue</p>
+                                                    <p
+                                                        class="text-sm text-gray-600 dark:text-gray-300 font-medium">Chegou
+                                                        no dia 18 de agosto</p>
+                                                    <p
+                                                        class="text-gray-800 dark:text-white font-semibold">Kit
+                                                        2 Cintos de Couro</p>
+                                                    <p
+                                                        class="text-gray-500 dark:text-gray-400 text-sm">1
+                                                        unidade</p>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="flex flex-col items-stretch sm:items-end gap-2 w-full sm:w-auto">
+                                                <a
+                                                    class="flex h-12 items-center justify-center gap-x-2 rounded-lg bg-primary text-white px-6 text-base font-bold w-full hover:bg-primary/90 transition-colors"
+                                                    href="#">Ver compra</a>
+                                                <a
+                                                    class="flex h-12 items-center justify-center gap-x-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800/50 px-6 text-base font-bold text-primary dark:text-primary w-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                                    href="#">Comprar
+                                                    novamente</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <nav
+                                class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-4 sm:px-0 mt-8 pt-6">
+                                <div class="flex w-0 flex-1">
+                                    <a
+                                        class="inline-flex items-center rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-2 text-base font-bold text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                        href="#">
+                                        <span
+                                            class="material-symbols-outlined text-base mr-2">arrow_back</span>
+                                        Anterior
+                                    </a>
+                                </div>
+                                <div class="hidden md:flex">
+                                    <a aria-current="page"
+                                        class="inline-flex items-center border-t-2 border-primary px-4 pt-4 text-sm font-medium text-primary"
+                                        href="#"> 1 </a>
+                                    <a
+                                        class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600 hover:text-gray-700 dark:hover:text-gray-200"
+                                        href="#"> 2 </a>
+                                    <a
+                                        class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600 hover:text-gray-700 dark:hover:text-gray-200"
+                                        href="#"> 3 </a>
+                                    <span
+                                        class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 dark:text-gray-400">...</span>
+                                    <a
+                                        class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600 hover:text-gray-700 dark:hover:text-gray-200"
+                                        href="#"> 8 </a>
+                                </div>
+                                <div class="flex w-0 flex-1 justify-end">
+                                    <a
+                                        class="inline-flex items-center rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-2 text-base font-bold text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                        href="#">
+                                        Próximo
+                                        <span
+                                            class="material-symbols-outlined text-base ml-2">arrow_forward</span>
+                                    </a>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+    </body></html>

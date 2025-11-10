@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Detalhes do Produto - Admin Dashboard</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#195de6",
+              "background-light": "#f6f6f8",
+              "background-dark": "#111621",
+            },
+            fontFamily: {
+              "display": ["Manrope", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex min-h-screen w-full flex-row">
+<!-- SideNavBar -->
+<nav class="flex h-screen min-h-screen flex-col border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 p-6 sticky top-0 w-64 flex-shrink-0 overflow-y-auto flex">
+<!-- Logo -->
+<div class="flex items-center gap-3 mb-8">
+  <div class="bg-primary/20 text-primary rounded-lg p-2">
+    <span class="material-symbols-outlined text-xl">shield</span>
+  </div>
+  <span class="font-bold text-gray-900 dark:text-white text-lg">Admin</span>
+</div>
+
+<!-- Menu Items -->
+<div class="flex-1 space-y-2">
+  <!-- Dashboard -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">dashboard</span>
+    <p class="text-sm font-medium leading-normal">Dashboard</p>
+  </a>
+  
+  <!-- Pedidos -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">shopping_cart</span>
+    <p class="text-sm font-medium leading-normal">Pedidos</p>
+  </a>
+  
+  <!-- Produtos -->
+  <a class="active flex items-center gap-3 px-4 py-2 rounded-lg bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary" href="#">
+    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+    <p class="text-sm font-medium leading-normal">Produtos</p>
+  </a>
+  
+  <!-- Clientes -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">group</span>
+    <p class="text-sm font-medium leading-normal">Clientes</p>
+  </a>
+  
+  <!-- Relatórios -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">bar_chart</span>
+    <p class="text-sm font-medium leading-normal">Relatórios</p>
+  </a>
+</div>
+
+<!-- Configurações -->
+<div class="flex flex-col gap-2 mt-auto border-t border-gray-200 dark:border-gray-700 pt-4">
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" href="#">
+    <span class="material-symbols-outlined">settings</span>
+    <p class="text-sm font-medium leading-normal">Configurações</p>
+  </a>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 p-8 overflow-y-auto">
+<div class="max-w-7xl mx-auto space-y-6">
+<!-- Breadcrumbs -->
+<div class="flex flex-wrap gap-2">
+<a class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal hover:text-primary" href="#">Dashboard</a>
+<span class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal">/</span>
+<a class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal hover:text-primary" href="#">Produtos</a>
+<span class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal">/</span>
+<span class="text-gray-900 dark:text-gray-100 text-sm font-medium leading-normal">Camiseta Básica de Algodão</span>
+</div>
+<!-- Page Heading -->
+<div class="flex flex-wrap justify-between items-center gap-4">
+<div class="flex flex-col gap-1">
+<h1 class="text-gray-900 dark:text-gray-100 text-3xl font-bold leading-tight tracking-tight">Camiseta Básica de Algodão</h1>
+<p class="text-gray-500 dark:text-gray-400 text-base font-normal leading-normal">SKU: CZ-TS-001</p>
+</div>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90">
+<span class="truncate">Salvar Alterações</span>
+</button>
+</div>
+<!-- Stats -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800">
+<p class="text-gray-700 dark:text-gray-300 text-base font-medium leading-normal">Estoque Total</p>
+<p class="text-gray-900 dark:text-gray-100 text-3xl font-bold leading-tight">1.250</p>
+<p class="text-green-600 dark:text-green-500 text-sm font-medium leading-normal">+5% desde o último mês</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800">
+<p class="text-gray-700 dark:text-gray-300 text-base font-medium leading-normal">Receita Gerada</p>
+<p class="text-gray-900 dark:text-gray-100 text-3xl font-bold leading-tight">R$ 22.450</p>
+<p class="text-green-600 dark:text-green-500 text-sm font-medium leading-normal">+12.5% desde o último mês</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800">
+<p class="text-gray-700 dark:text-gray-300 text-base font-medium leading-normal">Pedidos no Mês</p>
+<p class="text-gray-900 dark:text-gray-100 text-3xl font-bold leading-tight">312</p>
+<p class="text-green-600 dark:text-green-500 text-sm font-medium leading-normal">+8% desde o último mês</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800">
+<p class="text-gray-700 dark:text-gray-300 text-base font-medium leading-normal">Avaliação Média</p>
+<p class="text-gray-900 dark:text-gray-100 text-3xl font-bold leading-tight">4.8</p>
+<p class="text-red-600 dark:text-red-500 text-sm font-medium leading-normal">-0.1 desde o último mês</p>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Main content column -->
+<div class="lg:col-span-2 space-y-6">
+<!-- Image Gallery -->
+<div class="bg-white dark:bg-gray-900/50 rounded-xl border border-gray-200 dark:border-gray-800">
+<h2 class="text-gray-900 dark:text-gray-100 text-lg font-bold p-6 border-b border-gray-200 dark:border-gray-800">Galeria de Imagens</h2>
+<div class="p-6">
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<div class="sm:col-span-2 aspect-[4/3] rounded-lg bg-gray-100 dark:bg-gray-800 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBmOV73qv6xgEw3S_mu4Z1yZ7vkUW51WNN1ANbGmU8_sgx3wPMOn2gQFe7caSHM1pIQj1J2JQCUOr9NFDR98WzVBrKKEDcNf4yXRn_xtsn4fcDbEn6pg6eqEzc22-mqXFsmESVMw_jIu_Ryn3RgsZj8yH-13Pr9rdJkT2gLJCYyg9g-9n8gwkiS7aT9Fj7EOmC8wRmX5ZYs-vC8xSFdZOAZU-cg8rMixIakLukjeORb9m5g5zDOZYUIUsssaa0Up-pM_xKIYs5m0Js');"></div>
+<div class="grid grid-cols-2 sm:grid-cols-1 gap-4">
+<div class="aspect-square rounded-lg bg-gray-100 dark:bg-gray-800 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBmOV73qv6xgEw3S_mu4Z1yZ7vkUW51WNN1ANbGmU8_sgx3wPMOn2gQFe7caSHM1pIQj1J2JQCUOr9NFDR98WzVBrKKEDcNf4yXRn_xtsn4fcDbEn6pg6eqEzc22-mqXFsmESVMw_jIu_Ryn3RgsZj8yH-13Pr9rdJkT2gLJCYyg9g-9n8gwkiS7aT9Fj7EOmC8wRmX5ZYs-vC8xSFdZOAZU-cg8rMixIakLukjeORb9m5g5zDOZYUIUsssaa0Up-pM_xKIYs5m0Js');"></div>
+<div class="aspect-square rounded-lg bg-gray-100 dark:bg-gray-800 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBmOV73qv6xgEw3S_mu4Z1yZ7vkUW51WNN1ANbGmU8_sgx3wPMOn2gQFe7caSHM1pIQj1J2JQCUOr9NFDR98WzVBrKKEDcNf4yXRn_xtsn4fcDbEn6pg6eqEzc22-mqXFsmESVMw_jIu_Ryn3RgsZj8yH-13Pr9rdJkT2gLJCYyg9g-9n8gwkiS7aT9Fj7EOmC8wRmX5ZYs-vC8xSFdZOAZU-cg8rMixIakLukjeORb9m5g5zDOZYUIUsssaa0Up-pM_xKIYs5m0Js');"></div>
+</div>
+</div>
+<button class="mt-4 w-full flex items-center justify-center gap-2 rounded-lg h-10 px-4 border-2 border-dashed border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50 text-sm font-bold">
+<span class="material-symbols-outlined text-base">upload</span>
+<span>Adicionar Imagens</span>
+</button>
+</div>
+</div>
+<!-- General Information -->
+<div class="bg-white dark:bg-gray-900/50 rounded-xl border border-gray-200 dark:border-gray-800">
+<h2 class="text-gray-900 dark:text-gray-100 text-lg font-bold p-6 border-b border-gray-200 dark:border-gray-800">Informações Gerais</h2>
+<form class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300" for="product-name">Título do Produto</label>
+<input class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" id="product-name" type="text" value="Camiseta Básica de Algodão"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300" for="product-sku">SKU</label>
+<input class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" id="product-sku" type="text" value="CZ-TS-001"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300" for="product-category">Categoria</label>
+<select class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" id="product-category">
+<option>Camisetas</option>
+<option>Calças</option>
+<option>Acessórios</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300" for="product-brand">Marca</label>
+<input class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" id="product-brand" type="text" value="Marca Própria"/>
+</div>
+<div class="md:col-span-2">
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300" for="product-price">Preço (R$)</label>
+<input class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" id="product-price" type="number" value="89.90"/>
+</div>
+</form>
+</div>
+<!-- Variants Table -->
+<div class="bg-white dark:bg-gray-900/50 rounded-xl border border-gray-200 dark:border-gray-800">
+<div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-800">
+<h2 class="text-gray-900 dark:text-gray-100 text-lg font-bold">Variantes</h2>
+<button class="flex items-center justify-center gap-2 rounded-lg h-9 px-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 text-sm font-bold">
+<span>Adicionar Variante</span>
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-800 dark:text-gray-400">
+<tr>
+<th class="px-6 py-3" scope="col">Cor</th>
+<th class="px-6 py-3" scope="col">Tamanho</th>
+<th class="px-6 py-3" scope="col">Estoque</th>
+<th class="px-6 py-3" scope="col">SKU Variante</th>
+<th class="px-6 py-3" scope="col">Preço</th>
+</tr>
+</thead>
+<tbody>
+<tr class="bg-white dark:bg-gray-900/50 border-b dark:border-gray-800">
+<td class="px-6 py-4 font-medium text-gray-900 dark:text-white">Branco</td>
+<td class="px-6 py-4">P</td>
+<td class="px-6 py-4">150</td>
+<td class="px-6 py-4">CZ-TS-001-W-S</td>
+<td class="px-6 py-4">R$ 89,90</td>
+</tr>
+<tr class="bg-white dark:bg-gray-900/50 border-b dark:border-gray-800">
+<td class="px-6 py-4 font-medium text-gray-900 dark:text-white">Branco</td>
+<td class="px-6 py-4">M</td>
+<td class="px-6 py-4">200</td>
+<td class="px-6 py-4">CZ-TS-001-W-M</td>
+<td class="px-6 py-4">R$ 89,90</td>
+</tr>
+<tr class="bg-white dark:bg-gray-900/50 border-b dark:border-gray-800">
+<td class="px-6 py-4 font-medium text-gray-900 dark:text-white">Preto</td>
+<td class="px-6 py-4">M</td>
+<td class="px-6 py-4">50</td>
+<td class="px-6 py-4">CZ-TS-001-B-M</td>
+<td class="px-6 py-4">R$ 89,90</td>
+</tr>
+<tr class="bg-white dark:bg-gray-900/50">
+<td class="px-6 py-4 font-medium text-gray-900 dark:text-white">Preto</td>
+<td class="px-6 py-4">G</td>
+<td class="px-6 py-4">0 <span class="text-red-500 text-xs font-semibold ml-1">Fora de estoque</span></td>
+<td class="px-6 py-4">CZ-TS-001-B-L</td>
+<td class="px-6 py-4">R$ 89,90</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Sidebar column -->
+<div class="lg:col-span-1 space-y-6">
+<div class="bg-white dark:bg-gray-900/50 rounded-xl border border-gray-200 dark:border-gray-800 p-6 space-y-4">
+<h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">Status</h3>
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium text-gray-700 dark:text-gray-300">Visibilidade</span>
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center justify-center rounded-full bg-green-100 dark:bg-green-900 px-2.5 py-0.5 text-green-700 dark:text-green-300">
+<p class="whitespace-nowrap text-sm">Ativo</p>
+</span>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-gray-700 dark:text-gray-300" for="status-select">Alterar Status</label>
+<select class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" id="status-select">
+<option>Ativo</option>
+<option>Inativo</option>
+<option>Rascunho</option>
+</select>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-900/50 rounded-xl border border-gray-200 dark:border-gray-800 p-6 space-y-4">
+<h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">Organização</h3>
+<div>
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300" for="product-tags">Tags</label>
+<input class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" id="product-tags" type="text" value="camiseta, básico, algodão, verão"/>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-900/50 rounded-xl border border-gray-200 dark:border-gray-800 p-6 space-y-4">
+<h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">Ações</h3>
+<button class="w-full flex items-center justify-center gap-2 rounded-lg h-10 px-4 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 text-sm font-bold">
+<span class="material-symbols-outlined text-base">visibility</span>
+<span>Visualizar na Loja</span>
+</button>
+<button class="w-full flex items-center justify-center gap-2 rounded-lg h-10 px-4 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/50 text-sm font-bold">
+<span class="material-symbols-outlined text-base">delete</span>
+<span>Excluir Produto</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

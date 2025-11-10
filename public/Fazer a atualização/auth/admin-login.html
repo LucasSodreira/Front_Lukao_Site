@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#195de6",
+            "background-light": "#f6f6f8",
+            "background-dark": "#111621",
+          },
+          fontFamily: {
+            "display": ["Manrope", "sans-serif"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+</head>
+<body class="font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root" style='font-family: Manrope, "Noto Sans", sans-serif;'>
+<div class="layout-container flex h-full grow flex-col">
+<div class="flex flex-1 items-stretch">
+<div class="flex w-full flex-wrap">
+<div class="flex w-full flex-col items-center justify-center p-6 lg:w-3/5 lg:p-12">
+<div class="flex w-full max-w-md flex-col items-start gap-6">
+<div class="mb-4">
+<a class="flex items-center gap-2 text-2xl font-bold text-gray-900 dark:text-white" href="#">
+<span class="material-symbols-outlined text-primary text-3xl">store</span>
+<span>BrandDash</span>
+</a>
+</div>
+<div class="layout-content-container flex w-full flex-col">
+<h1 class="text-[#111318] tracking-light text-[32px] font-bold leading-tight text-left dark:text-white">Bem-vindo de volta</h1>
+<p class="text-[#636f88] text-base font-normal leading-normal pt-1 dark:text-gray-400">Acesse o painel de controle do seu e-commerce.</p>
+</div>
+<div class="flex w-full flex-col gap-4">
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-[#111318] text-base font-medium leading-normal pb-2 dark:text-gray-300">E-mail</p>
+<div class="flex w-full flex-1 items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111318] focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#dcdfe5] bg-white focus:border-primary h-14 placeholder:text-[#636f88] p-[15px] pr-2 text-base font-normal leading-normal dark:bg-background-dark dark:border-gray-700 dark:text-white dark:placeholder-gray-500" placeholder="seuemail@exemplo.com" type="email" value=""/>
+</div>
+</label>
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-[#111318] text-base font-medium leading-normal pb-2 dark:text-gray-300">Senha</p>
+<div class="flex w-full flex-1 items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111318] focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#dcdfe5] bg-white focus:border-primary h-14 placeholder:text-[#636f88] p-[15px] text-base font-normal leading-normal rounded-r-none border-r-0 pr-2 dark:bg-background-dark dark:border-gray-700 dark:text-white dark:placeholder-gray-500" placeholder="••••••••" type="password" value=""/>
+<button aria-label="Toggle password visibility" class="text-[#636f88] flex border border-[#dcdfe5] bg-white items-center justify-center px-[15px] rounded-r-lg border-l-0 hover:bg-gray-50 dark:bg-background-dark dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800">
+<span class="material-symbols-outlined">visibility_off</span>
+</button>
+</div>
+</label>
+</div>
+<div class="flex w-full items-center justify-between">
+<div></div>
+<a class="text-sm font-medium text-primary hover:underline" href="#">Esqueceu sua senha?</a>
+</div>
+<button class="flex w-full items-center justify-center rounded-lg bg-primary px-6 py-4 text-base font-bold text-white transition-colors hover:bg-primary/90">
+<span>Entrar</span>
+</button>
+<div class="flex w-full items-center gap-4">
+<hr class="w-full border-gray-300 dark:border-gray-700"/>
+<span class="text-sm text-gray-500 dark:text-gray-400">OU</span>
+<hr class="w-full border-gray-300 dark:border-gray-700"/>
+</div>
+<button class="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-6 py-3 text-base font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:bg-background-dark dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800">
+<svg class="h-6 w-6" height="100" viewbox="0 0 48 48" width="100" x="0px" xmlns="http://www.w3.org/2000/svg" y="0px">
+<path d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" fill="#FFC107"></path><path d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" fill="#FF3D00"></path><path d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z" fill="#4CAF50"></path><path d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.574l6.19,5.238C42.012,35.426,44,30.038,44,24C44,22.659,43.862,21.35,43.611,20.083z" fill="#1976D2"></path>
+</svg>
+<span>Entrar com Google</span>
+</button>
+</div>
+</div>
+<div class="hidden w-2/5 flex-1 lg:flex">
+<div class="h-full w-full bg-cover bg-center bg-no-repeat" data-alt="Close-up of a well-dressed man, focusing on the texture of a dark suit jacket and crisp white shirt." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCIhgYhUt5mLQAgSpE6_zuXiMnbqqnTx8XQCsePmbrMWU6d8M3b4qEYrK3gmeyiqtHikazfTjUdeivjbGehRhuNqnysXAHQBb9m9_Bt16tm-oSRiGfBRSj8GRVFig1XIF-mh4mJWFmoBBVZwvQYA1QLftgUOgjWEknDyD96juf-owz3-i09abAGFPYBPROhteSnUQ7mKkuyvoP1D3eHF_R3LT_HqXHXsWx7yxDg2pmlmZ_aQdEc9AfSkLMAzDZTcOAdZqORz1Abh-I");'></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

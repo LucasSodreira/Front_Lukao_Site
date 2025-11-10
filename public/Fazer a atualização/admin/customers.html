@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard de Clientes</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#195de6",
+              "background-light": "#F8F9FA",
+              "background-dark": "#101622",
+              "text-light": "#212529",
+              "text-dark": "#f8f9fa",
+              "border-light": "#DEE2E6",
+              "border-dark": "#2a3b5a",
+              "card-light": "#FFFFFF",
+              "card-dark": "#1a2436",
+            },
+            fontFamily: {
+              "display": ["Manrope", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="w-64 flex-shrink-0 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 sticky top-0 h-screen overflow-y-auto p-6 flex flex-col">
+<!-- Logo -->
+<div class="flex items-center gap-3 mb-8">
+  <div class="bg-primary/20 text-primary rounded-lg p-2">
+    <span class="material-symbols-outlined">storefront</span>
+  </div>
+  <div class="flex flex-col">
+    <h1 class="text-base font-bold leading-normal text-gray-900 dark:text-white">Moda Masculina</h1>
+    <p class="text-sm font-normal leading-normal text-gray-500 dark:text-gray-400">Painel Admin</p>
+  </div>
+</div>
+
+<!-- Menu Items -->
+<nav class="flex-1 space-y-2">
+  <!-- Dashboard -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">dashboard</span>
+    <p class="text-sm font-medium leading-normal">Dashboard</p>
+  </a>
+  
+  <!-- Pedidos -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">shopping_cart</span>
+    <p class="text-sm font-medium leading-normal">Pedidos</p>
+  </a>
+  
+  <!-- Produtos -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">inventory_2</span>
+    <p class="text-sm font-medium leading-normal">Produtos</p>
+  </a>
+  
+  <!-- Clientes -->
+  <a class="active flex items-center gap-3 px-4 py-2 rounded-lg bg-primary/10 text-primary dark:bg-primary/20" href="#">
+    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+    <p class="text-sm font-medium leading-normal">Clientes</p>
+  </a>
+  
+  <!-- Análises -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">analytics</span>
+    <p class="text-sm font-medium leading-normal">Análises</p>
+  </a>
+</nav>
+
+<!-- Configurações -->
+<div class="flex flex-col gap-2">
+          <button
+            class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90">
+            <span class="material-symbols-outlined">add_circle</span>
+            <span class="truncate">Adicionar Produto</span>
+          </button>
+          
+          <div
+            class="border-t border-slate-200 dark:border-slate-800 my-2"></div>
+          <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+            href="#">
+            <span class="material-symbols-outlined">settings</span>
+            <p class="text-sm font-medium leading-normal">Configurações</p>
+          </a>
+          <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+            href="#">
+            <span class="material-symbols-outlined">logout</span>
+            <p class="text-sm font-medium leading-normal">Sair</p>
+          </a>
+        </div>
+</aside>
+<!-- Main Content -->
+<div class="flex-1 flex flex-col">
+<!-- TopNavBar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-light dark:border-border-dark px-10 py-3 bg-card-light dark:bg-card-dark sticky top-0 z-10">
+<div class="flex items-center gap-4">
+<h2 class="text-text-light dark:text-text-dark text-lg font-bold leading-tight tracking-[-0.015em]">Clientes</h2>
+</div>
+<div class="flex flex-1 justify-end items-center gap-4">
+<label class="flex flex-col min-w-40 !h-10 w-full max-w-sm">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus-within:ring-2 focus-within:ring-primary">
+<div class="text-slate-500 dark:text-slate-400 flex items-center justify-center pl-3">
+<span class="material-symbols-outlined" style="font-size: 20px;">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-light dark:text-text-dark focus:outline-0 focus:ring-0 border-none bg-transparent h-full placeholder:text-slate-500 dark:placeholder:text-slate-400 px-2 text-base font-normal leading-normal" placeholder="Buscar cliente por nome ou e-mail..." value=""/>
+</div>
+</label>
+<div class="flex gap-2">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-transparent text-text-light dark:text-text-dark gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5 border border-border-light dark:border-border-dark hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">notifications</span>
+</button>
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-transparent text-text-light dark:text-text-dark gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5 border border-border-light dark:border-border-dark hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">settings</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Avatar do usuário" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBYkLmRboevMT5VuwpenQegrbXvzWat0YjIal-4jXAPD1OhYV3JxUg50gyUeeffRBaMR_ID65iSboiwOfrb2V6EvMIN4Dakv5OGDWEOoG_Iyy1DrKrz5YtRzLfqwIOv1PyhMy5l0wC2o5dngdogt2gxKCUGQseI-5K8QHtEw6gKtQJfLRk9jIHO5VsYs13L4cLF9ioAA4XP5Bxb4uh30mpw4S8bBuiT84w9EyWCx4W0j6wypHUbgTxQHXZkicp3ldR9FFJkvXz3Dgs");'></div>
+</div>
+</header>
+<!-- Page Content -->
+<main class="flex-1 p-10 overflow-auto">
+<div class="max-w-7xl mx-auto flex flex-col gap-8">
+<!-- PageHeading -->
+<div>
+<p class="text-text-light dark:text-text-dark text-4xl font-black leading-tight tracking-[-0.033em]">Gerenciamento de Clientes</p>
+</div>
+<!-- Stats -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark">
+<p class="text-base font-medium leading-normal text-slate-600 dark:text-slate-300">Total de Clientes</p>
+<p class="text-text-light dark:text-text-dark tracking-light text-3xl font-bold leading-tight">1,250</p>
+<p class="text-green-600 dark:text-green-400 text-sm font-medium leading-normal">+5.2% desde o mês passado</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark">
+<p class="text-base font-medium leading-normal text-slate-600 dark:text-slate-300">Novos Clientes (30 dias)</p>
+<p class="text-text-light dark:text-text-dark tracking-light text-3xl font-bold leading-tight">82</p>
+<p class="text-green-600 dark:text-green-400 text-sm font-medium leading-normal">+15% em relação ao período anterior</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark">
+<p class="text-base font-medium leading-normal text-slate-600 dark:text-slate-300">Gasto Médio por Cliente</p>
+<p class="text-text-light dark:text-text-dark tracking-light text-3xl font-bold leading-tight">R$ 450,70</p>
+<p class="text-red-600 dark:text-red-400 text-sm font-medium leading-normal">-1.8% desde o mês passado</p>
+</div>
+</div>
+<!-- Table Section -->
+<div class="bg-card-light dark:bg-card-dark rounded-xl border border-border-light dark:border-border-dark overflow-hidden">
+<!-- ToolBar -->
+<div class="flex flex-wrap justify-between items-center gap-4 p-4 border-b border-border-light dark:border-border-dark">
+<div class="flex gap-2">
+<button class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined">tune</span>
+<span class="sr-only">Filtros Avançados</span>
+</button>
+<button class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined">download</span>
+<span class="sr-only">Exportar Dados</span>
+</button>
+</div>
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-primary text-white gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-4 hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1; font-size: 20px;">add</span>
+<span class="truncate">Adicionar Novo Cliente</span>
+</button>
+</div>
+<!-- Customer Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm">
+<thead class="bg-background-light dark:bg-background-dark text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+<tr>
+<th class="px-6 py-4 font-medium" scope="col"><input class="form-checkbox rounded border-slate-400 dark:border-slate-600 bg-transparent dark:focus:ring-offset-background-dark focus:ring-primary text-primary" type="checkbox"/></th>
+<th class="px-6 py-4 font-medium" scope="col">Nome</th>
+<th class="px-6 py-4 font-medium" scope="col">Contato</th>
+<th class="px-6 py-4 font-medium" scope="col">Pedidos</th>
+<th class="px-6 py-4 font-medium" scope="col">Endereço Principal</th>
+<th class="px-6 py-4 font-medium" scope="col">Total Gasto</th>
+<th class="px-6 py-4 font-medium text-center" scope="col">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-light dark:divide-border-dark">
+<tr class="hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+<td class="px-6 py-4"><input class="form-checkbox rounded border-slate-400 dark:border-slate-600 bg-transparent dark:focus:ring-offset-background-dark focus:ring-primary text-primary" type="checkbox"/></td>
+<td class="px-6 py-4 font-semibold text-text-light dark:text-text-dark">Carlos Almeida</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-300">carlos.a@example.com<br/>(11) 98765-4321</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-300">12</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-300">São Paulo, SP</td>
+<td class="px-6 py-4 font-medium text-text-light dark:text-text-dark">R$ 2.345,90</td>
+<td class="px-6 py-4 text-center">
+<button class="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+<td class="px-6 py-4"><input class="form-checkbox rounded border-slate-400 dark:border-slate-600 bg-transparent dark:focus:ring-offset-background-dark focus:ring-primary text-primary" type="checkbox"/></td>
+<td class="px-6 py-4 font-semibold text-text-light dark:text-text-dark">Beatriz Santos</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-300">beatriz.s@example.com<br/>(21) 91234-5678</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-300">8</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-300">Rio de Janeiro, RJ</td>
+<td class="px-6 py-4 font-medium text-text-light dark:text-text-dark">R$ 1.780,50</td>
+<td class="px-6 py-4 text-center">
+<button class="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+<td class="px-6 py-4"><input class="form-checkbox rounded border-slate-400 dark:border-slate-600 bg-transparent dark:focus:ring-offset-background-dark focus:ring-primary text-primary" type="checkbox"/></td>
+<td class="px-6 py-4 font-semibold text-text-light dark:text-text-dark">Daniel Oliveira</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-300">daniel.o@example.com<br/>(31) 99988-7766</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-300">21</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-300">Belo Horizonte, MG</td>
+<td class="px-6 py-4 font-medium text-text-light dark:text-text-dark">R$ 4.120,00</td>
+<td class="px-6 py-4 text-center">
+<button class="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+<td class="px-6 py-4"><input class="form-checkbox rounded border-slate-400 dark:border-slate-600 bg-transparent dark:focus:ring-offset-background-dark focus:ring-primary text-primary" type="checkbox"/></td>
+<td class="px-6 py-4 font-semibold text-text-light dark:text-text-dark">Fernanda Costa</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-300">fernanda.c@example.com<br/>(51) 98877-6655</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-300">5</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-300">Porto Alegre, RS</td>
+<td class="px-6 py-4 font-medium text-text-light dark:text-text-dark">R$ 950,25</td>
+<td class="px-6 py-4 text-center">
+<button class="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="flex flex-wrap items-center justify-between p-4 gap-4">
+<span class="text-sm text-slate-600 dark:text-slate-400">Mostrando 1-4 de 1250 clientes</span>
+<div class="flex items-center gap-2">
+<button class="h-8 px-3 text-sm font-medium rounded-lg border border-border-light dark:border-border-dark bg-transparent hover:bg-black/5 dark:hover:bg-white/5 transition-colors">Anterior</button>
+<button class="h-8 w-8 text-sm font-medium rounded-lg border border-primary bg-primary/10 text-primary transition-colors">1</button>
+<button class="h-8 w-8 text-sm font-medium rounded-lg border border-transparent hover:bg-black/5 dark:hover:bg-white/5 transition-colors">2</button>
+<button class="h-8 w-8 text-sm font-medium rounded-lg border border-transparent hover:bg-black/5 dark:hover:bg-white/5 transition-colors">3</button>
+<span class="text-slate-500">...</span>
+<button class="h-8 w-8 text-sm font-medium rounded-lg border border-transparent hover:bg-black/5 dark:hover:bg-white/5 transition-colors">313</button>
+<button class="h-8 px-3 text-sm font-medium rounded-lg border border-border-light dark:border-border-dark bg-transparent hover:bg-black/5 dark:hover:bg-white/5 transition-colors">Próximo</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

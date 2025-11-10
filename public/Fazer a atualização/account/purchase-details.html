@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Detalhes do Pedido</title>
+    <script
+      src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet" />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#195de6",
+              "background-light": "#f6f6f8",
+              "background-dark": "#111621",
+            },
+            fontFamily: {
+              "display": ["Manrope", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+    <style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-background-light">
+    <header
+      class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          class="flex h-20 items-center justify-between whitespace-nowrap">
+          <div class="flex items-center gap-10">
+            <a class="flex items-center gap-2 text-gray-800 dark:text-white"
+              href="#">
+              <div class="size-7 text-primary dark:text-text-dark">
+                <svg fill="none" viewBox="0 0 48 48"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z"
+                    fill="currentColor"></path>
+                </svg>
+              </div>
+              <h1 class="text-2xl font-bold tracking-tight">THREADS</h1>
+            </a>
+            <nav class="hidden md:flex items-center gap-8">
+              <a
+                class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                href="#">Novidades</a>
+              <a
+                class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                href="#">Roupas</a>
+              <a
+                class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                href="#">Acessórios</a>
+              <a
+                class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                href="#">Marcas</a>
+              <a
+                class="text-sm font-medium tracking-wide text-gray-500 dark:text-gray-400 hover:text-text-light dark:hover:text-text-dark transition-colors"
+                href="#">Promoções</a>
+            </nav>
+          </div>
+          <div class="flex flex-1 justify-end items-center gap-4">
+            <div class="hidden sm:flex relative items-center">
+              <span
+                class="material-symbols-outlined absolute left-3 text-gray-500 dark:text-gray-400">search</span>
+              <input
+                class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-800 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border-none bg-gray-100 dark:bg-gray-800 h-10 placeholder:text-gray-500 dark:placeholder:text-gray-400 pl-10 pr-4 text-sm font-normal leading-normal"
+                placeholder="Buscar" value />
+            </div>
+            <div class="flex gap-2">
+              <button
+                class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white dark:hover:bg-gray-700 min-w-0 px-2.5">
+                <span class="material-symbols-outlined">favorite</span>
+              </button>
+              <button
+                class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white dark:hover:bg-gray-700 min-w-0 px-2.5">
+                <span class="material-symbols-outlined">shopping_cart</span>
+              </button>
+            </div>
+            <div
+              class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+              data-alt="Avatar do usuário"
+              style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC52EDZXOpoeh2RcaCa5y38UKAtURhObxkr9jzI9wiF3SjzgyAKE1818wMl02fQDG21nlH-mvj09Y5c60Y1-5iOGAFwJ9ZIv0bJbhmbHzoqdPqLsXJS0fqj-OqFnw-_oC576tYmQjLrwVxfqKH5POe0_DefDZJWOxewfup8P3qB1Icyxej34l2Tg7SQYUw32D-XLdd2RGzYTvjAM0k8uwYc_hIRQn6Y5BybdRJjf_tiUGj82t2bvhJAmQJh9R9tECZdAtqtLWMtLtY');"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="container mx-auto px-4 py-8 lg:py-12">
+      <div class="flex flex-col gap-8">
+        <!-- Breadcrumbs -->
+        <div class="flex flex-wrap gap-2">
+          <a
+            class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary"
+            href="#">Sua Conta</a>
+          <span
+            class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal">/</span>
+          <a
+            class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary"
+            href="#">Meus Pedidos</a>
+          <span
+            class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal">/</span>
+          <span
+            class="text-gray-800 dark:text-white text-sm font-medium leading-normal">Pedido
+            #12345</span>
+        </div>
+        <!-- PageHeading -->
+        <div class="flex flex-wrap justify-between items-start gap-4">
+          <div class="flex flex-col gap-1">
+            <h1
+              class="text-gray-800 dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em]">Detalhes
+              do Pedido #12345</h1>
+            <p
+              class="text-gray-500 dark:text-gray-400 text-base font-normal leading-normal">Realizado
+              em 24 de Agosto de 2024</p>
+          </div>
+          <button
+            class="flex items-center justify-center gap-2 rounded-lg bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 h-10 px-4 text-sm font-bold text-gray-800 dark:text-white">
+            <span class="material-symbols-outlined text-base">print</span>
+            <span>Imprimir Recibo</span>
+          </button>
+        </div>
+        <!-- ProgressBar -->
+        <div
+          class="flex flex-col gap-4 rounded-xl bg-white dark:bg-background-dark/80 p-6 shadow-sm">
+          <div
+            class="flex flex-col sm:flex-row gap-2 sm:justify-between sm:items-center">
+            <p
+              class="text-base font-bold leading-normal text-gray-800 dark:text-white">Status
+              do Pedido: <span
+                class="text-yellow-600 dark:text-yellow-400">Enviado</span></p>
+            <p
+              class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">Seu
+              pedido foi enviado e está a caminho.</p>
+          </div>
+          <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+            <div class="bg-yellow-500 h-2 rounded-full"
+              style="width: 66%;"></div>
+          </div>
+          <div
+            class="hidden sm:flex justify-between text-xs text-center font-medium text-gray-500 dark:text-gray-400">
+            <div class="w-1/4">
+              <p class="text-primary dark:text-primary">Aprovado</p>
+              <p class="text-xs">24/08</p>
+            </div>
+            <div class="w-1/4">
+              <p class="text-primary dark:text-primary">Em Preparação</p>
+              <p class="text-xs">25/08</p>
+            </div>
+            <div class="w-1/4">
+              <p class="text-yellow-600 dark:text-yellow-400">Enviado</p>
+              <p class="text-xs">26/08</p>
+            </div>
+            <div class="w-1/4">
+              <p>Entregue</p>
+              <p class="text-xs">Prev. 30/08</p>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-2 flex flex-col gap-8">
+            <!-- Order Items -->
+            <div
+              class="flex flex-col rounded-xl bg-white dark:bg-background-dark/80 shadow-sm">
+              <h2
+                class="text-gray-800 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-6 pt-5 pb-3 border-b border-gray-200 dark:border-gray-800">Itens
+                do Pedido (2)</h2>
+              <div class="divide-y divide-gray-200 dark:divide-gray-800">
+                <!-- Product Item 1 -->
+                <div class="flex items-start gap-4 p-6">
+                  <div
+                    class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-24 bg-gray-100"
+                    data-alt="Camiseta Minimalista Branca"
+                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC78_cfQ2DPeqSrnWq8xErDcMv0MsDiIL-h6B_ufDPcKzV0B-zQSuvoDyJURhXAUDMShgjrbCoP43vxg_w5aDGv27tw6dBVzANVm3Ge7aSpzES3vPJhS02ZrRO1cG4bc6Auwa51qVGmiyUGhqmIEkUzNrWrzB38jL8dN_2KA_SdLEXo4z7mMFx9DxbUm0VYnznIKBfRtVJslnDjnbXWsTpHLF7l6cv2wcjoOT9hKWoFXgF3fcgBUXVs7BvDunXAc9e8g4Whlrx7FSg');"></div>
+                  <div class="flex flex-1 flex-col gap-1">
+                    <h3 class="font-bold text-gray-800 dark:text-white">Camiseta
+                      Minimalista Branca</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Marca:
+                      Basic Co.</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Tamanho:
+                      G / Cor: Branco</p>
+                    <p
+                      class="text-sm text-gray-500 dark:text-gray-400 mt-1">Qtd:
+                      1</p>
+                  </div>
+                  <div class="text-right">
+                    <p class="font-bold text-gray-800 dark:text-white">R$
+                      89,90</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">R$ 89,90
+                      / un</p>
+                  </div>
+                </div>
+                <!-- Product Item 2 -->
+                <div class="flex items-start gap-4 p-6">
+                  <div
+                    class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-24 bg-gray-100"
+                    data-alt="Calça Jeans Slim Fit"
+                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDGNchUhRIMlzKgg8NGPxu4Zi388to3hlgbrFq5duY4jb3zbvqgThZpZYS0vrY1oYniz2UBNfc3otsQUPxC7Mjn2UBR_Ga7z4ronJTYInDUC_c1bzzNVonzxIaltIiL8jywVF2ZCSwqb0VDgmdLswr0u91OXuJYjwP_M4BLxAm5dfrPKTOupFdXnHa7OGGC5qzLxLW8Njzc09OP5r2nWrRUL20dg6bZ6FJ7ZwZQ6FeKfrEl37dh8A_tWIjDFdtjZ6jjb5p5xgEM2MA');"></div>
+                  <div class="flex flex-1 flex-col gap-1">
+                    <h3 class="font-bold text-gray-800 dark:text-white">Calça
+                      Jeans Slim Fit</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Marca:
+                      Urban Denim</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Tamanho:
+                      42 / Cor: Azul Escuro</p>
+                    <p
+                      class="text-sm text-gray-500 dark:text-gray-400 mt-1">Qtd:
+                      1</p>
+                  </div>
+                  <div class="text-right">
+                    <p class="font-bold text-gray-800 dark:text-white">R$
+                      249,90</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">R$
+                      249,90 / un</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Shipping and Tracking -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div
+                class="flex flex-col gap-4 rounded-xl bg-white dark:bg-background-dark/80 p-6 shadow-sm">
+                <h3
+                  class="text-lg font-bold text-gray-800 dark:text-white">Informações
+                  de Entrega</h3>
+                <div class="text-sm text-gray-500 dark:text-gray-300 space-y-1">
+                  <p class="font-medium text-gray-800 dark:text-white">João da
+                    Silva</p>
+                  <p>Rua das Flores, 123, Apto 45</p>
+                  <p>Jardim Botânico, Rio de Janeiro - RJ</p>
+                  <p>CEP: 22460-000</p>
+                </div>
+                <p class="text-sm"><span
+                    class="font-medium text-gray-800 dark:text-white">Método:</span>
+                  <span
+                    class="text-gray-500 dark:text-gray-300">SEDEX</span></p>
+              </div>
+              <div
+                class="flex flex-col gap-4 rounded-xl bg-white dark:bg-background-dark/80 p-6 shadow-sm">
+                <h3
+                  class="text-lg font-bold text-gray-800 dark:text-white">Rastreamento</h3>
+                <p class="text-sm"><span
+                    class="font-medium text-gray-800 dark:text-white">Transportadora:</span>
+                  <span
+                    class="text-gray-500 dark:text-gray-300">Correios</span></p>
+                <div class="flex flex-col gap-2">
+                  <p
+                    class="text-sm font-medium text-gray-800 dark:text-white">Código:</p>
+                  <div
+                    class="flex items-center gap-2 rounded-lg bg-gray-100 dark:bg-gray-800 p-2">
+                    <span
+                      class="text-sm font-mono text-gray-500 dark:text-gray-300">QB123456789BR</span>
+                    <button
+                      class="ml-auto flex h-7 w-7 items-center justify-center rounded-md hover:bg-gray-300 dark:hover:bg-gray-700">
+                      <span
+                        class="material-symbols-outlined text-base">content_copy</span>
+                    </button>
+                  </div>
+                </div>
+                <button
+                  class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary h-10 px-4 text-sm font-bold text-white mt-2">
+                  <span
+                    class="material-symbols-outlined text-base">local_shipping</span>
+                  <span>Acompanhar Entrega</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- Summary and Payment -->
+          <div class="lg:col-span-1">
+            <div
+              class="flex flex-col gap-6 rounded-xl bg-white dark:bg-background-dark/80 p-6 shadow-sm sticky top-28">
+              <h3
+                class="text-lg font-bold text-gray-800 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">Resumo
+                do Pedido</h3>
+              <div class="space-y-3 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-gray-500 dark:text-gray-300">Subtotal</span>
+                  <span class="text-gray-800 dark:text-white">R$ 339,80</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-500 dark:text-gray-300">Frete</span>
+                  <span class="text-gray-800 dark:text-white">R$ 15,50</span>
+                </div>
+                <div class="flex justify-between">
+                  <span
+                    class="text-gray-500 dark:text-gray-300">Descontos</span>
+                  <span class="text-green-600 dark:text-green-500">- R$
+                    0,00</span>
+                </div>
+              </div>
+              <div
+                class="flex justify-between font-bold text-lg border-t border-gray-200 dark:border-gray-800 pt-4">
+                <span class="text-gray-800 dark:text-white">Total</span>
+                <span class="text-gray-800 dark:text-white">R$ 355,30</span>
+              </div>
+              <div class="border-t border-gray-200 dark:border-gray-800 pt-4">
+                <h4 class="font-bold text-gray-800 dark:text-white mb-2">Método
+                  de Pagamento</h4>
+                <div class="flex items-center gap-3">
+                  <div
+                    class="flex items-center justify-center rounded-md bg-gray-100 dark:bg-gray-800 size-10">
+                    <span
+                      class="material-symbols-outlined text-gray-800 dark:text-white">credit_card</span>
+                  </div>
+                  <div>
+                    <p
+                      class="text-sm font-medium text-gray-800 dark:text-white">Cartão
+                      de Crédito</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Final
+                      **** 1234</p>
+                  </div>
+                </div>
+              </div>
+              <button
+                class="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 dark:border-gray-700 h-10 px-4 text-sm font-bold text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800">
+                <span
+                  class="material-symbols-outlined text-base">help_outline</span>
+                <span>Solicitar Ajuda</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body></html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pagamentos - Vex Store Admin</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#195de6",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                        "success": "#38A169",
+                        "warning": "#D69E2E",
+                        "danger": "#E53E3E",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#1A202C] dark:text-gray-200">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="flex h-screen flex-col justify-between bg-white dark:bg-background-dark/50 border-r border-slate-200 dark:border-slate-800 p-4 w-64 sticky top-0">
+<div class="flex h-full flex-col justify-between p-4">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3 px-2">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Vex Store logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC7O6WA1kv8Yn6Xrmi7vE60gAs_mYYLmDVRAdOjW3eHTAaJNMtCt9uRaTf6E6_535lC0lmO7DBAykyO5_d4NlXO-4FjyLM5AAwPAmccoSt2eBcj5vGdsejFO0jroZoicBRft6BImQlBqWWPgdhP6PNXKX5DgyGN-S4lbsAMRM56M98UJTUl33v6YO1V3SrobiFvDBcB-FCLcsHon56Gq-RanWyhDHPKmEkQuTrReW7sym3KwlrFGjzmbikd17q7bEYeI4CtwEZojdQ");'></div>
+<div class="flex flex-col">
+<h1 class="text-[#1A202C] dark:text-white text-base font-bold leading-normal">Vex Store</h1>
+<p class="text-[#718096] dark:text-gray-400 text-sm font-normal leading-normal">Admin Panel</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2 mt-6">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800" href="#">
+<span class="material-symbols-outlined text-[#718096] dark:text-gray-400">dashboard</span>
+<p class="text-[#1A202C] dark:text-gray-200 text-sm font-medium leading-normal">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800" href="#">
+<span class="material-symbols-outlined text-[#718096] dark:text-gray-400">package_2</span>
+<p class="text-[#1A202C] dark:text-gray-200 text-sm font-medium leading-normal">Pedidos</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800" href="#">
+<span class="material-symbols-outlined text-[#718096] dark:text-gray-400">tag</span>
+<p class="text-[#1A202C] dark:text-gray-200 text-sm font-medium leading-normal">Produtos</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800" href="#">
+<span class="material-symbols-outlined text-[#718096] dark:text-gray-400">group</span>
+<p class="text-[#1A202C] dark:text-gray-200 text-sm font-medium leading-normal">Clientes</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 dark:bg-primary/20" href="#">
+<span class="material-symbols-outlined text-primary">payment</span>
+<p class="text-primary text-sm font-bold leading-normal">Pagamentos</p>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-2">
+<button class="flex min-w-[84px] w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] gap-2">
+<span class="material-symbols-outlined text-base">add_circle</span>
+<span class="truncate">Novo Produto</span>
+</button>
+<div class="flex flex-col gap-1 mt-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800" href="#">
+<span class="material-symbols-outlined text-[#718096] dark:text-gray-400">settings</span>
+<p class="text-[#1A202C] dark:text-gray-200 text-sm font-medium leading-normal">Configurações</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800" href="#">
+<span class="material-symbols-outlined text-[#718096] dark:text-gray-400">logout</span>
+<p class="text-[#1A202C] dark:text-gray-200 text-sm font-medium leading-normal">Sair</p>
+</a>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 p-8 overflow-y-auto">
+<div class="max-w-7xl mx-auto">
+<!-- PageHeading -->
+<div class="flex flex-wrap justify-between items-center gap-4">
+<div class="flex flex-col">
+<h1 class="text-[#1A202C] dark:text-white text-3xl font-black leading-tight tracking-tight">Pagamentos</h1>
+<p class="text-[#718096] dark:text-gray-400 text-base font-normal leading-normal mt-1">Monitore e gerencie todas as transações financeiras.</p>
+</div>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] gap-2">
+<span class="material-symbols-outlined text-base">download</span>
+<span class="truncate">Exportar Relatório</span>
+</button>
+</div>
+<!-- Stats -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-background-dark border border-[#E2E8F0] dark:border-gray-700">
+<p class="text-[#1A202C] dark:text-gray-300 text-base font-medium leading-normal">Total Recebido (Hoje)</p>
+<p class="text-[#1A202C] dark:text-white tracking-light text-3xl font-bold leading-tight">R$ 7.850,00</p>
+<p class="text-success text-sm font-medium leading-normal mt-1">+5.4%</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-background-dark border border-[#E2E8F0] dark:border-gray-700">
+<p class="text-[#1A202C] dark:text-gray-300 text-base font-medium leading-normal">Pagamentos Pendentes</p>
+<p class="text-[#1A202C] dark:text-white tracking-light text-3xl font-bold leading-tight">12</p>
+<p class="text-success text-sm font-medium leading-normal mt-1">+2.1%</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-background-dark border border-[#E2E8F0] dark:border-gray-700">
+<p class="text-[#1A202C] dark:text-gray-300 text-base font-medium leading-normal">Total Reembolsado (Mês)</p>
+<p class="text-[#1A202C] dark:text-white tracking-light text-3xl font-bold leading-tight">R$ 980,50</p>
+<p class="text-danger text-sm font-medium leading-normal mt-1">-1.5%</p>
+</div>
+</div>
+<!-- Toolbar and Table Section -->
+<div class="mt-8 bg-white dark:bg-background-dark border border-[#E2E8F0] dark:border-gray-700 rounded-xl">
+<!-- SearchBar & Filters -->
+<div class="p-4 border-b border-[#E2E8F0] dark:border-gray-700">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+<div class="lg:col-span-2">
+<label class="flex flex-col w-full">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-10">
+<div class="text-[#718096] flex bg-background-light dark:bg-gray-800 items-center justify-center pl-3 rounded-l-lg border-y border-l border-[#E2E8F0] dark:border-gray-700">
+<span class="material-symbols-outlined text-lg">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-[#1A202C] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#E2E8F0] dark:border-gray-700 bg-background-light dark:bg-gray-800 focus:border-primary/50 h-full placeholder:text-[#718096] dark:placeholder:text-gray-500 px-3 border-l-0 text-sm font-normal leading-normal" placeholder="Pesquisar por ID, cliente..." value=""/>
+</div>
+</label>
+</div>
+<div>
+<select class="form-select w-full h-10 rounded-lg text-sm text-[#1A202C] dark:text-white bg-background-light dark:bg-gray-800 border-[#E2E8F0] dark:border-gray-700 focus:ring-2 focus:ring-primary/50 focus:border-primary/50">
+<option>Status: Todos</option>
+<option>Pago</option>
+<option>Pendente</option>
+<option>Reembolsado</option>
+<option>Falhou</option>
+</select>
+</div>
+<div>
+<select class="form-select w-full h-10 rounded-lg text-sm text-[#1A202C] dark:text-white bg-background-light dark:bg-gray-800 border-[#E2E8F0] dark:border-gray-700 focus:ring-2 focus:ring-primary/50 focus:border-primary/50">
+<option>Método: Todos</option>
+<option>Cartão de Crédito</option>
+<option>Pix</option>
+<option>Boleto</option>
+</select>
+</div>
+<button class="flex items-center justify-center h-10 px-4 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm font-medium text-[#718096] dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600">Limpar Filtros</button>
+</div>
+</div>
+<!-- Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-sm text-left">
+<thead class="text-xs text-[#718096] dark:text-gray-400 uppercase bg-background-light dark:bg-gray-800">
+<tr>
+<th class="px-6 py-3 font-medium" scope="col">ID do Pedido</th>
+<th class="px-6 py-3 font-medium" scope="col">Cliente</th>
+<th class="px-6 py-3 font-medium" scope="col">Data</th>
+<th class="px-6 py-3 font-medium text-right" scope="col">Valor</th>
+<th class="px-6 py-3 font-medium" scope="col">Método</th>
+<th class="px-6 py-3 font-medium" scope="col">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-[#E2E8F0] dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer">
+<td class="px-6 py-4 font-bold text-primary">#783451</td>
+<td class="px-6 py-4 font-medium text-[#1A202C] dark:text-white">Carlos Almeida</td>
+<td class="px-6 py-4 text-[#718096] dark:text-gray-400">15/07/2024</td>
+<td class="px-6 py-4 font-medium text-right text-[#1A202C] dark:text-white">R$ 289,90</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-lg text-gray-500">credit_card</span>
+<span class="text-[#718096] dark:text-gray-400">Cartão</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-success/10 text-success">Pago</span>
+</td>
+</tr>
+<tr class="border-b border-[#E2E8F0] dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer">
+<td class="px-6 py-4 font-bold text-primary">#783450</td>
+<td class="px-6 py-4 font-medium text-[#1A202C] dark:text-white">Juliana Martins</td>
+<td class="px-6 py-4 text-[#718096] dark:text-gray-400">15/07/2024</td>
+<td class="px-6 py-4 font-medium text-right text-[#1A202C] dark:text-white">R$ 150,00</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-lg text-gray-500">photos</span>
+<span class="text-[#718096] dark:text-gray-400">Pix</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-warning/10 text-warning">Pendente</span>
+</td>
+</tr>
+<tr class="border-b border-[#E2E8F0] dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer">
+<td class="px-6 py-4 font-bold text-primary">#783449</td>
+<td class="px-6 py-4 font-medium text-[#1A202C] dark:text-white">Ricardo Pereira</td>
+<td class="px-6 py-4 text-[#718096] dark:text-gray-400">14/07/2024</td>
+<td class="px-6 py-4 font-medium text-right text-[#1A202C] dark:text-white">R$ 99,50</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-lg text-gray-500">credit_card</span>
+<span class="text-[#718096] dark:text-gray-400">Cartão</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-danger/10 text-danger">Reembolsado</span>
+</td>
+</tr>
+<tr class="border-b border-[#E2E8F0] dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer">
+<td class="px-6 py-4 font-bold text-primary">#783448</td>
+<td class="px-6 py-4 font-medium text-[#1A202C] dark:text-white">Fernanda Lima</td>
+<td class="px-6 py-4 text-[#718096] dark:text-gray-400">14/07/2024</td>
+<td class="px-6 py-4 font-medium text-right text-[#1A202C] dark:text-white">R$ 420,00</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-lg text-gray-500">receipt_long</span>
+<span class="text-[#718096] dark:text-gray-400">Boleto</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-success/10 text-success">Pago</span>
+</td>
+</tr>
+<tr class="border-b border-[#E2E8F0] dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer">
+<td class="px-6 py-4 font-bold text-primary">#783447</td>
+<td class="px-6 py-4 font-medium text-[#1A202C] dark:text-white">Bruno Costa</td>
+<td class="px-6 py-4 text-[#718096] dark:text-gray-400">13/07/2024</td>
+<td class="px-6 py-4 font-medium text-right text-[#1A202C] dark:text-white">R$ 199,99</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-lg text-gray-500">photos</span>
+<span class="text-[#718096] dark:text-gray-400">Pix</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-success/10 text-success">Pago</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="flex items-center justify-between p-4">
+<span class="text-sm text-[#718096] dark:text-gray-400">Exibindo 1-5 de 128</span>
+<div class="inline-flex items-center -space-x-px">
+<button class="flex items-center justify-center px-3 h-8 text-[#718096] dark:text-gray-400 bg-white dark:bg-gray-800 border border-[#E2E8F0] dark:border-gray-700 rounded-l-lg hover:bg-gray-100 dark:hover:bg-gray-700">Anterior</button>
+<button class="flex items-center justify-center px-3 h-8 text-primary bg-primary/10 border border-[#E2E8F0] dark:border-gray-700 dark:bg-gray-700 dark:text-white">1</button>
+<button class="flex items-center justify-center px-3 h-8 text-[#718096] dark:text-gray-400 bg-white dark:bg-gray-800 border border-[#E2E8F0] dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">2</button>
+<button class="flex items-center justify-center px-3 h-8 text-[#718096] dark:text-gray-400 bg-white dark:bg-gray-800 border border-[#E2E8F0] dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">3</button>
+<button class="flex items-center justify-center px-3 h-8 text-[#718096] dark:text-gray-400 bg-white dark:bg-gray-800 border border-[#E2E8F0] dark:border-gray-700 rounded-r-lg hover:bg-gray-100 dark:hover:bg-gray-700">Próximo</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

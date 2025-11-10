@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gerenciamento de Produtos - Moda Masculina Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#195de6",
+            "background-light": "#f6f6f8",
+            "background-dark": "#111621",
+          },
+          fontFamily: {
+            "display": ["Manrope", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    
+    /* Inicialmente mostra grid, esconde table */
+    .view-grid { display: block !important; }
+    .view-table { display: none !important; }
+    
+    /* Quando active-table, inverte */
+    .active-table .view-grid { display: none !important; }
+    .active-table .view-table { display: block !important; }
+    
+    /* Quando active-grid, deixa como padrão */
+    .active-grid .view-grid { display: block !important; }
+    .active-grid .view-table { display: none !important; }
+  </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex min-h-screen w-full">
+<!-- Sidebar -->
+<aside class="w-64 flex-shrink-0 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 sticky top-0 h-screen overflow-y-auto p-6 flex flex-col">
+  <!-- Logo -->
+  <div class="flex items-center gap-3 mb-8">
+    <div class="bg-primary/20 text-primary rounded-lg p-2">
+      <span class="material-symbols-outlined text-xl">shield</span>
+    </div>
+    <span class="font-bold text-gray-900 dark:text-white text-lg">Admin</span>
+  </div>
+
+  <!-- Menu Items -->
+  <nav class="flex-1 space-y-2">
+    <!-- Dashboard -->
+    <a href="/admin/dashboard.html" class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary">
+      <span class="material-symbols-outlined text-xl">dashboard</span>
+      <span class="font-medium">Dashboard</span>
+    </a>
+
+    <!-- Produtos -->
+    <a href="/admin/product-management.html" class="active flex items-center gap-3 px-4 py-2 bg-primary/10 dark:bg-primary/20 text-primary rounded-lg transition-colors">
+      <span class="material-symbols-outlined text-xl">inventory_2</span>
+      <span class="font-medium">Produtos</span>
+    </a>
+
+    <!-- Pedidos -->
+    <a href="/admin/order-list.html" class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary">
+      <span class="material-symbols-outlined text-xl">receipt_long</span>
+      <span class="font-medium">Pedidos</span>
+    </a>
+
+    <!-- Clientes -->
+    <a href="/admin/customers.html" class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary">
+      <span class="material-symbols-outlined text-xl">group</span>
+      <span class="font-medium">Clientes</span>
+    </a>
+
+    <!-- Avaliações -->
+    <a href="/admin/reviews-management.html" class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary">
+      <span class="material-symbols-outlined text-xl">star</span>
+      <span class="font-medium">Avaliações</span>
+    </a>
+
+    <!-- Relatórios -->
+    <a href="/admin/reports.html" class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary">
+      <span class="material-symbols-outlined text-xl">bar_chart</span>
+      <span class="font-medium">Relatórios</span>
+    </a>
+  </nav>
+
+  <!-- Botão e Configurações -->
+<div class="flex flex-col gap-2">
+          <button
+            class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90">
+            <span class="material-symbols-outlined">add_circle</span>
+            <span class="truncate">Adicionar Produto</span>
+          </button>
+          <div
+            class="border-t border-slate-200 dark:border-slate-800 my-2"></div>
+          <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+            href="#">
+            <span class="material-symbols-outlined">settings</span>
+            <p class="text-sm font-medium leading-normal">Configurações</p>
+          </a>
+          <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+            href="#">
+            <span class="material-symbols-outlined">logout</span>
+            <p class="text-sm font-medium leading-normal">Sair</p>
+          </a>
+        </div>
+</aside>
+
+<!-- Main Content -->
+<main class="flex-1">
+<!-- Header -->
+<header class="sticky top-0 z-10 flex items-center justify-between border-b border-gray-200 bg-white/80 px-8 py-4 backdrop-blur-sm dark:border-gray-700 dark:bg-background-dark/80">
+<div class="flex items-center gap-4 text-gray-800 dark:text-white">
+</div>
+<div class="flex flex-1 items-center justify-end gap-4">
+<button class="relative flex cursor-pointer items-center justify-center rounded-full p-2 text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors">
+<span class="material-symbols-outlined text-2xl">notifications</span>
+<span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500"></span>
+</button>
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Admin user avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDuD3QP9_i83Ts9Yfc4E47aH7CvwP7MnZUZTQvKHODWRnHvBPkAfYV7BXKNa2c3sI5sg7Amo_4v-qLMYTDuXUB0bDOs354uyFg1LgqUhdsX18MgyeplmHFhqauIS_bLTPOppkhUvEMQpx5p9HwvqXJJ0GylI-DhAp2qvtfLpKQ-CRxhtWWmV4ut0wGqBMu6Lm7-72sQ25UV6u6tBYM8sIKlAHYB3x_cc3LfezxyJvEqEH7nCeW8N9OXfywjjpERMbkCbvjBC75KJWk");'></div>
+<div class="flex flex-col text-right">
+<h1 class="text-sm font-medium text-gray-800 dark:text-white">Admin User</h1>
+<p class="text-xs text-gray-500 dark:text-gray-400">admin@example.com</p>
+</div>
+</div>
+</div>
+</header>
+
+<!-- Page Content -->
+<div class="w-full p-8">
+<!-- Page Heading -->
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div class="flex min-w-72 flex-col">
+<p class="text-3xl font-black text-gray-800 dark:text-white">Gerenciamento de Produtos</p>
+<p class="text-base font-normal text-gray-500 dark:text-gray-400">Adicione, edite e gerencie o estoque dos seus produtos.</p>
+</div>
+<div class="flex gap-2">
+<button class="flex h-10 max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+<span class="material-symbols-outlined mr-2 text-lg">download</span>
+<span class="truncate">Exportar</span>
+</button>
+<button class="flex h-10 max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-primary px-4 text-sm font-bold text-white shadow-sm transition-colors hover:bg-primary/90">
+<span class="material-symbols-outlined mr-2 text-lg">add_circle</span>
+<span class="truncate">Adicionar Produto</span>
+</button>
+</div>
+</div>
+
+<!-- Filters and View Toggle -->
+<div class="mt-6 flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-background-dark md:flex-row md:items-center">
+<div class="flex-1">
+<label class="flex flex-col w-full">
+<div class="flex h-10 w-full flex-1 items-stretch rounded-lg">
+<div class="flex items-center justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 pl-3.5 text-gray-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:border-primary focus:outline-0 focus:ring-0 focus:ring-primary/50 dark:border-gray-600 dark:bg-gray-900 dark:text-white" placeholder="Buscar por nome ou SKU..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex flex-wrap gap-2 md:flex-nowrap">
+<select class="form-select h-10 w-full min-w-[150px] rounded-lg border-gray-300 bg-white text-sm text-gray-500 focus:border-primary focus:ring-primary/50 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-400 md:w-auto">
+<option>Todas as Categorias</option>
+<option>Camisas</option>
+<option>Calças</option>
+<option>Acessórios</option>
+</select>
+<select class="form-select h-10 w-full min-w-[150px] rounded-lg border-gray-300 bg-white text-sm text-gray-500 focus:border-primary focus:ring-primary/50 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-400 md:w-auto">
+<option>Todas as Marcas</option>
+<option>Marca A</option>
+<option>Marca B</option>
+<option>Marca C</option>
+</select>
+<select class="form-select h-10 w-full min-w-[150px] rounded-lg border-gray-300 bg-white text-sm text-gray-500 focus:border-primary focus:ring-primary/50 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-400 md:w-auto">
+<option>Todos os Status</option>
+<option>Ativo</option>
+<option>Inativo</option>
+<option>Sem Estoque</option>
+</select>
+<div class="flex border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
+<button id="btnViewGrid" onclick="toggleView('grid')" class="flex h-10 w-10 items-center justify-center bg-primary/10 text-primary dark:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-xl">grid_view</span>
+</button>
+<button id="btnViewTable" onclick="toggleView('table')" class="flex h-10 w-10 items-center justify-center bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+<span class="material-symbols-outlined text-xl">table_rows</span>
+</button>
+</div>
+</div>
+</div>
+
+<!-- Content Container -->
+<div id="contentContainer" class="active-grid">
+<!-- Grid View -->
+<div class="view-grid mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+<!-- Product Card 1 -->
+<div class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+<div class="relative">
+<img class="aspect-[4/3] w-full object-cover" data-alt="White T-shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4CXV9yCpUbwzZxUSieCgh8l4VLlzCUdvNNYFKXCAKRZiN1jbwndzHfa-Pz6syZp8fPuPomEPEXW-VBs1NiLaWBfuqz4JILSJSAj90dEeXSA_s9J8M-E9MNVSv0C0qPh-MqgWBM3i39ydT1N3WbL45d8M5xMfHEhWhErlN0NWAduodrbVghBMWVl7OunTW3qFsa6ngdRtJgPywkZPDTeRD5hmnKsv2cCSaqP2ctj7JRzrk0_vKtCoMN1MyPH5OaVVC7fHuEpY-Tsw"/>
+<span class="absolute top-2 right-2 inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">Ativo</span>
+<div class="absolute inset-0 flex items-center justify-center gap-2 bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+<button class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-700 shadow-md hover:bg-primary hover:text-white dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-primary transition-colors"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-700 shadow-md hover:bg-red-500 hover:text-white dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-red-500 transition-colors"><span class="material-symbols-outlined text-lg">delete</span></button>
+</div>
+</div>
+<div class="flex flex-1 flex-col p-3">
+<h3 class="font-semibold text-sm text-gray-800 dark:text-white">Camisa Social Slim Fit - Branca</h3>
+<p class="text-xs text-gray-500 dark:text-gray-400">SKU: CS-BR-001</p>
+<div class="mt-auto pt-3">
+<p class="text-base font-bold text-primary dark:text-primary-light">R$ 199,90</p>
+<div class="mt-2 flex justify-between text-xs text-gray-600 dark:text-gray-300">
+<span>Estoque: <span class="font-medium">120</span></span>
+<span>Vendas: <span class="font-medium">450</span></span>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Produto 2 -->
+<div class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+<div class="relative">
+<img class="aspect-[4/3] w-full object-cover" data-alt="Black jeans" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOu3GDuW5BmFHyDeShUcfrnBb6UKXyJXWD-UGFowocTNQ0KjJOUuWOKoNbo3gtAzDzDVwXK6vCrD1o40Nu0Zi2OMQ529boTysoFwdiUDKjaKZY-D_-Y2O-ATO8AbQjSlGZzqX8FX6hOYR_lWKLez90M_TKEU3ROBDC0DgU04rnFJAUxejxkQdKtOlOUm7oYitnQBDEkIdXfkum4D1fle0wC-gsLmVyLilYO0m5g5r3WSXjjjKXdoBOdaWRH5Ikz50H4ifYcd2UWCQ"/>
+<span class="absolute top-2 right-2 inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">Ativo</span>
+<div class="absolute inset-0 flex items-center justify-center gap-2 bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+<button class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-700 shadow-md hover:bg-primary hover:text-white dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-primary transition-colors"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-700 shadow-md hover:bg-red-500 hover:text-white dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-red-500 transition-colors"><span class="material-symbols-outlined text-lg">delete</span></button>
+</div>
+</div>
+<div class="flex flex-1 flex-col p-3">
+<h3 class="font-semibold text-sm text-gray-800 dark:text-white">Calça Jeans Preta</h3>
+<p class="text-xs text-gray-500 dark:text-gray-400">SKU: CJ-PR-005</p>
+<div class="mt-auto pt-3">
+<p class="text-base font-bold text-primary dark:text-primary-light">R$ 249,90</p>
+<div class="mt-2 flex justify-between text-xs text-gray-600 dark:text-gray-300">
+<span>Estoque: <span class="font-medium">85</span></span>
+<span>Vendas: <span class="font-medium">312</span></span>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Produto 3 -->
+<div class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+<div class="relative">
+<img class="aspect-[4/3] w-full object-cover" data-alt="Brown leather shoes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIvGBoFumnwq9i7oPLeZcLEfIkTVsZogacdplT88wg35TCMUf_IF37f92lhcJ4hKSdzeGP1mfnb2DtBSbRb3L4bE1dAhiJDBp1ym3ZPYm2uf35tOvNVGyQFXlpyKuM0JGax2jB_ZJNwhXBYqJa4pk1OzNfI40xLzp3kJ1a1RvH6gNgM4JyK8DB4PbdPIXuULvpCU9MroVLLFTp_NVwxEMQx_MRAZY6McwsJM2uZ-aSsUen3uUxdiygPL4C5Oc3ZEt_eA_73Vds-AA"/>
+<span class="absolute top-2 right-2 inline-flex items-center rounded-full bg-orange-100 px-2 py-0.5 text-xs font-medium text-orange-800 dark:bg-orange-900 dark:text-orange-300">Baixo Estoque</span>
+<div class="absolute inset-0 flex items-center justify-center gap-2 bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+<button class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-700 shadow-md hover:bg-primary hover:text-white dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-primary transition-colors"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-700 shadow-md hover:bg-red-500 hover:text-white dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-red-500 transition-colors"><span class="material-symbols-outlined text-lg">delete</span></button>
+</div>
+</div>
+<div class="flex flex-1 flex-col p-3">
+<h3 class="font-semibold text-sm text-gray-800 dark:text-white">Sapato de Couro Marrom</h3>
+<p class="text-xs text-gray-500 dark:text-gray-400">SKU: SC-MR-010</p>
+<div class="mt-auto pt-3">
+<p class="text-base font-bold text-primary dark:text-primary-light">R$ 399,90</p>
+<div class="mt-2 flex justify-between text-xs text-gray-600 dark:text-gray-300">
+<span>Estoque: <span class="font-medium text-orange-500 dark:text-orange-400">5</span></span>
+<span>Vendas: <span class="font-medium">180</span></span>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Produto 4 -->
+<div class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+<div class="relative">
+<img class="aspect-[4/3] w-full object-cover" data-alt="Red sports sneakers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAm4BVqS0USy5MlWBP2nELAKsP1LLiDyeGXH69BgccJRO0PqtYNouWrtO9-12COJR38Iow3f6OtO37BL72FVkhkuEhNA_sfn4gA_lHqjRQSexHjlXbxBaYyc0phk8whN9XTVxzf2J-1tfEbnh80ubMZJxBNW-cpoCDgXyIAKVCSjkdNDVAdzFElGoHWjtCPjJZvHE_EJD-QU6mtUhqqnS7KJJ-KrxkYiGeOQ9Oelij-7l8qKd0hVI19ENd5h0ViUT9AtCRuUsDZ_E4"/>
+<span class="absolute top-2 right-2 inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">Sem Estoque</span>
+<div class="absolute inset-0 flex items-center justify-center gap-2 bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+<button class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-700 shadow-md hover:bg-primary hover:text-white dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-primary transition-colors"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-700 shadow-md hover:bg-red-500 hover:text-white dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-red-500 transition-colors"><span class="material-symbols-outlined text-lg">delete</span></button>
+</div>
+</div>
+<div class="flex flex-1 flex-col p-3">
+<h3 class="font-semibold text-sm text-gray-800 dark:text-white">Tênis Esportivo Vermelho</h3>
+<p class="text-xs text-gray-500 dark:text-gray-400">SKU: TE-VM-002</p>
+<div class="mt-auto pt-3">
+<p class="text-base font-bold text-primary dark:text-primary-light">R$ 349,90</p>
+<div class="mt-2 flex justify-between text-xs text-gray-600 dark:text-gray-300">
+<span>Estoque: <span class="font-medium text-red-500 dark:text-red-400">0</span></span>
+<span>Vendas: <span class="font-medium">250</span></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Table View -->
+<div class="view-table mt-6 overflow-x-auto rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-background-dark">
+<table class="min-w-full divide-y divide-gray-200 text-sm dark:divide-gray-700">
+<thead class="bg-gray-50 dark:bg-gray-800">
+<tr>
+<th class="px-6 py-3 text-left font-semibold text-gray-600 dark:text-gray-300" scope="col">Produto</th>
+<th class="px-6 py-3 text-left font-semibold text-gray-600 dark:text-gray-300" scope="col">Preço</th>
+<th class="px-6 py-3 text-left font-semibold text-gray-600 dark:text-gray-300" scope="col">Estoque</th>
+<th class="px-6 py-3 text-left font-semibold text-gray-600 dark:text-gray-300" scope="col">Vendas</th>
+<th class="px-6 py-3 text-left font-semibold text-gray-600 dark:text-gray-300" scope="col">Status</th>
+<th class="px-6 py-3 text-right font-semibold text-gray-600 dark:text-gray-300" scope="col">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-background-dark">
+<tr>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex items-center gap-4">
+<img class="h-12 w-12 rounded-lg object-cover" data-alt="White T-shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4CXV9yCpUbwzZxUSieCgh8l4VLlzCUdvNNYFKXCAKRZiN1jbwndzHfa-Pz6syZp8fPuPomEPEXW-VBs1NiLaWBfuqz4JILSJSAj90dEeXSA_s9J8M-E9MNVSv0C0qPh-MqgWBM3i39ydT1N3WbL45d8M5xMfHEhWhErlN0NWAduodrbVghBMWVl7OunTW3qFsa6ngdRtJgPywkZPDTeRD5hmnKsv2cCSaqP2ctj7JRzrk0_vKtCoMN1MyPH5OaVVC7fHuEpY-Tsw"/>
+<div>
+<p class="font-medium text-gray-800 dark:text-white">Camisa Social Slim Fit - Branca</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">SKU: CS-BR-001</p>
+</div>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4 font-medium text-gray-700 dark:text-gray-300">R$ 199,90</td>
+<td class="whitespace-nowrap px-6 py-4 font-medium text-gray-700 dark:text-gray-300">120</td>
+<td class="whitespace-nowrap px-6 py-4 font-medium text-gray-700 dark:text-gray-300">450</td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">Ativo</span>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-primary dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white transition-colors"><span class="material-symbols-outlined text-xl">edit</span></button>
+<button class="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-red-500 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-red-500 transition-colors"><span class="material-symbols-outlined text-xl">delete</span></button>
+</div>
+</td>
+</tr>
+<tr>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex items-center gap-4">
+<img class="h-12 w-12 rounded-lg object-cover" data-alt="Black jeans" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOu3GDuW5BmFHyDeShUcfrnBb6UKXyJXWD-UGFowocTNQ0KjJOUuWOKoNbo3gtAzDzDVwXK6vCrD1o40Nu0Zi2OMQ529boTysoFwdiUDKjaKZY-D_-Y2O-ATO8AbQjSlGZzqX8FX6hOYR_lWKLez90M_TKEU3ROBDC0DgU04rnFJAUxejxkQdKtOlOUm7oYitnQBDEkIdXfkum4D1fle0wC-gsLmVyLilYO0m5g5r3WSXjjjKXdoBOdaWRH5Ikz50H4ifYcd2UWCQ"/>
+<div>
+<p class="font-medium text-gray-800 dark:text-white">Calça Jeans Preta</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">SKU: CJ-PR-005</p>
+</div>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4 font-medium text-gray-700 dark:text-gray-300">R$ 249,90</td>
+<td class="whitespace-nowrap px-6 py-4 font-medium text-gray-700 dark:text-gray-300">85</td>
+<td class="whitespace-nowrap px-6 py-4 font-medium text-gray-700 dark:text-gray-300">312</td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">Ativo</span>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-primary dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white transition-colors"><span class="material-symbols-outlined text-xl">edit</span></button>
+<button class="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-red-500 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-red-500 transition-colors"><span class="material-symbols-outlined text-xl">delete</span></button>
+</div>
+</td>
+</tr>
+<tr>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex items-center gap-4">
+<img class="h-12 w-12 rounded-lg object-cover" data-alt="Brown leather shoes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIvGBoFumnwq9i7oPLeZcLEfIkTVsZogacdplT88wg35TCMUf_IF37f92lhcJ4hKSdzeGP1mfnb2DtBSbRb3L4bE1dAhiJDBp1ym3ZPYm2uf35tOvNVGyQFXlpyKuM0JGax2jB_ZJNwhXBYqJa4pk1OzNfI40xLzp3kJ1a1RvH6gNgM4JyK8DB4PbdPIXuULvpCU9MroVLLFTp_NVwxEMQx_MRAZY6McwsJM2uZ-aSsUen3uUxdiygPL4C5Oc3ZEt_eA_73Vds-AA"/>
+<div>
+<p class="font-medium text-gray-800 dark:text-white">Sapato de Couro Marrom</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">SKU: SC-MR-010</p>
+</div>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4 font-medium text-gray-700 dark:text-gray-300">R$ 399,90</td>
+<td class="whitespace-nowrap px-6 py-4 font-medium text-orange-500 dark:text-orange-400">5</td>
+<td class="whitespace-nowrap px-6 py-4 font-medium text-gray-700 dark:text-gray-300">180</td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-orange-100 px-2.5 py-0.5 text-xs font-medium text-orange-800 dark:bg-orange-900 dark:text-orange-300">Baixo Estoque</span>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-primary dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white transition-colors"><span class="material-symbols-outlined text-xl">edit</span></button>
+<button class="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-red-500 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-red-500 transition-colors"><span class="material-symbols-outlined text-xl">delete</span></button>
+</div>
+</td>
+</tr>
+<tr>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex items-center gap-4">
+<img class="h-12 w-12 rounded-lg object-cover" data-alt="Red sports sneakers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAm4BVqS0USy5MlWBP2nELAKsP1LLiDyeGXH69BgccJRO0PqtYNouWrtO9-12COJR38Iow3f6OtO37BL72FVkhkuEhNA_sfn4gA_lHqjRQSexHjlXbxBaYyc0phk8whN9XTVxzf2J-1tfEbnh80ubMZJxBNW-cpoCDgXyIAKVCSjkdNDVAdzFElGoHWjtCPjJZvHE_EJD-QU6mtUhqqnS7KJJ-KrxkYiGeOQ9Oelij-7l8qKd0hVI19ENd5h0ViUT9AtCRuUsDZ_E4"/>
+<div>
+<p class="font-medium text-gray-800 dark:text-white">Tênis Esportivo Vermelho</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">SKU: TE-VM-002</p>
+</div>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4 font-medium text-gray-700 dark:text-gray-300">R$ 349,90</td>
+<td class="whitespace-nowrap px-6 py-4 font-medium text-red-500 dark:text-red-400">0</td>
+<td class="whitespace-nowrap px-6 py-4 font-medium text-gray-700 dark:text-gray-300">250</td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">Sem Estoque</span>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-primary dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white transition-colors"><span class="material-symbols-outlined text-xl">edit</span></button>
+<button class="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-red-500 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-red-500 transition-colors"><span class="material-symbols-outlined text-xl">delete</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- Pagination -->
+<div class="flex flex-col items-center justify-between gap-4 mt-6 sm:flex-row">
+<p class="text-sm text-gray-500 dark:text-gray-400">
+  Mostrando <span class="font-semibold text-gray-800 dark:text-white">1</span>-
+  <span class="font-semibold text-gray-800 dark:text-white">4</span> de
+  <span class="font-semibold text-gray-800 dark:text-white">128</span> produtos
+</p>
+<div class="flex items-center gap-2">
+<button class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors">
+<span class="material-symbols-outlined text-xl">chevron_left</span>
+</button>
+<button class="flex h-9 w-9 items-center justify-center rounded-lg border border-primary bg-primary text-white">1</button>
+<button class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors">2</button>
+<button class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors">3</button>
+<span class="text-gray-500">...</span>
+<button class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors">32</button>
+<button class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors">
+<span class="material-symbols-outlined text-xl">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+<script>
+  function toggleView(view) {
+    const container = document.getElementById('contentContainer');
+    const gridBtn = document.getElementById('btnViewGrid');
+    const tableBtn = document.getElementById('btnViewTable');
+    
+    if (view === 'grid') {
+      container.className = 'active-grid';
+      gridBtn.className = 'flex h-10 w-10 items-center justify-center bg-primary/10 text-primary dark:bg-primary/20 transition-colors';
+      tableBtn.className = 'flex h-10 w-10 items-center justify-center bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors';
+    } else {
+      container.className = 'active-table';
+      tableBtn.className = 'flex h-10 w-10 items-center justify-center bg-primary/10 text-primary dark:bg-primary/20 transition-colors';
+      gridBtn.className = 'flex h-10 w-10 items-center justify-center bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors';
+    }
+  }
+</script>
+
+</body></html>

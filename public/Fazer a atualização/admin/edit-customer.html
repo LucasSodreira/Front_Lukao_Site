@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Editar Cliente - Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#195de6",
+            "background-light": "#f6f6f8",
+            "background-dark": "#111621",
+          },
+          fontFamily: {
+            "display": ["Manrope", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings:
+        'FILL' 1
+    }
+  </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex h-auto min-h-screen w-full flex-row group/design-root overflow-x-hidden">
+<aside class="flex h-auto min-h-screen w-64 flex-col justify-between border-r border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 flex-shrink-0 sticky top-0 overflow-y-auto">
+<!-- Logo -->
+<div class="flex items-center gap-3 mb-8">
+  <div class="bg-primary/20 text-primary rounded-lg p-2">
+    <span class="material-symbols-outlined text-xl">shield</span>
+  </div>
+  <span class="font-bold text-gray-900 dark:text-white text-lg">Admin</span>
+</div>
+
+<!-- Menu Items -->
+<nav class="flex-1 space-y-2">
+  <!-- Dashboard -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">dashboard</span>
+    <p class="text-sm font-medium leading-normal">Dashboard</p>
+  </a>
+  
+  <!-- Pedidos -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">inventory_2</span>
+    <p class="text-sm font-medium leading-normal">Pedidos</p>
+  </a>
+  
+  <!-- Produtos -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">checkroom</span>
+    <p class="text-sm font-medium leading-normal">Produtos</p>
+  </a>
+  
+  <!-- Clientes -->
+  <a class="active flex items-center gap-3 px-4 py-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary" href="#">
+    <span class="material-symbols-outlined fill">group</span>
+    <p class="text-sm font-medium leading-normal">Clientes</p>
+  </a>
+  
+  <!-- Analytics -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">analytics</span>
+    <p class="text-sm font-medium leading-normal">Analytics</p>
+  </a>
+</nav>
+
+<!-- Configurações -->
+<div class="flex flex-col gap-2">
+          <button
+            class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90">
+            <span class="material-symbols-outlined">add_circle</span>
+            <span class="truncate">Adicionar Produto</span>
+          </button>
+          <div
+            class="border-t border-slate-200 dark:border-slate-800 my-2"></div>
+          <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+            href="#">
+            <span class="material-symbols-outlined">settings</span>
+            <p class="text-sm font-medium leading-normal">Configurações</p>
+          </a>
+          <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+            href="#">
+            <span class="material-symbols-outlined">logout</span>
+            <p class="text-sm font-medium leading-normal">Sair</p>
+          </a>
+        </div>
+</aside>
+<main class="flex-1 p-6 lg:p-10">
+<div class="mx-auto flex max-w-7xl flex-col gap-8">
+<div class="flex flex-wrap items-center gap-2">
+<a class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary" href="#">Dashboard</a>
+<span class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal">/</span>
+<a class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary" href="#">Clientes</a>
+<span class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal">/</span>
+<span class="text-slate-900 dark:text-white text-sm font-medium leading-normal">Editar Cliente</span>
+</div>
+<div class="flex flex-wrap items-start justify-between gap-4">
+<div class="flex min-w-72 flex-col gap-2">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-16" data-alt="Avatar de Jorge Amado" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB9WrlAUYxxNm0ueMt0S6cF7oiO7fzOC6wcv8zViG1rN2FgaNg-cAo46KRM2lWjXaN1-2MiqlWBBtgMwK7eN12bQgAlnMYvoXlOftiDRvX7k2L6Okc7BBbcEMzp-mGfmYd2RRfd_Xk7RQKUQAevmn7Fsogsu8bePhDqtFyV7IRMpyZD01gAx659KoEPlPWv7YRXb6snPAJmnMLDwPKXZVa_VMwEjOA4JALmoqMnKew_nuUtsFfNA6NdKQbDuMjEg2Vwbl25r0qWOeY");'></div>
+<div>
+<p class="text-slate-900 dark:text-white text-3xl font-bold leading-tight">Editar Cliente: Jorge Amado</p>
+<p class="text-slate-500 dark:text-slate-400 text-base font-normal leading-normal">Altere as informações do perfil, endereço e consulte o histórico de compras.</p>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-slate-200 text-slate-800 text-sm font-bold leading-normal tracking-[0.015em] hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600">
+<span class="truncate">Cancelar</span>
+</button>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90">
+<span class="truncate">Salvar Alterações</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-8">
+<div class="flex flex-col gap-6 rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+<div class="flex flex-col gap-1">
+<p class="text-slate-900 dark:text-white text-lg font-bold leading-tight">Dados Pessoais</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Informações básicas e de contato do cliente.</p>
+</div>
+<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal pb-2">Nome Completo</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 bg-white focus:border-primary h-11 placeholder:text-slate-400 p-3 text-base font-normal leading-normal dark:bg-slate-800 dark:border-slate-700 dark:text-white dark:focus:border-primary" value="Jorge Amado"/>
+</label>
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal pb-2">E-mail</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 bg-white focus:border-primary h-11 placeholder:text-slate-400 p-3 text-base font-normal leading-normal dark:bg-slate-800 dark:border-slate-700 dark:text-white dark:focus:border-primary" value="jorge.amado@email.com"/>
+</label>
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal pb-2">Telefone</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 bg-white focus:border-primary h-11 placeholder:text-slate-400 p-3 text-base font-normal leading-normal dark:bg-slate-800 dark:border-slate-700 dark:text-white dark:focus:border-primary" value="(71) 99999-8888"/>
+</label>
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal pb-2">CPF</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 bg-white focus:border-primary h-11 placeholder:text-slate-400 p-3 text-base font-normal leading-normal dark:bg-slate-800 dark:border-slate-700 dark:text-white dark:focus:border-primary" value="123.456.789-00"/>
+</label>
+</div>
+<div class="flex items-center justify-between border-t border-slate-200 pt-4 dark:border-slate-800">
+<div class="flex flex-col">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium">Status da Conta</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Controle se o cliente pode fazer login.</p>
+</div>
+<label class="relative inline-flex cursor-pointer items-center">
+<input checked="" class="peer sr-only" type="checkbox" value=""/>
+<div class="peer h-6 w-11 rounded-full bg-slate-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-slate-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/30 dark:bg-slate-700 dark:border-slate-600 dark:peer-focus:ring-primary/80"></div>
+<span class="ms-3 text-sm font-medium text-slate-900 dark:text-slate-300">Ativo</span>
+</label>
+</div>
+</div>
+<div class="flex flex-col gap-6 rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+<div class="flex flex-col gap-1">
+<p class="text-slate-900 dark:text-white text-lg font-bold leading-tight">Endereço Principal</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Endereço de entrega principal do cliente.</p>
+</div>
+<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+<label class="flex flex-col min-w-40 flex-1 sm:col-span-2 lg:col-span-1">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal pb-2">CEP</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 bg-white focus:border-primary h-11 placeholder:text-slate-400 p-3 text-base font-normal leading-normal dark:bg-slate-800 dark:border-slate-700 dark:text-white dark:focus:border-primary" value="41820-021"/>
+</label>
+<label class="flex flex-col min-w-40 flex-1 sm:col-span-2">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal pb-2">Rua</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 bg-white focus:border-primary h-11 placeholder:text-slate-400 p-3 text-base font-normal leading-normal dark:bg-slate-800 dark:border-slate-700 dark:text-white dark:focus:border-primary" value="Avenida Tancredo Neves"/>
+</label>
+</div>
+<div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal pb-2">Número</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 bg-white focus:border-primary h-11 placeholder:text-slate-400 p-3 text-base font-normal leading-normal dark:bg-slate-800 dark:border-slate-700 dark:text-white dark:focus:border-primary" value="123"/>
+</label>
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal pb-2">Complemento</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 bg-white focus:border-primary h-11 placeholder:text-slate-400 p-3 text-base font-normal leading-normal dark:bg-slate-800 dark:border-slate-700 dark:text-white dark:focus:border-primary" value="Apto 404"/>
+</label>
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal pb-2">Bairro</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 bg-white focus:border-primary h-11 placeholder:text-slate-400 p-3 text-base font-normal leading-normal dark:bg-slate-800 dark:border-slate-700 dark:text-white dark:focus:border-primary" value="Caminho das Árvores"/>
+</label>
+</div>
+<div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal pb-2">Cidade</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 bg-white focus:border-primary h-11 placeholder:text-slate-400 p-3 text-base font-normal leading-normal dark:bg-slate-800 dark:border-slate-700 dark:text-white dark:focus:border-primary" value="Salvador"/>
+</label>
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium leading-normal pb-2">Estado</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 bg-white focus:border-primary h-11 placeholder:text-slate-400 p-3 text-base font-normal leading-normal dark:bg-slate-800 dark:border-slate-700 dark:text-white dark:focus:border-primary" value="BA"/>
+</label>
+</div>
+</div>
+<div class="flex flex-col gap-6 rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+<div class="flex flex-col gap-1">
+<p class="text-slate-900 dark:text-white text-lg font-bold leading-tight">Segurança</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Gerencie as opções de segurança da conta do cliente.</p>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-4 border-t border-slate-200 pt-4 dark:border-slate-800">
+<div class="flex flex-col">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-medium">Redefinição de Senha</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Um e-mail será enviado ao cliente com instruções para criar uma nova senha.</p>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-transparent text-primary text-sm font-bold leading-normal tracking-[0.015em] gap-2 border border-primary hover:bg-primary/10">
+<span class="material-symbols-outlined">lock_reset</span>
+<span class="truncate">Redefinir Senha</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-6 rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+<div class="flex flex-col gap-1">
+<p class="text-slate-900 dark:text-white text-lg font-bold leading-tight">Histórico do Cliente</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Resumo de compras e lista de pedidos realizados.</p>
+</div>
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+<div class="flex items-center gap-4 rounded-lg border border-slate-200 p-4 dark:border-slate-800">
+<div class="flex size-12 items-center justify-center rounded-full bg-primary/10">
+<span class="material-symbols-outlined text-primary text-3xl">payments</span>
+</div>
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Total Gasto</p>
+<p class="text-slate-900 dark:text-white text-xl font-bold">R$ 1.250,80</p>
+</div>
+</div>
+<div class="flex items-center gap-4 rounded-lg border border-slate-200 p-4 dark:border-slate-800">
+<div class="flex size-12 items-center justify-center rounded-full bg-primary/10">
+<span class="material-symbols-outlined text-primary text-3xl">shopping_cart</span>
+</div>
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Total de Pedidos</p>
+<p class="text-slate-900 dark:text-white text-xl font-bold">5</p>
+</div>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm">
+<thead class="border-b border-slate-200 text-xs uppercase text-slate-500 dark:border-slate-800 dark:text-slate-400">
+<tr>
+<th class="px-6 py-3" scope="col">ID do Pedido</th>
+<th class="px-6 py-3" scope="col">Data</th>
+<th class="px-6 py-3" scope="col">Status</th>
+<th class="px-6 py-3 text-right" scope="col">Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800/50">
+<td class="whitespace-nowrap px-6 py-4 font-medium text-slate-900 dark:text-white">#3058</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-300">15 de Jun, 2024</td>
+<td class="px-6 py-4"><span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">Entregue</span></td>
+<td class="px-6 py-4 text-right text-slate-600 dark:text-slate-300">R$ 299,90</td>
+</tr>
+<tr class="border-b border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800/50">
+<td class="whitespace-nowrap px-6 py-4 font-medium text-slate-900 dark:text-white">#2943</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-300">02 de Abr, 2024</td>
+<td class="px-6 py-4"><span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">Entregue</span></td>
+<td class="px-6 py-4 text-right text-slate-600 dark:text-slate-300">R$ 150,00</td>
+</tr>
+<tr class="border-b border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800/50">
+<td class="whitespace-nowrap px-6 py-4 font-medium text-slate-900 dark:text-white">#2810</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-300">10 de Jan, 2024</td>
+<td class="px-6 py-4"><span class="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">Pendente</span></td>
+<td class="px-6 py-4 text-right text-slate-600 dark:text-slate-300">R$ 450,50</td>
+</tr>
+<tr class="bg-white hover:bg-slate-50 dark:bg-slate-900 dark:hover:bg-slate-800/50">
+<td class="whitespace-nowrap px-6 py-4 font-medium text-slate-900 dark:text-white">#2755</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-300">20 de Dez, 2023</td>
+<td class="px-6 py-4"><span class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">Cancelado</span></td>
+<td class="px-6 py-4 text-right text-slate-600 dark:text-slate-300">R$ 350,40</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

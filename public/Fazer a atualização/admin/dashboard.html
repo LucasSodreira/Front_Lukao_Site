@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>E-commerce Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#195de6",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                        "card-light": "#ffffff",
+                        "card-dark": "#1a202c",
+                        "text-light-primary": "#111318",
+                        "text-dark-primary": "#f6f6f8",
+                        "text-light-secondary": "#636f88",
+                        "text-dark-secondary": "#94a3b8",
+                        "border-light": "#dcdfe5",
+                        "border-dark": "#334155"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex min-h-screen w-full">
+<!-- SideNavBar -->
+<aside class="flex w-64 flex-col bg-white dark:bg-gray-800 p-6 border-r border-gray-200 dark:border-gray-700 sticky top-0 h-screen overflow-y-auto flex-shrink-0">
+<!-- Logo -->
+<div class="flex items-center gap-3 mb-8">
+  <div class="bg-primary/20 text-primary rounded-lg p-2">
+    <span class="material-symbols-outlined text-xl">shield</span>
+  </div>
+  <span class="font-bold text-gray-900 dark:text-white text-lg">Admin</span>
+</div>
+
+<!-- Menu Items -->
+<nav class="flex-1 space-y-2">
+  <!-- Dashboard -->
+  <a class="active flex items-center gap-3 px-4 py-2 rounded-lg bg-primary/10 text-primary dark:bg-primary/20" href="#">
+    <span class="material-symbols-outlined">dashboard</span>
+    <p class="text-sm font-medium leading-normal">Dashboard</p>
+  </a>
+  
+  <!-- Produtos -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">inventory_2</span>
+    <p class="text-sm font-medium leading-normal">Produtos</p>
+  </a>
+  
+  <!-- Pedidos -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">receipt_long</span>
+    <p class="text-sm font-medium leading-normal">Pedidos</p>
+  </a>
+  
+  <!-- Clientes -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">group</span>
+    <p class="text-sm font-medium leading-normal">Clientes</p>
+  </a>
+  
+  <!-- Análises -->
+  <a class="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors [&.active]:bg-primary/10 dark:[&.active]:bg-primary/20 [&.active]:text-primary" href="#">
+    <span class="material-symbols-outlined">analytics</span>
+    <p class="text-sm font-medium leading-normal">Análises</p>
+  </a>
+  
+</nav>
+
+<!-- Footer Menu -->
+<div class="flex flex-col gap-2">
+          <button
+            class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90">
+            <span class="material-symbols-outlined">add_circle</span>
+            <span class="truncate">Adicionar Produto</span>
+          </button>
+          
+          <div
+            class="border-t border-slate-200 dark:border-slate-800 my-2"></div>
+          <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+            href="#">
+            <span class="material-symbols-outlined">settings</span>
+            <p class="text-sm font-medium leading-normal">Configurações</p>
+          </a>
+          <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+            href="#">
+            <span class="material-symbols-outlined">logout</span>
+            <p class="text-sm font-medium leading-normal">Sair</p>
+          </a>
+        </div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 p-8 overflow-y-auto">
+<div class="max-w-7xl mx-auto">
+<!-- PageHeading -->
+<header class="flex flex-wrap justify-between items-center gap-4 mb-6">
+<div class="flex flex-col gap-1">
+<h1 class="text-text-light-primary dark:text-text-dark-primary text-3xl font-bold leading-tight">Dashboard Geral</h1>
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-base font-normal leading-normal">Visão geral de desempenho do seu e-commerce.</p>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark px-4">
+<span class="material-symbols-outlined text-xl text-text-light-secondary dark:text-text-dark-secondary">calendar_today</span>
+<p class="text-text-light-primary dark:text-text-dark-primary text-sm font-medium leading-normal">Últimos 30 dias</p>
+<span class="material-symbols-outlined text-xl text-text-light-secondary dark:text-text-dark-secondary">expand_more</span>
+</button>
+<button class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark">
+<span class="material-symbols-outlined text-xl text-text-light-secondary dark:text-text-dark-secondary">notifications</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCsbfoSRIULIsULS_O099h9JxhORGssnKc-aOZ8FWOihBhyRRgQLYWlKNw7Ld-QibqzWWa2STYFvF-t73j_at7V8FGV6LK8ZOWI76FGi5ejZvX8MRd1nuVF5L410eU3HyVB-jX2lh0bzbLg0yX5_w4YNp397eYlG9fQRF91odNS6-R0jCG5as4t-zom_0FshnHacqN5RD6iBOEz09nJwP5EWm-_06clxwwMovA0yUiHgWR2USo1UA1AjwDDPXNasAC9pbzDRp_60cE");'></div>
+</div>
+</header>
+<!-- Stats -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark">
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-base font-medium leading-normal">Vendas Totais</p>
+<p class="text-text-light-primary dark:text-text-dark-primary tracking-tight text-3xl font-bold leading-tight">R$ 152.480,50</p>
+<p class="text-[#07883b] text-sm font-medium leading-normal">+12.5% vs. mês anterior</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark">
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-base font-medium leading-normal">Total de Pedidos</p>
+<p class="text-text-light-primary dark:text-text-dark-primary tracking-tight text-3xl font-bold leading-tight">1.240</p>
+<p class="text-[#07883b] text-sm font-medium leading-normal">+8.2% vs. mês anterior</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark">
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-base font-medium leading-normal">Ticket Médio</p>
+<p class="text-text-light-primary dark:text-text-dark-primary tracking-tight text-3xl font-bold leading-tight">R$ 122,97</p>
+<p class="text-[#e73908] text-sm font-medium leading-normal">-1.4% vs. mês anterior</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark">
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-base font-medium leading-normal">Total de Visitantes</p>
+<p class="text-text-light-primary dark:text-text-dark-primary tracking-tight text-3xl font-bold leading-tight">12.890</p>
+<p class="text-[#07883b] text-sm font-medium leading-normal">+21.7% vs. mês anterior</p>
+</div>
+</div>
+<!-- Charts -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 flex flex-col gap-2 rounded-xl border border-border-light dark:border-border-dark p-6 bg-card-light dark:bg-card-dark">
+<p class="text-text-light-primary dark:text-text-dark-primary text-lg font-semibold leading-normal">Desempenho de Vendas</p>
+<div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+<p class="text-text-light-primary dark:text-text-dark-primary tracking-tight text-4xl font-bold leading-tight truncate">R$ 38.420,00</p>
+<div class="flex gap-1">
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-sm font-normal leading-normal">Últimos 30 dias</p>
+<p class="text-[#07883b] text-sm font-medium leading-normal">+12.5%</p>
+</div>
+</div>
+<div class="flex min-h-[280px] flex-1 flex-col justify-end pt-4">
+<svg class="h-full w-full" fill="none" preserveaspectratio="none" viewbox="0 0 475 150" width="100%" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25V149H0V109Z" fill="url(#paint0_linear_chart)"></path>
+<path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25" stroke="#195de6" stroke-linecap="round" stroke-width="3"></path>
+<defs>
+<lineargradient gradientunits="userSpaceOnUse" id="paint0_linear_chart" x1="236" x2="236" y1="1" y2="149">
+<stop stop-color="#195de6" stop-opacity="0.2"></stop>
+<stop offset="1" stop-color="#195de6" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+</svg>
+<div class="flex justify-around mt-2">
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-xs font-semibold tracking-wide">Sem 1</p>
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-xs font-semibold tracking-wide">Sem 2</p>
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-xs font-semibold tracking-wide">Sem 3</p>
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-xs font-semibold tracking-wide">Sem 4</p>
+</div>
+</div>
+</div>
+<!-- Top Selling Products -->
+<div class="flex flex-col gap-4 rounded-xl border border-border-light dark:border-border-dark p-6 bg-card-light dark:bg-card-dark">
+<h3 class="text-text-light-primary dark:text-text-dark-primary text-lg font-semibold leading-normal">Produtos Mais Vendidos</h3>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-4">
+<img class="w-14 h-14 rounded-lg object-cover" data-alt="White t-shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBasOiRbo4wMs0v9sROncAEvWIttTg0gM6kyZW8H68YgBnon1GJ2mkmL-OatzXO2HMzKzMmnFDq-BY8_pD8zbVcFVO3N6xP55VFjW29aM1A0MLJEfgxwwxjpbcMvSuZI_1aZFnhVv0p1N8-QaTyQcyVJziDVI9SN5gRTOjvcpHjTmGn7X0G_2XyWE4yycpobpDevgaqV2t8b_3qX2TOqO7hNfiZWkqwYOkXTKOfsWwwN5RJ2063tv7l_I6reqbbKf-2-d4Pa5taGU"/>
+<div class="flex-1">
+<p class="text-text-light-primary dark:text-text-dark-primary text-sm font-semibold">Camiseta Básica Branca</p>
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-xs">210 vendidos</p>
+</div>
+<p class="text-text-light-primary dark:text-text-dark-primary text-sm font-bold">R$ 8.379,00</p>
+</div>
+<div class="flex items-center gap-4">
+<img class="w-14 h-14 rounded-lg object-cover" data-alt="Blue jeans" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOaLsfA2Of0GGaHbdae-h5h6wCiTm2Pr3AcbP7XLw122j5POoVTE06j4TP_4qwqzHuWLoFvPaLOQueDWd3Q7K5vL82wxPClZB-30zPCryTMJIfXbD8evSB5k8UocjvWF6daDHmAuLJrHgFmoR7GkASCSnw3AvHVXpdoKdPt9_2z5aA0DHxMqJ9T4_4VKoRLeBvnoFeR5MEQ1V2eP_UqJ6qDJpa65xnpDbHcxH1OUwK7AbBayIRKCuwXMJa4bqZERGdJbemjLHGdEM"/>
+<div class="flex-1">
+<p class="text-text-light-primary dark:text-text-dark-primary text-sm font-semibold">Calça Jeans Slim Fit</p>
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-xs">185 vendidos</p>
+</div>
+<p class="text-text-light-primary dark:text-text-dark-primary text-sm font-bold">R$ 27.565,00</p>
+</div>
+<div class="flex items-center gap-4">
+<img class="w-14 h-14 rounded-lg object-cover" data-alt="Leather sneakers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALJ0KmIcu99MRZg7Zpo6sTA91UB9bU4ZAWx0Mqk6jYPCFCVkrg_eIPVwWbEG2cr5vYcLQurG4SQBy9NFNoZ19cmMtc_xuxDuOUfDoy8fa7lSffEMHxyT2WxFWgIHeAzD-0k54XEYjKTuNitrk1ohIhf5AB0CSzKS6Yl5iZWmJ-IC-WztFr9rPIWthVlWgFclHfdN9DHMLnNRvxJZXw0NbhAHdwBhSGhOa9VUbeKKVMu2qB_ysuW0J0wEjvlZ-vi3WaSivp2zMzMZs"/>
+<div class="flex-1">
+<p class="text-text-light-primary dark:text-text-dark-primary text-sm font-semibold">Tênis de Couro</p>
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-xs">150 vendidos</p>
+</div>
+<p class="text-text-light-primary dark:text-text-dark-primary text-sm font-bold">R$ 44.850,00</p>
+</div>
+<div class="flex items-center gap-4">
+<img class="w-14 h-14 rounded-lg object-cover" data-alt="Gray hoodie" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAs3W4KvWwksNPXqsGAD3oFr6d4_SkRURcKcSFFs2QNOIEITwE3-jSWoOore7jBXp3hMZQstbWevQ9d3aQEl-LKKsgaKxy0twzSrwlY9KRQuLGZwZHOVCpSvZrITexE69fMX5Rid76XyxeH4G25_V4hFKdrWV_-WpgVSBAPOlawpI-UEUoNik9Mb3C_rqyxt7dYyLNOO6lU6Dp0MGhcyfFOKlQ2RaS0E4apyMql8M5OD8MED99rcNs3nUs_4BADfMI56qJ2RJisGyQ"/>
+<div class="flex-1">
+<p class="text-text-light-primary dark:text-text-dark-primary text-sm font-semibold">Moletom com Capuz</p>
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-xs">123 vendidos</p>
+</div>
+<p class="text-text-light-primary dark:text-text-dark-primary text-sm font-bold">R$ 18.327,00</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Orders -->
+<div class="mt-6 rounded-xl border border-border-light dark:border-border-dark p-6 bg-card-light dark:bg-card-dark">
+<h3 class="text-text-light-primary dark:text-text-dark-primary text-lg font-semibold leading-normal mb-4">Últimos Pedidos</h3>
+<div class="overflow-x-auto">
+<table class="w-full text-sm text-left">
+<thead class="text-xs text-text-light-secondary dark:text-text-dark-secondary uppercase">
+<tr>
+<th class="py-3 px-4" scope="col">ID do Pedido</th>
+<th class="py-3 px-4" scope="col">Cliente</th>
+<th class="py-3 px-4" scope="col">Data</th>
+<th class="py-3 px-4" scope="col">Total</th>
+<th class="py-3 px-4" scope="col">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-border-light dark:border-border-dark">
+<td class="py-4 px-4 font-medium text-text-light-primary dark:text-text-dark-primary">#10524</td>
+<td class="py-4 px-4">Carlos Pereira</td>
+<td class="py-4 px-4 text-text-light-secondary dark:text-text-dark-secondary">24 de Jul, 2024</td>
+<td class="py-4 px-4">R$ 249,90</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+<span class="size-1.5 inline-block rounded-full bg-green-500"></span> Entregue
+                                        </span>
+</td>
+</tr>
+<tr class="border-b border-border-light dark:border-border-dark">
+<td class="py-4 px-4 font-medium text-text-light-primary dark:text-text-dark-primary">#10523</td>
+<td class="py-4 px-4">Ana Rodrigues</td>
+<td class="py-4 px-4 text-text-light-secondary dark:text-text-dark-secondary">24 de Jul, 2024</td>
+<td class="py-4 px-4">R$ 89,50</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+<span class="size-1.5 inline-block rounded-full bg-blue-500"></span> Enviado
+                                        </span>
+</td>
+</tr>
+<tr class="border-b border-border-light dark:border-border-dark">
+<td class="py-4 px-4 font-medium text-text-light-primary dark:text-text-dark-primary">#10522</td>
+<td class="py-4 px-4">Mariana Costa</td>
+<td class="py-4 px-4 text-text-light-secondary dark:text-text-dark-secondary">23 de Jul, 2024</td>
+<td class="py-4 px-4">R$ 150,00</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
+<span class="size-1.5 inline-block rounded-full bg-yellow-500"></span> Em Processamento
+                                        </span>
+</td>
+</tr>
+<tr>
+<td class="py-4 px-4 font-medium text-text-light-primary dark:text-text-dark-primary">#10521</td>
+<td class="py-4 px-4">João Silva</td>
+<td class="py-4 px-4 text-text-light-secondary dark:text-text-dark-secondary">22 de Jul, 2024</td>
+<td class="py-4 px-4">R$ 312,80</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">
+<span class="size-1.5 inline-block rounded-full bg-red-500"></span> Cancelado
+                                        </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

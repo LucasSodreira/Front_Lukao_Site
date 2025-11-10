@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Configurações da Conta - Dashboard de Administração</title>
+        <script
+            src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+        <link href="https://fonts.googleapis.com" rel="preconnect" />
+        <link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+            rel="stylesheet" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+            rel="stylesheet" />
+        <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#195de6",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+        <style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+    </head>
+    <body
+        class="bg-gray-50 dark:bg-gray-900 font-display text-gray-900 dark:text-white">
+        <div class="relative flex min-h-screen w-full">
+            <!-- SideNavBar -->
+            <aside
+                class="flex h-screen flex-col justify-between bg-white dark:bg-background-dark/50 border-r border-slate-200 dark:border-slate-800 p-4 w-64 sticky top-0">
+                <div class="flex h-full flex-col justify-between p-4">
+                    <div class="flex flex-col gap-6">
+                        <div class="flex items-center gap-3 px-3 py-2">
+                            <div
+                                class="bg-primary/20 text-primary rounded-lg p-2">
+                                <span
+                                    class="material-symbols-outlined">storefront</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <h1
+                                    class="text-base font-bold leading-normal text-gray-800 dark:text-white">ModaMax</h1>
+                                <p
+                                    class="text-sm font-normal leading-normal text-gray-500 dark:text-gray-400">Admin
+                                    Panel</p>
+                            </div>
+                        </div>
+                        <nav class="flex flex-col gap-2">
+                            <a
+                                class="flex items-center gap-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                                href="#">
+                                <span
+                                    class="material-symbols-outlined">dashboard</span>
+                                <p
+                                    class="text-sm font-medium leading-normal">Dashboard</p>
+                            </a>
+                            <a
+                                class="flex items-center gap-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                                href="#">
+                                <span
+                                    class="material-symbols-outlined">receipt_long</span>
+                                <p
+                                    class="text-sm font-medium leading-normal">Pedidos</p>
+                            </a>
+                            <a
+                                class="flex items-center gap-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                                href="#">
+                                <span
+                                    class="material-symbols-outlined">inventory_2</span>
+                                <p
+                                    class="text-sm font-medium leading-normal">Produtos</p>
+                            </a>
+                            <a
+                                class="flex items-center gap-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                                href="#">
+                                <span
+                                    class="material-symbols-outlined">group</span>
+                                <p
+                                    class="text-sm font-medium leading-normal">Clientes</p>
+                            </a>
+                            <a
+                                class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary dark:text-white"
+                                href="#">
+                                <span
+                                    class="material-symbols-outlined fill">settings</span>
+                                <p
+                                    class="text-sm font-bold leading-normal">Configurações</p>
+                            </a>
+                        </nav>
+                    </div>
+                    <!-- Botão e Configurações -->
+<div class="flex flex-col gap-2">
+          <button
+            class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90">
+            <span class="material-symbols-outlined">add_circle</span>
+            <span class="truncate">Adicionar Produto</span>
+          </button>
+          <div
+            class="border-t border-slate-200 dark:border-slate-800 my-2"></div>
+          <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+            href="#">
+            <span class="material-symbols-outlined">settings</span>
+            <p class="text-sm font-medium leading-normal">Configurações</p>
+          </a>
+          <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+            href="#">
+            <span class="material-symbols-outlined">logout</span>
+            <p class="text-sm font-medium leading-normal">Sair</p>
+          </a>
+        </div>
+            </aside>
+            <!-- Main Content -->
+            <main class="flex-1 p-6 lg:p-8">
+                <div class="mx-auto max-w-4xl">
+                    <!-- PageHeading -->
+                    <div class="mb-8">
+                        <h1
+                            class="text-gray-900 dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em]">Configurações
+                            da Conta</h1>
+                    </div>
+                    <!-- Tabs -->
+                    <div class="mb-8">
+                        <div
+                            class="flex border-b border-gray-200 dark:border-gray-700 gap-8">
+                            <a
+                                class="flex flex-col items-center justify-center border-b-[3px] border-b-primary text-primary pb-3 pt-4"
+                                href="#">
+                                <p
+                                    class="text-sm font-bold leading-normal tracking-[0.015em]">Meu
+                                    Perfil</p>
+                            </a>
+                            <a
+                                class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-gray-600 dark:text-gray-400 pb-3 pt-4 hover:text-gray-900 dark:hover:text-white transition-colors"
+                                href="#">
+                                <p
+                                    class="text-sm font-bold leading-normal tracking-[0.015em]">Segurança</p>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Content Area -->
+                    <div class="flex flex-col gap-8">
+                        <!-- ProfileHeader Card -->
+                        <div
+                            class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                            <div class="p-6 @container">
+                                <div
+                                    class="flex w-full flex-col gap-4 @[520px]:flex-row @[520px]:justify-between @[520px]:items-center">
+                                    <div class="flex gap-4 items-center">
+                                        <div
+                                            class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-24 w-24"
+                                            data-alt="Avatar de Admin User"
+                                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuANmjcDuhlMy5COxCu7lEtr6P0R8fM9b6rMj62tXEbNUpqzlvSGcT4aUEa1e8RUYp40KhIL_5Pf1gDb_Xz9mT4jCgAkb9u4ryhpD7-yWYYbsWKwORqPHr9MwgwU-WubE66OMXgz24_ROP0_fqT_wJYqxPPvRZbIhTEDs53D0xajWElFA6WaX0LjSFc1i-XAOzD2kOECWWnnDG1n0JSmqGR1zTh2hKUeMQyCimlRrfCtV8XOAEMAMaczHynZWpOD3MmU3F04R3eTP0c");'></div>
+                                        <div
+                                            class="flex flex-col justify-center">
+                                            <p
+                                                class="text-gray-900 dark:text-white text-2xl font-bold leading-tight tracking-[-0.015em]">Admin
+                                                User</p>
+                                            <p
+                                                class="text-gray-600 dark:text-gray-400 text-base font-normal leading-normal">admin@email.com</p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm font-bold leading-normal tracking-[0.015em] w-full max-w-[480px] @[480px]:w-auto border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                        <span class="truncate">Alterar
+                                            Foto</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Personal Information Card -->
+                        <div
+                            class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                            <div
+                                class="border-b border-gray-200 dark:border-gray-700">
+                                <h3
+                                    class="text-gray-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] px-6 py-4">Informações
+                                    Pessoais</h3>
+                            </div>
+                            <form
+                                class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label
+                                        class="block text-sm font-semibold text-gray-800 dark:text-white mb-2"
+                                        for="fullName">Nome Completo</label>
+                                    <input
+                                        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 h-10 placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 text-sm font-normal leading-normal"
+                                        id="fullName" type="text"
+                                        value="Admin User" />
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-sm font-semibold text-gray-800 dark:text-white mb-2"
+                                        for="email">E-mail</label>
+                                    <input
+                                        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 h-10 placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 text-sm font-normal leading-normal"
+                                        id="email" type="email"
+                                        value="admin@email.com" />
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label
+                                        class="block text-sm font-semibold text-gray-800 dark:text-white mb-2"
+                                        for="phone">Telefone</label>
+                                    <input
+                                        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 h-10 placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 text-sm font-normal leading-normal"
+                                        id="phone" type="tel"
+                                        value="(11) 98765-4321" />
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Address Card -->
+                        <div
+                            class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                            <div
+                                class="border-b border-gray-200 dark:border-gray-700">
+                                <h3
+                                    class="text-gray-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] px-6 py-4">Endereço</h3>
+                            </div>
+                            <form
+                                class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="md:col-span-2">
+                                    <label
+                                        class="block text-sm font-semibold text-gray-800 dark:text-white mb-2"
+                                        for="address">Logradouro</label>
+                                    <input
+                                        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 h-10 placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 text-sm font-normal leading-normal"
+                                        id="address" type="text"
+                                        value="Avenida Paulista, 1000" />
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-sm font-semibold text-gray-800 dark:text-white mb-2"
+                                        for="city">Cidade</label>
+                                    <input
+                                        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 h-10 placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 text-sm font-normal leading-normal"
+                                        id="city" type="text"
+                                        value="São Paulo" />
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-sm font-semibold text-gray-800 dark:text-white mb-2"
+                                        for="state">Estado</label>
+                                    <input
+                                        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 h-10 placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 text-sm font-normal leading-normal"
+                                        id="state" type="text" value="SP" />
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-sm font-semibold text-gray-800 dark:text-white mb-2"
+                                        for="zip">CEP</label>
+                                    <input
+                                        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 h-10 placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 text-sm font-normal leading-normal"
+                                        id="zip" type="text"
+                                        value="01310-100" />
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Actions -->
+                        <div class="flex justify-end gap-3 pt-4">
+                            <button
+                                class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <span class="truncate">Cancelar</span>
+                            </button>
+                            <button
+                                class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+                                <span class="truncate">Salvar Alterações</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </body></html>
