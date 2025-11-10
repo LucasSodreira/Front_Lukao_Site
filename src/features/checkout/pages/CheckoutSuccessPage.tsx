@@ -1,59 +1,152 @@
-import { useEffect, useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import type { FC } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { CheckCircle2 } from 'lucide-react';
+import { useQuery } from '@apollo/client/react';
+import { Container } from '@/ui/Container';
 import { Button } from '@/ui/Button';
-import { Card, CardBody } from '@/ui/Card';
+import { OrderConfirmationDetails } from '../components/OrderConfirmationDetails';
+import { GET_ORDER_BY_ID } from '@/graphql/checkoutQueries';
+import { logger } from '@/utils';
 
-export const CheckoutSuccessPage = () => {
+interface Order {
+  id: string;
+  status: string;
+  totalAmount: number;
+  shippingCost: number;
+  items: Array<{
+    id: string;
+    product: {
+      id: string;
+      title: string;
+      image?: string;
+    };
+    quantity: number;
+    totalPrice: number;
+  }>;
+  createdAt: string;
+  address?: {
+    fullName: string;
+    street: string;
+    number: string;
+    complement?: string;
+    neighborhood: string;
+    city: string;
+    state: string;
+    cep: string;
+  };
+  paymentMethod?: string;
+  estimatedDelivery?: string;
+}
+
+interface OrderQueryResult {
+  order: Order;
+}
+
+export const CheckoutSuccessPage: FC = () => {
+  const { orderId } = useParams<{ orderId: string }>();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const [confirmed, setConfirmed] = useState(false);
 
-  const sessionId = searchParams.get('session_id');
-
-  useEffect(() => {
-    // Simular confirmação do pagamento
-    // Em produção, você pode chamar um endpoint para confirmar via webhook
-    if (sessionId) {
-      setConfirmed(true);
+  // Buscar dados do pedido da API
+  const { data: orderData, loading, error: queryError } = useQuery<OrderQueryResult>(
+    GET_ORDER_BY_ID,
+    {
+      variables: { orderId },
+      skip: !orderId,
+      fetchPolicy: 'network-only',
     }
-  }, [sessionId]);
+  );
+
+  if (queryError) {
+    logger.error('Erro ao carregar pedido para confirmação', { orderId, error: queryError.message });
+  }
+
+  const order = orderData?.order;
+
+  // Mostrar loading
+  if (loading) {
+    return (
+      <Container>
+        <main className="flex flex-1 justify-center py-8 px-4 sm:px-6 lg:px-8">
+          <div className="layout-content-container flex flex-col max-w-2xl flex-1 text-center space-y-4">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+            <p className="text-gray-600 dark:text-gray-300">Carregando detalhes do pedido...</p>
+          </div>
+        </main>
+      </Container>
+    );
+  }
+
+  // Mostrar erro
+  if (queryError || !order) {
+    return (
+      <Container>
+        <main className="flex flex-1 justify-center py-8 px-4 sm:px-6 lg:px-8">
+          <div className="layout-content-container flex flex-col max-w-2xl flex-1">
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 text-center">
+              <p className="text-red-700 dark:text-red-300 font-semibold mb-2">
+                Erro ao carregar o pedido
+              </p>
+              <p className="text-red-600 dark:text-red-400 text-sm mb-4">
+                Não conseguimos recuperar os detalhes do seu pedido. Por favor, tente novamente.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button onClick={() => window.location.reload()}>
+                  Tentar Novamente
+                </Button>
+                <Button variant="secondary" onClick={() => navigate('/')}>
+                  Voltar para Home
+                </Button>
+              </div>
+            </div>
+          </div>
+        </main>
+      </Container>
+    );
+  }
 
   return (
-    <div className="space-y-6">
-      <div className="text-center space-y-2">
-        <div className="text-4xl text-green-600 mb-4">✓</div>
-        <h1 className="text-3xl font-semibold text-gray-900 dark:text-gray-100">Pagamento Confirmado!</h1>
-        <p className="text-gray-600 dark:text-gray-300">Obrigado pela sua compra.</p>
-      </div>
-
-      {confirmed && (
-        <Card>
-          <CardBody className="space-y-4">
-            <div className="space-y-2">
-              <p className="text-gray-600 dark:text-gray-300">
-                Seu pagamento foi processado com sucesso!
-              </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Session ID: {sessionId}
-              </p>
+    <Container>
+      <main className="flex flex-1 justify-center py-8 px-4 sm:px-6 lg:px-8">
+        <div className="layout-content-container flex flex-col max-w-2xl flex-1">
+          {/* Success Header */}
+          <div className="bg-white dark:bg-gray-900/50 rounded-xl shadow-sm p-6 sm:p-10 text-center flex flex-col items-center mb-6">
+            <div className="flex items-center justify-center size-16 bg-green-100 dark:bg-green-900/50 rounded-full mb-5">
+              <CheckCircle2 size={40} className="text-green-600 dark:text-green-400" />
             </div>
-          </CardBody>
-        </Card>
-      )}
 
-      <div className="flex gap-3">
-        <Button variant="secondary" className="flex-1" onClick={() => navigate('/orders')}>
-          Ver Meus Pedidos
-        </Button>
-        <Button className="flex-1" onClick={() => navigate('/products')}>
-          Continuar Comprando
-        </Button>
-      </div>
+            <p className="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal pb-1 pt-1">
+              Seu Pedido {order.id}
+            </p>
 
-      <p className="text-sm text-gray-600 dark:text-gray-300 text-center">
-        Um e-mail de confirmação foi enviado para seu endereço de e-mail.
-      </p>
-    </div>
+            <h1 className="text-gray-800 dark:text-white tracking-tight text-3xl font-bold leading-tight pb-2">
+              Obrigado pelo seu pedido!
+            </h1>
+
+            <p className="text-gray-800 dark:text-gray-300 text-base font-normal leading-normal max-w-md">
+              Um e-mail de confirmação com todos os detalhes foi enviado para o seu endereço.
+            </p>
+          </div>
+
+          {/* Order Details */}
+          {order && <OrderConfirmationDetails order={order} />}
+
+          {/* Info Text */}
+          <div className="text-center mt-8">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Você receberá um e-mail de notificação quando seu pedido for enviado.
+            </p>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+              <Button onClick={() => navigate('/')}>Continuar Comprando</Button>
+              <Button variant="secondary" onClick={() => navigate('/orders')}>
+                Ir para Meus Pedidos
+              </Button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </Container>
   );
 };
 

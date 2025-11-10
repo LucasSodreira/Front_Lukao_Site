@@ -5,7 +5,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { PROCESS_STRIPE_PAYMENT, GET_ORDER_BY_ID, CREATE_PAYMENT_INTENT } from '@/graphql/checkoutQueries';
 import type { PaymentIntentResponse, StripePaymentResponse } from '@/types/domain';
-import { OrderSummary, StripePaymentForm } from '../components';
+import { OrderSummary, StripePaymentForm, ShippingForm, type ShippingFormData } from '../components';
 import { Container } from '@/ui/Container';
 import { Button } from '@/ui/Button';
 import { logger } from '@/utils';
@@ -46,12 +46,16 @@ if (!stripeKey) {
 }
 const stripePromise = loadStripe(stripeKey);
 
+type CheckoutStep = 'shipping' | 'payment' | 'confirmation';
+
 export const CheckoutPage = () => {
   const { orderId } = useParams<{ orderId: string }>();
   const navigate = useNavigate();
+  const [currentStep, setCurrentStep] = useState<CheckoutStep>('shipping');
   const [error, setError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentIntent, setPaymentIntent] = useState<PaymentIntentResponse | null>(null);
+  const [shippingData, setShippingData] = useState<ShippingFormData | null>(null);
 
   // Buscar dados do pedido do backend (mais seguro)
   const { data: orderData, loading: orderLoading, error: orderError } = useQuery<OrderQueryResult>(
@@ -93,13 +97,13 @@ export const CheckoutPage = () => {
     }
   }, [orderId, navigate]);
 
-  // Criar payment intent quando o pedido for carregado 
+  // Criar payment intent quando necessário
   useEffect(() => {
-    if (order && !paymentIntent && !paymentLoading) {
+    if (currentStep === 'payment' && order && !paymentIntent && !paymentLoading) {
       createPaymentIntent();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order?.id]); // Só executa quando o orderId mudar
+  }, [currentStep, order?.id]);
 
   // Lidar com erros de carregamento
   useEffect(() => {
@@ -108,6 +112,13 @@ export const CheckoutPage = () => {
       setError('Erro ao carregar dados do pedido. Tente novamente.');
     }
   }, [orderError, orderId]);
+
+  const handleShippingSubmit = async (data: ShippingFormData) => {
+    setShippingData(data);
+    // Você pode salvar os dados de envio no servidor aqui
+    logger.info('Dados de envio salvos', { data });
+    setCurrentStep('payment');
+  };
 
   const handlePaymentSuccess = async (paymentIntentId: string) => {
     if (!orderId) {
@@ -131,6 +142,7 @@ export const CheckoutPage = () => {
             order: {
               ...order,
               status: 'PAID',
+              address: shippingData,
             },
             paymentIntentId,
           },
@@ -150,8 +162,12 @@ export const CheckoutPage = () => {
     setError(error);
   };
 
+  const handleBackToShipping = () => {
+    setCurrentStep('shipping');
+  };
+
   // Mostrar loading enquanto carrega os dados
-  if (orderLoading || paymentLoading) {
+  if (orderLoading) {
     return (
       <Container>
         <div className="text-center space-y-4">
@@ -164,7 +180,7 @@ export const CheckoutPage = () => {
   }
 
   // Se não tem dados, redirecionar para carrinho
-  if (!order || !paymentIntent) {
+  if (!order) {
     return (
       <Container>
         <div className="text-center space-y-4">
@@ -176,88 +192,89 @@ export const CheckoutPage = () => {
     );
   }
 
-  const stripeOptions = {
-    clientSecret: paymentIntent.clientSecret,
-  };
-
   return (
     <Container>
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Finalizar Pagamento</h1>
-          <p className="text-gray-600 dark:text-gray-300 mt-2">Pedido #{order.id}</p>
-        </div>
+      <div className="max-w-7xl mx-auto py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
+          {/* Coluna Esquerda: Formulários */}
+          <div className="lg:col-span-7">
+            {error && (
+              <div className="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4 text-red-700 dark:text-red-300">
+                <p className="font-semibold">❌ Erro</p>
+                <p className="text-sm mt-1">{error}</p>
+                <button
+                  onClick={() => setError(null)}
+                  className="text-sm underline mt-2 hover:no-underline"
+                >
+                  Descartar
+                </button>
+              </div>
+            )}
 
-        {/* Progresso */}
-        <div className="mb-8 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center font-bold">
-              ✓
-            </div>
-            <span className="text-sm text-gray-600 dark:text-gray-300">Dados</span>
-          </div>
-          <div className="flex-1 h-1 bg-green-500 mx-2"></div>
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">
-              2
-            </div>
-            <span className="text-sm text-gray-600 dark:text-gray-300">Pagamento</span>
-          </div>
-          <div className="flex-1 h-1 bg-gray-300 dark:bg-gray-600 mx-2"></div>
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-300 flex items-center justify-center font-bold">
-              3
-            </div>
-            <span className="text-sm text-gray-600 dark:text-gray-300">Confirmação</span>
-          </div>
-        </div>
+            {currentStep === 'shipping' && (
+              <div className="bg-white dark:bg-gray-900/50 rounded-xl shadow-sm">
+                <ShippingForm
+                  onSubmit={handleShippingSubmit}
+                  onBack={() => navigate('/cart')}
+                  isLoading={isProcessing}
+                  initialData={shippingData || undefined}
+                />
+              </div>
+            )}
 
-        {/* Erro Global */}
-        {error && (
-          <div className="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4 text-red-700 dark:text-red-300">
-            <p className="font-semibold">❌ Erro</p>
-            <p className="text-sm mt-1">{error}</p>
-            <button
-              onClick={() => setError(null)}
-              className="text-sm underline mt-2 hover:no-underline"
-            >
-              Descartar
-            </button>
-          </div>
-        )}
+            {currentStep === 'payment' && (
+              <div className="space-y-6">
+                {/* Mostrar resumo do envio */}
+                {shippingData && (
+                  <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                    <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Informações de Envio</h3>
+                    <p className="text-sm text-blue-800 dark:text-blue-200">
+                      {shippingData.fullName}
+                      <br />
+                      {shippingData.street}, {shippingData.number}
+                      {shippingData.complement && `, ${shippingData.complement}`}
+                      <br />
+                      {shippingData.city} - {shippingData.state}, {shippingData.cep}
+                    </p>
+                  </div>
+                )}
 
-        {/* Conteúdo Principal */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-          {/* Coluna Esquerda: Formulário de Pagamento */}
-          <div className="lg:col-span-2">
-            <Elements stripe={stripePromise} options={stripeOptions}>
-              <StripePaymentForm
-                clientSecret={paymentIntent.clientSecret}
-                orderId={orderId!}
-                amount={Number(order.totalAmount)}
-                onSuccess={handlePaymentSuccess}
-                onError={handlePaymentError}
-                isLoading={isProcessing}
-              />
-            </Elements>
+                {paymentIntent ? (
+                  <Elements stripe={stripePromise} options={{ clientSecret: paymentIntent.clientSecret }}>
+                    <StripePaymentForm
+                      clientSecret={paymentIntent.clientSecret}
+                      orderId={orderId!}
+                      amount={Number(order.totalAmount)}
+                      onSuccess={handlePaymentSuccess}
+                      onError={handlePaymentError}
+                      isLoading={isProcessing}
+                    />
+                  </Elements>
+                ) : (
+                  <div className="text-center space-y-4">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                    <p className="text-gray-600 dark:text-gray-300">Preparando formulário de pagamento...</p>
+                  </div>
+                )}
+
+                <Button
+                  variant="secondary"
+                  onClick={handleBackToShipping}
+                  disabled={isProcessing || paymentLoading}
+                  className="w-full"
+                >
+                  Voltar para Envio
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Coluna Direita: Resumo do Pedido */}
-          <div>
-            <OrderSummary order={order} />
+          <div className="lg:col-span-5">
+            <div className="bg-white dark:bg-gray-900/50 rounded-xl shadow-sm p-6 lg:p-8 sticky top-8">
+              <OrderSummary order={order} loading={orderLoading} />
+            </div>
           </div>
-        </div>
-
-        {/* Botão de Voltar */}
-        <div className="text-center">
-          <Button
-            variant="secondary"
-            onClick={() => navigate('/cart')}
-            disabled={isProcessing}
-          >
-            Voltar ao Carrinho
-          </Button>
         </div>
       </div>
     </Container>
