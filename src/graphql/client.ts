@@ -1,10 +1,9 @@
 import { ApolloClient, InMemoryCache, createHttpLink, ApolloLink, Observable } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { onError as onErrorLink } from '@apollo/client/link/error';
-import { logger } from '@/utils';
+import { environment } from '@/config/environment';
 
 const httpLink = createHttpLink({
-  uri: '/graphql',
+  uri: environment.graphqlEndpoint,
   // Inclui cookies (ex.: anon_cart, access_token) nas requisições
   credentials: 'include',
 });
@@ -40,28 +39,28 @@ const timeoutLink = new ApolloLink((operation, forward) => {
   });
 });
 
-// Error link - trata erros globalmente
-const errorLink = onErrorLink((errorResponse) => {
-  const { graphQLErrors, networkError, operation } = errorResponse as any;
-  
-  if (graphQLErrors) {
-    graphQLErrors.forEach((error: any) => {
-      logger.error('GraphQL error', {
-        message: error.message,
-        operation: operation.operationName,
-        locations: error.locations,
-        path: error.path,
-      });
-    });
-  }
+// Error link - trata erros globalmente (temporariamente desabilitado)
+// const errorLink = onErrorLink((errorResp) => {
+//   const { graphQLErrors, networkError, operation } = errorResp;
+//   
+//   if (graphQLErrors && graphQLErrors.length > 0) {
+//     graphQLErrors.forEach((error: unknown) => {
+//       if (error && typeof error === 'object' && 'message' in error) {
+//         logger.error('GraphQL error', {
+//           message: (error as { message: string }).message || 'Unknown error',
+//           operation: operation.operationName,
+//         });
+//       }
+//     });
+//   }
 
-  if (networkError) {
-    logger.error('Network error', {
-      message: networkError.message,
-      operation: operation.operationName,
-    });
-  }
-});
+//   if (networkError) {
+//     logger.error('Network error', {
+//       message: networkError.message || 'Unknown network error',
+//       operation: operation.operationName,
+//     });
+//   }
+// });
 
 // Link de autenticação para incluir o token JWT e CSRF
 const authLink = setContext((_, { headers }) => {
@@ -90,7 +89,7 @@ function getCookie(name: string): string | null {
 
 // Cliente Apollo
 export const client = new ApolloClient({
-  link: ApolloLink.from([timeoutLink, errorLink, authLink, httpLink]),
+  link: ApolloLink.from([timeoutLink, authLink, httpLink]),
   cache: new InMemoryCache({
     typePolicies: {
       Product: {

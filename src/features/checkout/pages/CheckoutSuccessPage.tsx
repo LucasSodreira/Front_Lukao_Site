@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CheckCircle2 } from 'lucide-react';
 import { useQuery } from '@apollo/client/react';
@@ -6,6 +7,7 @@ import { Container } from '@/ui/Container';
 import { Button } from '@/ui/Button';
 import { OrderConfirmationDetails } from '../components/OrderConfirmationDetails';
 import { GET_ORDER_BY_ID } from '@/graphql/checkoutQueries';
+import { useCheckoutState } from '../hooks';
 import { logger } from '@/utils';
 
 interface Order {
@@ -45,6 +47,12 @@ interface OrderQueryResult {
 export const CheckoutSuccessPage: FC = () => {
   const { orderId } = useParams<{ orderId: string }>();
   const navigate = useNavigate();
+  const { clearCheckout } = useCheckoutState();
+
+  // Limpar dados de checkout quando chegar na página de sucesso
+  useEffect(() => {
+    clearCheckout();
+  }, [clearCheckout]);
 
   // Buscar dados do pedido da API
   const { data: orderData, loading, error: queryError } = useQuery<OrderQueryResult>(

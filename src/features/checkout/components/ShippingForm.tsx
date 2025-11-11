@@ -1,8 +1,6 @@
 import type { FC } from 'react';
 import { useState, useCallback } from 'react';
-import { ArrowLeft, Loader } from 'lucide-react';
 import { ShippingFormFields, type ShippingFormData } from './ShippingFormFields';
-import { Button } from '@/ui/Button';
 
 interface ShippingFormProps {
   onSubmit: (data: ShippingFormData) => Promise<void>;
@@ -117,37 +115,9 @@ export const ShippingForm: FC<ShippingFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-      {/* Barra de Progresso */}
-      <div className="flex flex-col gap-3 p-4 mb-8">
-        <div className="flex gap-6 justify-between text-sm font-medium text-gray-800 dark:text-gray-300">
-          <p className="text-primary dark:text-primary/80 font-bold">1. Envio</p>
-          <p className="text-gray-400 dark:text-gray-500">2. Pagamento</p>
-          <p className="text-gray-400 dark:text-gray-500">3. Revisão</p>
-        </div>
-        <div className="rounded-full bg-gray-200 dark:bg-gray-700 h-1.5">
-          <div className="h-1.5 rounded-full bg-primary" style={{ width: '33%' }}></div>
-        </div>
-      </div>
-
-      {/* Heading */}
-      <div className="flex flex-wrap justify-between gap-3 p-4 border-b border-gray-200 dark:border-gray-700">
-        <p className="text-gray-800 dark:text-white text-3xl font-bold leading-tight tracking-tight">
-          Informações de Envio
-        </p>
-      </div>
-
-      {/* Helper Text */}
-      <p className="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal pb-3 pt-4 px-4">
-        Já tem uma conta?{' '}
-        <a className="text-primary underline" href="/login">
-          Faça login
-        </a>{' '}
-        para um checkout mais rápido.
-      </p>
-
       {/* Erro Global */}
       {submitError && (
-        <div className="mx-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+        <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
           <p className="text-red-700 dark:text-red-300 text-sm">{submitError}</p>
         </div>
       )}
@@ -160,34 +130,25 @@ export const ShippingForm: FC<ShippingFormProps> = ({
         isLoading={isSubmitting || isLoading}
       />
 
-      {/* Botões de Ação */}
-      <div className="flex items-center justify-between mt-8 px-4 pb-4">
+      {/* Action Buttons */}
+      <div className="flex items-center justify-between mt-8">
         <button
           type="button"
           onClick={onBack}
           disabled={isSubmitting || isLoading}
           className="flex items-center gap-2 text-sm font-semibold text-primary dark:text-primary/90 hover:text-primary/80 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
-          <ArrowLeft size={16} />
+          <span className="material-symbols-outlined text-base">arrow_back</span>
           Voltar ao carrinho
         </button>
-        <Button
+        <button
           type="submit"
           disabled={isSubmitting || isLoading}
-          className="flex items-center gap-2"
+          className="flex max-w-xs cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-primary text-white gap-2 text-base font-bold leading-normal tracking-wide min-w-0 px-8 hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isSubmitting || isLoading ? (
-            <>
-              <Loader size={16} className="animate-spin" />
-              Processando...
-            </>
-          ) : (
-            'Continuar para Pagamento'
-          )}
-        </Button>
+          {isSubmitting || isLoading ? 'Processando...' : 'Ir para Revisão'}
+        </button>
       </div>
     </form>
   );
 };
-
-export default ShippingForm;

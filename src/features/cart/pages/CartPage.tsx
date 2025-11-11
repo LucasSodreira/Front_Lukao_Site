@@ -1,79 +1,68 @@
 import { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client/react';
-import { useNavigate } from 'react-router-dom';
-import { GET_MY_CART, UPDATE_CART_ITEM, REMOVE_FROM_CART, CLEAR_CART, GET_MY_ADDRESSES } from '@/graphql/queries';
-import { AUTHENTICATED_CHECKOUT } from '@/graphql/checkoutQueries';
-import type { Cart, CartItem } from '@/types';
-import { Card, CardBody } from '@/ui/Card';
-import { Button } from '@/ui/Button';
-import { CheckoutModal } from '../components/CheckoutModal';
-import { useAuth } from '@/shared/hooks';
+import { useNavigate, Link } from 'react-router-dom';
+import { GET_MY_CART, UPDATE_CART_ITEM, REMOVE_FROM_CART } from '@/graphql/queries';
+import type { Cart } from '@/types';
+import { CartItem, OrderSummary, ShippingCalculator } from '../components';
 import { logger, ErrorHandler, InputValidator } from '@/utils';
 
 interface CartQueryResult {
   myCart: Cart;
 }
 
-interface AddressesQueryResult {
-  myAddresses: Array<{
-    id: string;
-    street: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    country: string;
-    primary: boolean;
-    createdAt: string;
-  }>;
-}
-
-interface AuthenticatedCheckoutResult {
-  checkout: {
-    id: string;
-    status: string;
-    totalAmount: number;
-    shippingCost: number;
-    items: Array<{
-      product: {
-        title: string;
-      };
-      quantity: number;
-      totalPrice: number;
-    }>;
-    createdAt: string;
-  };
-}
-
-const SHIPPING_COST = 15.0; // Frete fixo por enquanto
+const DEFAULT_SHIPPING = 15.0;
 
 export const CartPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [shippingCost, setShippingCost] = useState(DEFAULT_SHIPPING);
 
-  const { loading, error, data } = useQuery<CartQueryResult>(GET_MY_CART, { fetchPolicy: 'network-only' });
-  
-  // Carregar endereços se autenticado
-  const { data: addressesData } = useQuery<AddressesQueryResult>(GET_MY_ADDRESSES, {
-    skip: !isAuthenticated,
-    fetchPolicy: 'network-only',
+  const { loading, error, data } = useQuery<CartQueryResult>(GET_MY_CART, { 
+    fetchPolicy: 'network-only' 
   });
 
-  const [updateCartItem] = useMutation(UPDATE_CART_ITEM, { refetchQueries: [{ query: GET_MY_CART }] });
-  const [removeFromCart] = useMutation(REMOVE_FROM_CART, { refetchQueries: [{ query: GET_MY_CART }] });
-  const [clearCart, { loading: clearing }] = useMutation(CLEAR_CART, { refetchQueries: [{ query: GET_MY_CART }] });
-  const [authenticatedCheckout] = useMutation<AuthenticatedCheckoutResult>(AUTHENTICATED_CHECKOUT);
+  const [updateCartItem] = useMutation(UPDATE_CART_ITEM, { 
+    refetchQueries: [{ query: GET_MY_CART }] 
+  });
+  
+  const [removeFromCart] = useMutation(REMOVE_FROM_CART, { 
+    refetchQueries: [{ query: GET_MY_CART }] 
+  });
 
-  if (loading) return <div className="text-gray-600 dark:text-gray-300">Carregando carrinho...</div>;
+  if (loading) {
+    return (
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="animate-pulse space-y-6">
+          <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded w-1/3" />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="lg:col-span-8 space-y-4">
+              {[1, 2].map((i) => (
+                <div key={i} className="h-40 bg-gray-200 dark:bg-gray-700 rounded-xl" />
+              ))}
+            </div>
+            <div className="lg:col-span-4">
+              <div className="h-96 bg-gray-200 dark:bg-gray-700 rounded-xl" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (error) {
     logger.error('Erro ao carregar carrinho', { error: error.message });
     return (
-      <div className="text-center space-y-4 py-8">
-        <div className="text-red-600 dark:text-red-400 text-lg font-semibold">
-          {ErrorHandler.getUserFriendlyMessage(error)}
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center space-y-4">
+          <div className="text-red-600 dark:text-red-400 text-lg font-semibold">
+            {ErrorHandler.getUserFriendlyMessage(error)}
+          </div>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90"
+          >
+            Tentar Novamente
+          </button>
         </div>
-        <Button onClick={() => window.location.reload()}>Tentar Novamente</Button>
       </div>
     );
   }
@@ -82,69 +71,47 @@ export const CartPage = () => {
 
   if (!cart || cart.items.length === 0) {
     return (
-      <div className="space-y-4">
-        <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">Seu Carrinho</h1>
-        <p className="text-gray-600 dark:text-gray-300">Seu carrinho está vazio</p>
-        <Button onClick={() => navigate('/products')}>Continuar Comprando</Button>
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center space-y-6">
+          <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-800">
+            <span className="material-symbols-outlined text-6xl text-gray-400">
+              shopping_cart
+            </span>
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
+              Seu carrinho está vazio
+            </h1>
+            <p className="text-gray-500 dark:text-gray-400">
+              Adicione produtos para começar suas compras
+            </p>
+          </div>
+          <Link
+            to="/products"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+          >
+            <span className="material-symbols-outlined">arrow_back</span>
+            Continuar Comprando
+          </Link>
+        </div>
       </div>
     );
   }
 
-  // Verificar autenticação antes de permitir checkout
-  const handleCheckoutClick = () => {
-    if (!isAuthenticated) {
-      // Redirecionar para login com mensagem
-      navigate('/login', { state: { from: '/cart', message: 'Faça login para continuar com a compra' } });
-      return;
-    }
-    setIsCheckoutOpen(true);
-  };
-
-  const handleCheckoutSubmit = async (formData: Record<string, string>) => {
-    setIsProcessing(true);
-    try {
-      // ✅ Usuário DEVE estar autenticado para chegar aqui
-      const primaryAddress = addressesData?.myAddresses.find((addr) => addr.primary);
-      const addressId = primaryAddress?.id;
-      
-      if (!addressId) {
-        throw new Error('Por favor, configure um endereço de entrega primário');
-      }
-
-      // 1. Criar o pedido (anteriormente authenticatedCheckout)
-      const orderResult = await authenticatedCheckout({
-        variables: {
-          shippingAddressId: addressId,
-          notes: formData.notes || '',
-        },
-      });
-
-      const order = orderResult.data?.checkout;
-      if (!order) throw new Error('Falha ao criar pedido');
-
-      
-      // Navegar para a página de checkout com o ID do pedido
-      setIsCheckoutOpen(false);
-      navigate(`/checkout/${order.id}`);
-
-    } catch (err) {
-      logger.error('Erro no checkout', { error: err });
-      const friendlyMessage = ErrorHandler.getUserFriendlyMessage(err);
-      alert(friendlyMessage);
-    } finally {
-      setIsProcessing(false);
-    }
+  const handleCheckout = () => {
+    // A rota /checkout já está protegida com PrivateRoute no App.tsx
+    // Se o usuário não estiver logado, será redirecionado automaticamente para /login
+    // Na página de checkout, o usuário escolherá/criará o endereço
+    navigate('/checkout');
   };
 
   const handleUpdateQuantity = (productId: string, newQuantity: number) => {
-    // Validar ID do produto
     if (!InputValidator.validateProductId(productId)) {
       logger.error('ID de produto inválido', { productId });
       alert('Erro: ID de produto inválido');
       return;
     }
 
-    // Validar quantidade
     if (!InputValidator.validateQuantity(newQuantity)) {
       alert('Quantidade inválida. Mínimo: 1, Máximo: 999');
       return;
@@ -155,88 +122,78 @@ export const CartPage = () => {
     });
   };
 
-  return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">Seu Carrinho</h1>
+  const handleRemoveItem = (productId: string) => {
+    if (!InputValidator.validateProductId(productId)) {
+      logger.error('ID de produto inválido', { productId });
+      return;
+    }
 
-      <div className="space-y-3">
-        {cart.items.map((item: CartItem) => (
-          <Card key={item.id}>
-            <CardBody className="grid grid-cols-1 sm:grid-cols-[120px_1fr_auto] gap-4 items-center">
-              <div>
-                <p className="font-medium text-gray-900 dark:text-gray-100">{item.product.title}</p>
-                <p className="text-sm text-gray-600 dark:text-gray-300">ID: {item.product.id}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600 dark:text-gray-300">Preço: R$ {item.product.price}</p>
-                <p className="text-sm text-gray-600 dark:text-gray-300">Total: R$ {item.totalPrice}</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => handleUpdateQuantity(item.product.id, Math.max(1, item.quantity - 1))}
-                  disabled={item.quantity <= 1}
-                >
-                  -
-                </Button>
-                <span className="w-8 text-center">{item.quantity}</span>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => handleUpdateQuantity(item.product.id, item.quantity + 1)}
-                  disabled={item.quantity >= 999}
-                >
-                  +
-                </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={() => removeFromCart({ variables: { productId: item.product.id } })}
-                >
-                  Remover
-                </Button>
-              </div>
-            </CardBody>
-          </Card>
-        ))}
+    removeFromCart({
+      variables: { productId },
+    });
+  };
+
+  const subtotal = Number(cart.total) || 0;
+  const discount = 0; // Pode ser calculado com cupons
+  const total = subtotal - discount + shippingCost;
+
+  return (
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-8">
+      {/* Cabeçalho */}
+      <div className="mb-10">
+        <h1 className="text-gray-800 dark:text-white text-4xl md:text-5xl font-bold">
+          Carrinho de Compras
+        </h1>
+        <p className="mt-2 text-lg text-gray-500 dark:text-gray-400">
+          Você tem {cart.items.length} {cart.items.length === 1 ? 'item' : 'itens'} no seu carrinho.
+        </p>
       </div>
 
-      <Card>
-        <CardBody className="space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-gray-600 dark:text-gray-300">Subtotal:</span>
-            <span className="font-medium text-gray-900 dark:text-gray-100">R$ {(Number(cart.total) || 0).toFixed(2)}</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-gray-600 dark:text-gray-300">Frete:</span>
-            <span className="font-medium text-gray-900 dark:text-gray-100">R$ {SHIPPING_COST.toFixed(2)}</span>
-          </div>
-          <div className="border-t border-gray-200 dark:border-gray-700 pt-4 flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-              Total: R$ {((Number(cart.total) || 0) + SHIPPING_COST).toFixed(2)}
-            </h3>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button variant="secondary" onClick={() => clearCart()} disabled={clearing} className="flex-1">
-              Limpar Carrinho
-            </Button>
-            <Button onClick={handleCheckoutClick} className="flex-1">
-              Finalizar Compra
-            </Button>
-          </div>
-        </CardBody>
-      </Card>
+      {/* Grid Principal */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        {/* Lista de Itens */}
+        <div className="lg:col-span-8 space-y-6">
+          {cart.items.map((item) => (
+            <CartItem
+              key={item.id}
+              item={item}
+              onUpdateQuantity={handleUpdateQuantity}
+              onRemove={handleRemoveItem}
+            />
+          ))}
 
-      <CheckoutModal
-        isOpen={isCheckoutOpen}
-        cartTotal={Number(cart.total) || 0}
-        shippingCost={SHIPPING_COST}
-        onClose={() => setIsCheckoutOpen(false)}
-        onSubmit={handleCheckoutSubmit}
-        isLoading={isProcessing}
-      />
-    </div>
+          {/* Link para continuar comprando */}
+          <div className="pt-4 text-center">
+            <Link
+              to="/products"
+              className="inline-flex items-center gap-2 text-primary dark:text-blue-400 font-semibold text-sm hover:underline"
+            >
+              <span className="material-symbols-outlined">arrow_back</span>
+              Continuar comprando
+            </Link>
+          </div>
+        </div>
+
+        {/* Sidebar - Resumo e Opções */}
+        <aside className="lg:col-span-4 w-full lg:sticky lg:top-28 space-y-6">
+          {/* Resumo do Pedido */}
+          <OrderSummary
+            subtotal={subtotal}
+            discount={discount}
+            shipping={shippingCost}
+            total={total}
+            onCheckout={handleCheckout}
+          />
+
+          {/* Calculadora de Frete e Cupom */}
+          <ShippingCalculator
+            onShippingChange={(option: { id: string; name: string; description: string; price: number }) => 
+              setShippingCost(option.price)
+            }
+          />
+        </aside>
+      </div>
+    </main>
   );
 };
 

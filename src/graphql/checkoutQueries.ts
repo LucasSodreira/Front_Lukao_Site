@@ -22,6 +22,76 @@ export const AUTHENTICATED_CHECKOUT = gql`
   }
 `;
 
+// Validar endereço de envio
+export const VALIDATE_SHIPPING_ADDRESS = gql`
+  mutation ValidateShippingAddress(
+    $street: String!
+    $number: String!
+    $neighborhood: String!
+    $city: String!
+    $state: String!
+    $cep: String!
+    $complement: String
+  ) {
+    validateShippingAddress(
+      street: $street
+      number: $number
+      neighborhood: $neighborhood
+      city: $city
+      state: $state
+      cep: $cep
+      complement: $complement
+    ) {
+      isValid
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+// Validar informações de pagamento
+export const VALIDATE_PAYMENT_INFO = gql`
+  mutation ValidatePaymentInfo(
+    $method: String!
+    $cardNumber: String
+    $cardExpiry: String
+    $cardCvv: String
+    $installments: Int
+  ) {
+    validatePaymentInfo(
+      method: $method
+      cardNumber: $cardNumber
+      cardExpiry: $cardExpiry
+      cardCvv: $cardCvv
+      installments: $installments
+    ) {
+      isValid
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+// Calcular frete
+export const CALCULATE_SHIPPING = gql`
+  mutation CalculateShipping(
+    $cep: String!
+    $state: String!
+    $city: String!
+  ) {
+    calculateShipping(cep: $cep, state: $state, city: $city) {
+      success
+      shippingCost
+      estimatedDays
+      error
+    }
+  }
+`;
+
 export const CREATE_PAYMENT_INTENT = gql`
   mutation CreatePaymentIntent($orderId: ID!) {
     createPaymentIntent(orderId: $orderId) {

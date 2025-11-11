@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pagamento - ModernMan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#195de6",
+              "background-light": "#f6f6f8",
+              "background-dark": "#111621",
+            },
+            fontFamily: {
+              "display": ["Manrope", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+      }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#212529] dark:text-gray-300">
+<div class="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<header class="w-full bg-background-light dark:bg-background-dark/80 backdrop-blur-sm sticky top-0 z-20 border-b border-[#CED4DA] dark:border-gray-700">
+<div class="container mx-auto px-4">
+<div class="flex items-center justify-between whitespace-nowrap h-16">
+<div class="flex items-center gap-4 text-[#0e121b] dark:text-white">
+<div class="size-6 text-primary">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill-rule="evenodd"></path>
+<path clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-[#0e121b] dark:text-white text-xl font-bold tracking-[-0.015em]">ModernMan</h2>
+</div>
+<div class="hidden lg:flex flex-1 justify-center gap-8">
+<a class="text-[#212529] dark:text-gray-300 text-sm font-medium" href="#">Novidades</a>
+<a class="text-[#212529] dark:text-gray-300 text-sm font-medium" href="#">Roupas</a>
+<a class="text-[#212529] dark:text-gray-300 text-sm font-medium" href="#">Acessórios</a>
+<a class="text-[#212529] dark:text-gray-300 text-sm font-medium" href="#">Marcas</a>
+<a class="text-[#212529] dark:text-gray-300 text-sm font-medium" href="#">Promoções</a>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex items-center justify-center rounded-lg h-10 bg-black/5 dark:bg-white/10 text-[#0e121b] dark:text-white gap-2 text-sm min-w-0 px-2.5">
+<span class="material-symbols-outlined text-xl">search</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 bg-black/5 dark:bg-white/10 text-[#0e121b] dark:text-white gap-2 text-sm min-w-0 px-2.5">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 bg-black/5 dark:bg-white/10 text-[#0e121b] dark:text-white gap-2 text-sm min-w-0 px-2.5">
+<span class="material-symbols-outlined text-xl">shopping_bag</span>
+</button>
+<div class="hidden md:block bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 ml-2" data-alt="User profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDiDUtIgtZrdaY16MG4NOF4i7_Kbv8vexUAa6RSo9hYBytM2bmIy-l5d5SwsVp8xTR3983vDlcvL3ph5ampVF8vSZPLORLOv0tjIrcdekluKIv6wFoe5sIgLdPPuPGq2tJGmJHEirxSIUo50OW9lbqSMIzKSDXCxV-kXwgW1hiiNWSXROtBP9-xnFQFYwjPqWXGa0pAE9b2WreiBZZaiqLbrNpYNPt42Xuumt38avKThX9Q6lwEajrji8mzJ9mwyDqEKLKiJcrIWj8");'></div>
+</div>
+</div>
+</div>
+</header>
+<main class="container mx-auto px-4 py-8 md:py-12">
+<div class="flex flex-wrap gap-2 mb-8">
+<a class="text-gray-500 dark:text-gray-400 text-sm font-medium" href="#">Carrinho</a>
+<span class="text-gray-500 dark:text-gray-400 text-sm font-medium">/</span>
+<a class="text-gray-500 dark:text-gray-400 text-sm font-medium" href="#">Endereço</a>
+<span class="text-gray-500 dark:text-gray-400 text-sm font-medium">/</span>
+<span class="text-[#0e121b] dark:text-white text-sm font-bold">Pagamento</span>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 xl:gap-12">
+<div class="lg:col-span-2">
+<div class="mb-6">
+<h1 class="text-[#0e121b] dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">Como você prefere pagar?</h1>
+</div>
+<div class="mb-6">
+<div class="flex h-12 items-center justify-center rounded-xl bg-black/5 dark:bg-white/10 p-1.5">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-3 has-[:checked]:bg-white has-[:checked]:dark:bg-background-dark has-[:checked]:shadow-md has-[:checked]:text-primary text-[#4e6797] dark:text-gray-400 text-sm font-bold">
+<span class="truncate">Cartão de Crédito</span>
+<input checked="" class="invisible w-0" name="payment-method" type="radio" value="Cartão de Crédito"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-3 has-[:checked]:bg-white has-[:checked]:dark:bg-background-dark has-[:checked]:shadow-md has-[:checked]:text-primary text-[#4e6797] dark:text-gray-400 text-sm font-bold">
+<span class="truncate">Pix</span>
+<input class="invisible w-0" name="payment-method" type="radio" value="Pix"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-3 has-[:checked]:bg-white has-[:checked]:dark:bg-background-dark has-[:checked]:shadow-md has-[:checked]:text-primary text-[#4e6797] dark:text-gray-400 text-sm font-bold">
+<span class="truncate">Boleto Bancário</span>
+<input class="invisible w-0" name="payment-method" type="radio" value="Boleto Bancário"/>
+</label>
+</div>
+</div>
+<div class="bg-white dark:bg-background-dark/80 p-6 md:p-8 rounded-xl shadow-sm border border-transparent dark:border-gray-800">
+<p class="text-base font-normal leading-normal pb-6 text-gray-600 dark:text-gray-400">Pague com cartão de crédito com aprovação imediata.</p>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-[#212529] dark:text-gray-300 mb-1.5" for="cardNumber">Número do Cartão</label>
+<input class="w-full rounded-lg border-[#CED4DA] dark:border-gray-700 bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" id="cardNumber" placeholder="0000 0000 0000 0000" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-[#212529] dark:text-gray-300 mb-1.5" for="cardName">Nome impresso no cartão</label>
+<input class="w-full rounded-lg border-[#CED4DA] dark:border-gray-700 bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" id="cardName" placeholder="Seu nome completo" type="text"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="md:col-span-2">
+<label class="block text-sm font-medium text-[#212529] dark:text-gray-300 mb-1.5" for="cardExpiry">Validade (MM/AA)</label>
+<input class="w-full rounded-lg border-[#CED4DA] dark:border-gray-700 bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" id="cardExpiry" placeholder="MM/AA" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-[#212529] dark:text-gray-300 mb-1.5" for="cardCvv">CVV</label>
+<input class="w-full rounded-lg border-[#CED4DA] dark:border-gray-700 bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" id="cardCvv" placeholder="123" type="text"/>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-[#212529] dark:text-gray-300 mb-1.5" for="installments">Parcelamento</label>
+<select class="w-full rounded-lg border-[#CED4DA] dark:border-gray-700 bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary" id="installments">
+<option>1x de R$ 389,90 (sem juros)</option>
+<option>2x de R$ 194,95 (sem juros)</option>
+<option>3x de R$ 129,97 (sem juros)</option>
+<option>4x de R$ 102,15 (com juros)</option>
+</select>
+</div>
+<div class="flex items-center pt-2">
+<input class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" id="saveCard" type="checkbox"/>
+<label class="ml-2 block text-sm text-[#212529] dark:text-gray-300" for="saveCard">Salvar cartão para compras futuras</label>
+</div>
+</div>
+</div>
+<div class="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined text-lg">lock</span>
+<span>Seus dados estão protegidos. Compra 100% segura.</span>
+</div>
+<div class="flex items-center gap-2">
+<img alt="Visa" class="h-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBy8JZYQ2dPbPVvD9n5TGRyfUzo85MPvyPf-ejowpPGaMvN1qIuUSouBJA0a6NX5RzigQZN2eutmHwfyexnEBlhBzVds_hg63vZsxpeuy-mpdWLgvL-AB3G2I5Id1DDTzbsBIRfK_NY7HslIoTFq2OnTp_EOyOF_braAvoVdG5pKktDEYpk1mHBta2v25hfnfJN_7HF5MLo2mR0xyd9JXKpHiYIUwl-NKlc6Lj5bmC5cg9yTtfwxgecz12B_0iJ5hjUL0ylks-kYuY"/>
+<img alt="Mastercard" class="h-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6lgqZFRJurmSTqrbDYpYDQrBepdZZdvxRjpDyhqEKyWo_81PBxizTjlxXp75hiBGQ6tP1hU6Tny9cjn7f_P0cG3NqCiRSzmTxusubVRS6Md4ocx0byqM5yImjt8aGhA-02Bx7L9cpOU1JWEPtahw1cMOOIIbmsvAqteMe0EWAsZ_RAErCYWEmwC3ZC-Uikri4XwgsNTET-07Lj4JDr5wXkiwAp5w0_ksYVDgq7hkCo3bkOPrYm0PMSUIh7ZDUiBI4LRClqwCmir4"/>
+<img alt="American Express" class="h-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUZCCoEZuaIvz2TiVO8-kNyIj_M3EtXnD9i4gRJ9pOAzGcuoy0t4qI9DNpPDC5rZYa0wplDICFH3hdipRVxbvvHJJHWdI4jCTkmsNAD_kwlST8_AR3xjCmD1gHAOtHeNWCldKBYfiUh8zEvalpU_Ttok3MzATIbVl4p90dtAbV6rCnwT-GI4Oc61tiXH1PH6NAa3bypB_lBiwW6cWqB-mNIYKG6T6FK8IOLbRxi6VwgMEZ-x-RMSjyKCgbkM7p6A1g3HDOoD3WeWc"/>
+</div>
+</div>
+</div>
+<div class="lg:col-span-1">
+<div class="bg-white dark:bg-background-dark/80 p-6 rounded-xl shadow-sm border border-transparent dark:border-gray-800 sticky top-24">
+<h3 class="text-xl font-bold text-[#0e121b] dark:text-white mb-6">Resumo da Compra</h3>
+<div class="space-y-4">
+<div class="flex items-start gap-4">
+<img class="h-16 w-16 rounded-lg object-cover" data-alt="Black modern t-shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCd5NXaM4DQB4dZn3MeL2ifR8SjhXi3V4Jw3SzpljpdQ0Pp4Y1c3Pbcu7B1pv72jmiaUFVoGaMn2T-KGU-iADjZo8hVRgB8zKPNhNCEk9iI0ColrX5n2VhDdE2ecVqCxVRAkoPfbYnDeOWzUw-V5ESpyFtmiOA6jCZF9Ovrf4eGrK4pbjND9yOFhl4CE7reSqFMIdtB-DimfNG6Rba5gPGc-nh0lPJVY2GjdCZbwdsnauxReTH5auiX8GFVagasVshdHQ4OuyVDg_E"/>
+<div class="flex-1">
+<p class="font-medium text-[#212529] dark:text-gray-300">Camiseta Minimalista Preta</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">Tamanho: M / Qtd: 1</p>
+</div>
+<p class="font-semibold text-[#212529] dark:text-gray-300">R$ 159,90</p>
+</div>
+<div class="flex items-start gap-4">
+<img class="h-16 w-16 rounded-lg object-cover" data-alt="Red and black running shoes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCt9I6F_0FrZtop093NQRyyZkyyfApfe-MB0p3TSLuywoTclyCbv3-I6EBjjxF-NSKuDuWgpWChRkSvnpg9IY5wnUeguCBgTDhTSHhUWmC7VQERsAkZaBf5Rd8AlIDo6pKgGy5AoGjtDthbMKgUlT3-5XHi0hnT8MPhAcKiltm-o1Y6WqwUgqNY_t8_8KocFKDMoIIwZCDti4qWo397ftfkshMzkeO4UeV_fGbRGsis56ABGsQdes9vWaeAei3jdfVrGhwa8geiwVw"/>
+<div class="flex-1">
+<p class="font-medium text-[#212529] dark:text-gray-300">Tênis Esportivo Runner</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">Tamanho: 42 / Qtd: 1</p>
+</div>
+<p class="font-semibold text-[#212529] dark:text-gray-300">R$ 210,00</p>
+</div>
+</div>
+<div class="border-t border-[#CED4DA] dark:border-gray-700 my-6"></div>
+<div class="space-y-3 text-sm">
+<div class="flex justify-between text-gray-600 dark:text-gray-400">
+<span>Subtotal</span>
+<span>R$ 369,90</span>
+</div>
+<div class="flex justify-between text-gray-600 dark:text-gray-400">
+<span>Frete</span>
+<span>R$ 20,00</span>
+</div>
+</div>
+<div class="border-t border-[#CED4DA] dark:border-gray-700 my-6"></div>
+<div class="flex justify-between items-center text-lg font-bold text-[#0e121b] dark:text-white">
+<span>Total</span>
+<span>R$ 389,90</span>
+</div>
+<button class="mt-8 flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 bg-primary text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">Finalizar Compra</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

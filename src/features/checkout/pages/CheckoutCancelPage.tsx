@@ -1,9 +1,17 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/ui/Button';
 import { Card, CardBody } from '@/ui/Card';
+import { useCheckoutState } from '../hooks';
 
 export const CheckoutCancelPage = () => {
   const navigate = useNavigate();
+  const { clearCheckout } = useCheckoutState();
+
+  // Limpar dados de checkout quando cancelar
+  useEffect(() => {
+    clearCheckout();
+  }, [clearCheckout]);
 
   return (
     <div className="space-y-6">
