@@ -120,7 +120,8 @@ export const CheckoutAddressPage = () => {
         cep: data.cep,
       });
       setSelectedAddressId(null);
-      setCurrentStep('address');
+  // Passo concluído: endereço salvo, avançar para etapa de revisão
+  setCurrentStep('review');
       navigate('/checkout/review');
     } catch {
       setValidationErrors({
@@ -177,7 +178,8 @@ export const CheckoutAddressPage = () => {
         return;
       }
 
-      setCurrentStep('address');
+  // Endereço selecionado válido, avança para revisão
+  setCurrentStep('review');
       navigate('/checkout/review');
     } catch {
       setValidationErrors({

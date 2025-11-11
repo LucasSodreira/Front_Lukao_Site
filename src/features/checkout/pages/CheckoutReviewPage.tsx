@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@apollo/client/react';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { GET_MY_CART } from '@/graphql/queries';
+import { AUTHENTICATED_CHECKOUT, CHECKOUT_WITH_ADDRESS } from '@/graphql/checkoutQueries';
 import type { Cart } from '@/types';
 import { CheckoutBreadcrumb } from '../components/CheckoutBreadcrumb';
 import { useCheckoutState } from '../hooks';
@@ -9,12 +10,46 @@ interface CartQueryResult {
   myCart: Cart;
 }
 
+interface CheckoutMutationResult {
+  checkout: {
+    id: string;
+    status: string;
+    totalAmount: number;
+    shippingCost: number;
+    items: Array<{
+      id: string;
+      product: { id: string; title: string };
+      quantity: number;
+      totalPrice: number;
+    }>;
+    createdAt: string;
+  };
+}
+
+interface CheckoutWithAddressResult {
+  checkoutWithAddress: {
+    id: string;
+    status: string;
+    totalAmount: number;
+    shippingCost: number;
+    items: Array<{
+      id: string;
+      product: { id: string; title: string };
+      quantity: number;
+      totalPrice: number;
+    }>;
+    createdAt: string;
+  };
+}
+
 export const CheckoutReviewPage = () => {
   const navigate = useNavigate();
-  const { shippingAddress, setCurrentStep } = useCheckoutState();
+  const { shippingAddress, selectedAddressId, setOrderId, setCurrentStep } = useCheckoutState();
   const { data, loading } = useQuery<CartQueryResult>(GET_MY_CART, {
     fetchPolicy: 'network-only',
   });
+  const [checkoutMutate, { loading: checkoutLoading }] = useMutation<CheckoutMutationResult>(AUTHENTICATED_CHECKOUT);
+  const [checkoutInlineMutate] = useMutation<CheckoutWithAddressResult>(CHECKOUT_WITH_ADDRESS);
 
   const cart = data?.myCart;
 
@@ -45,12 +80,47 @@ export const CheckoutReviewPage = () => {
   const shipping = 20.0; // TODO: Usar valor calculado na página de endereço
   const total = subtotal + shipping;
 
-  const handleProceedToPayment = () => {
+  const handleProceedToPayment = async () => {
     try {
-      setCurrentStep('review');
+      let createdOrderId: string | undefined;
+
+      if (selectedAddressId) {
+        // Fluxo com endereço salvo
+        const { data: checkoutData } = await checkoutMutate({
+          variables: { shippingAddressId: selectedAddressId },
+        });
+        createdOrderId = checkoutData?.checkout?.id;
+      } else if (shippingAddress) {
+        // Fluxo inline: criar pedido com dados do endereço preenchidos no formulário
+        const createInput = {
+          street: shippingAddress.street,
+          city: shippingAddress.city,
+          state: shippingAddress.state,
+          zipCode: shippingAddress.cep,
+          country: 'BR',
+          primary: false,
+        };
+        const { data: inlineData } = await checkoutInlineMutate({ variables: { input: createInput } });
+        createdOrderId = inlineData?.checkoutWithAddress?.id;
+      } else {
+        // Sem address id e sem shippingAddress no contexto
+        alert('Informe um endereço para continuar.');
+        navigate('/checkout/address');
+        return;
+      }
+
+      if (!createdOrderId) {
+        alert('Não foi possível criar o pedido. Tente novamente.');
+        return;
+      }
+
+      // Salvar orderId para uso no pagamento
+      setOrderId(createdOrderId);
+      // Revisão concluída, avançar para etapa de pagamento
+      setCurrentStep('payment');
       navigate('/checkout/payment');
     } catch (error) {
-      console.error('Erro ao prosseguir para pagamento:', error);
+      console.error('Erro ao criar pedido antes do pagamento:', error);
       alert('Erro ao prosseguir. Tente novamente.');
     }
   };
@@ -219,10 +289,20 @@ export const CheckoutReviewPage = () => {
             {/* Botão Proceder para Pagamento */}
             <button
               onClick={handleProceedToPayment}
-              className="w-full bg-primary text-white font-bold py-4 rounded-xl text-base hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 mb-4"
+              disabled={checkoutLoading}
+              className="w-full bg-primary text-white font-bold py-4 rounded-xl text-base hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <span className="material-symbols-outlined">credit_card</span>
-              Proceder para Pagamento
+              {checkoutLoading ? (
+                <>
+                  <span className="material-symbols-outlined animate-spin">progress_activity</span>
+                  Criando pedido...
+                </>
+              ) : (
+                <>
+                  <span className="material-symbols-outlined">credit_card</span>
+                  Proceder para Pagamento
+                </>
+              )}
             </button>
 
             {/* Botão Voltar */}

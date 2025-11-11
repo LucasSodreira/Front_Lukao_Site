@@ -45,12 +45,10 @@ export const CreditCardForm: React.FC<CreditCardFormProps> = ({
   const labelClassName = "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5";
 
   return (
-    <div className="bg-card-light dark:bg-card-dark p-6 md:p-8 rounded-xl border border-border-light/50 dark:border-border-dark">
-      <p className="text-base font-normal leading-normal pb-6 text-text-secondary-light dark:text-text-secondary-dark">
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <p className="text-base font-normal leading-normal text-text-secondary-light dark:text-text-secondary-dark">
         Pague com cartão de crédito com aprovação imediata.
       </p>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
         {/* Número do Cartão */}
         <div>
           <label className={labelClassName} htmlFor="cardNumber">
@@ -173,26 +171,26 @@ export const CreditCardForm: React.FC<CreditCardFormProps> = ({
           </label>
         </div>
 
-        {/* Security Info */}
-        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
-          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-            <span className="material-symbols-outlined text-lg">lock</span>
-            <span>Seus dados estão protegidos. Compra 100% segura.</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <img
-              alt="Visa"
-              className="h-6"
-              src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png"
-            />
-            <img
-              alt="Mastercard"
-              className="h-6"
-              src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
-            />
-          </div>
+        {/* Submit */}
+        <div className="pt-2">
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full flex items-center justify-center gap-2 h-12 rounded-xl bg-primary text-white font-bold text-base tracking-wide hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading ? (
+              <>
+                <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                Processando...
+              </>
+            ) : (
+              <>
+                <span className="material-symbols-outlined">credit_card</span>
+                Finalizar compra
+              </>
+            )}
+          </button>
         </div>
       </form>
-    </div>
   );
 };

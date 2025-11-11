@@ -22,6 +22,25 @@ export const AUTHENTICATED_CHECKOUT = gql`
   }
 `;
 
+// Novo: Checkout com endereço inline
+export const CHECKOUT_WITH_ADDRESS = gql`
+  mutation CheckoutWithAddress($input: CreateAddressInput!, $notes: String) {
+    checkoutWithAddress(input: $input, notes: $notes) {
+      id
+      status
+      totalAmount
+      shippingCost
+      items {
+        id
+        product { id title }
+        quantity
+        totalPrice
+      }
+      createdAt
+    }
+  }
+`;
+
 // Validar endereço de envio
 export const VALIDATE_SHIPPING_ADDRESS = gql`
   mutation ValidateShippingAddress(

@@ -14,7 +14,7 @@ interface CartQueryResult {
 
 export const CheckoutPaymentPage = () => {
   const navigate = useNavigate();
-  const { shippingAddress, setPaymentInfo, setOrderId } = useCheckoutState();
+  const { shippingAddress, orderId, setPaymentInfo, setCurrentStep } = useCheckoutState();
   const { validatePayment } = useValidatePayment();
   const { createPaymentIntent, processPayment } = useStripePayment();
   
@@ -28,12 +28,15 @@ export const CheckoutPaymentPage = () => {
 
   const cart = cartData?.myCart;
 
-  // Verificar se tem endereço selecionado
+  // Garantir pré-condições: endereço e orderId
   useEffect(() => {
     if (!shippingAddress && !cartLoading) {
       navigate('/checkout/address');
+    } else if (shippingAddress && !orderId && !cartLoading) {
+      // Sem orderId (não criou pedido na revisão) volta para revisão
+      navigate('/checkout/review');
     }
-  }, [shippingAddress, cartLoading, navigate]);
+  }, [shippingAddress, orderId, cartLoading, navigate]);
 
   if (cartLoading || !cart) {
     return (
@@ -84,10 +87,14 @@ export const CheckoutPaymentPage = () => {
 
       logger.info('Cartão validado com sucesso');
 
-      // 2. Criar intenção de pagamento no Stripe
-      // TODO: Substituir por ID do pedido real quando criado
-      const orderId = cart.id || 'temp-order-' + Date.now();
-      
+      // 2. Criar intenção de pagamento no Stripe usando orderId persistido
+      if (!orderId) {
+        setValidationErrors({ general: 'Pedido não encontrado. Volte para revisão.' });
+        setIsProcessing(false);
+        navigate('/checkout/review');
+        return;
+      }
+
       const intentResult = await createPaymentIntent(orderId);
       
       if (!intentResult.success) {
@@ -100,7 +107,7 @@ export const CheckoutPaymentPage = () => {
       }
 
       // 3. Processar pagamento
-      const paymentResult = await processPayment(orderId, intentResult.paymentIntentId || '');
+    const paymentResult = await processPayment(orderId, intentResult.paymentIntentId || '');
 
       if (!paymentResult.success) {
         setValidationErrors({
@@ -122,11 +129,11 @@ export const CheckoutPaymentPage = () => {
         ...cardData,
       });
       
-      if (paymentResult.orderId) {
-        setOrderId(paymentResult.orderId);
-      }
+      // orderId já existente; resposta pode confirmar
 
-      // 5. Navegar para sucesso
+  // Atualizar etapa atual para pagamento concluído antes de sucesso
+  setCurrentStep('payment');
+  // 5. Navegar para sucesso
       navigate('/checkout/success', {
         state: { orderId: paymentResult.orderId },
       });
@@ -183,7 +190,19 @@ export const CheckoutPaymentPage = () => {
               totalAmount={total}
               isLoading={isProcessing}
             />
-            
+
+            {/* Informação de segurança e bandeiras */}
+            <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                <span className="material-symbols-outlined text-lg">lock</span>
+                <span>Seus dados estão protegidos. Compra 100% segura.</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <img alt="Visa" className="h-6" src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" />
+                <img alt="Mastercard" className="h-6" src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" />
+              </div>
+            </div>
+
             {/* Erro de Validação */}
             {validationErrors.general && (
               <div className="mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
