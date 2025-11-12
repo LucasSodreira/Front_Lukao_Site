@@ -1,12 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
-interface Product {
-  id: string;
-  title: string;
-  price: number;
-  images?: Array<{ url: string; altText?: string }>;
-}
+import { useProducts } from '@/features/products/hooks/useProducts';
+import type { Product } from '@/types/domain/product';
 
 interface Banner {
   id: string;
@@ -20,6 +15,16 @@ interface Banner {
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const { data: products, isLoading, error } = useProducts();
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    if (products) {
+      // Pega os primeiros 4 produtos como destaque
+      setFeaturedProducts(products.slice(0, 4));
+    }
+  }, [products]);
+
   const [banners] = useState<Banner[]>([
     {
       id: '1',
@@ -47,54 +52,7 @@ const HomePage = () => {
       buttonLink: '/products',
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAidZOwAZkitN5nM-wpzLQxuy0P8UYwYmwg6XjNEYzOY0ZPy-yY1gu_OZLxbrRwnWzOGtehpMJEW_YpW8NzsxAJh88DOsP0lQ6l0LU3avgogtJpESSI3fOGqSY0krosYlMvNTwySntCTQKB3b7K6Q4gdOUrofyp-3BqkZIIMAbwrwbWaTOY8decVbGxq0seqO3VSTTWnhwoBGF6dgiP6tGtuxAoj5Q-gmlNBQjlkwtk74CoQqumDN9vl32qYhJG8TnlYQewbYf3214',
       altText: 'Close-up de diversos acessórios masculinos como relógio, óculos de sol e cinto de couro.',
-    },
-  ]);
-
-  const [featuredProducts] = useState<Product[]>([
-    {
-      id: '1',
-      title: 'Jaqueta Bomber Verde',
-      price: 349.9,
-      images: [
-        {
-          url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDZspN4SsDRK3ktBRpLt-VYJGpuRICWDq2lwmXIEUqs-kRFh0pnOseM6QZqtDQx81dpOW17ykUR5NHljTdjntURMqr-sX0vEEr07Nqvhk7j_vwlH7LIh8Lslh1TJU5OlH14Uhp_y_shUcNU-GXM_Wk4flnqtcLzmviQJQiU4OIRKRYBYy32iE_rrWk7weckR6ZfYnsU2HD_WUwK7OeeN5wzOzd4SAZ-7znr64ua_Xdmvr0BG2oNLcdwiJ2alYQxeL8OakuyK2ziaPM',
-          altText: 'Modelo masculino vestindo uma jaqueta bomber de cor verde oliva sobre uma camiseta branca.',
-        },
-      ],
-    },
-    {
-      id: '2',
-      title: 'Camisa de Linho Listrada',
-      price: 189.9,
-      images: [
-        {
-          url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCftokoezCBis3H3vGweZzj526aOtQNG_TnAj_GH3kzRy0zZE5rNy9i7ll3QK7P8B6crrM83zQ1jy-RvmZ65ilAkX-yh52iDupcPIkorJd2lXiG0HcgpYDtgQ4RedpmwOM0N2sLcNiYSHX9aH-ydseO9SkfGNbG_SNPMMKHx1hOnpyVzT8-E_UVhCj5DOvZN9tDWo3-9FMbwG1tCyW357Zq4d-AwUZ-pym-_u-KZPZJE_DwiAE2Wn5DawIEPmVM8wCA_ROQBTTCrlQ',
-          altText: 'Camisa de linho de manga curta com listras verticais em azul e branco.',
-        },
-      ],
-    },
-    {
-      id: '3',
-      title: 'Bermuda Sarja Cáqui',
-      price: 159.9,
-      images: [
-        {
-          url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCvkk7jS32y9nbiUjKlXFVe0lve42ttAf3PdnCNlsEF1Wml_tX0NIOkqfN-WJJiMWcqaw_BkKLEz783Xot4Fw-dxYiswmuP_nCCrxYU55hSSiN3hzWyfJVvKPp6h5veMIqutAdSGi2etH0Hv7rT3dhDX1jrllNtlGFSoNydztgXOUQGa2XeFgwBpIDf4Zb3eOsEhzFKKtH6dbebRuuQigb1vufYh05Wqfat8H8xqR2RmMhyZKrSz_Fp-xZdwZ9pHH_FxLLszf-jsfc',
-          altText: 'Bermuda de sarja na cor cáqui com um cinto de couro.',
-        },
-      ],
-    },
-    {
-      id: '4',
-      title: 'Óculos de Sol Aviador',
-      price: 299.9,
-      images: [
-        {
-          url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCEE388E_--ufYiVjh83VD0BX0R8w39Fz9FwgQRrcIX_Ow7_wzvdy6NTxcIxoR_f6gcdtkimwCwltjvqmfQthET99pWEwt-M-dKuwRAZ0nv0DIhOW5MJJ0MAZGO-PoieGqGThR5kRViL45lvYccBiXzrf9xvjiJVai3dY3D-PhsQSW0UvhDjv4xrPysjUPpavn1qhyYY1DIkZcUViU6TaSybWaQiN6U1ixKj7Wp6gi_SAVUIXaDyyzCoNovYiK4VjBRgTZgp-Ocfuk',
-          altText: 'Óculos de sol estilo aviador com armação de metal dourada e lentes escuras.',
-        },
-      ],
-    },
+    }
   ]);
 
   const handleBannerClick = (link: string) => {
@@ -158,29 +116,33 @@ const HomePage = () => {
               <span className="material-symbols-outlined transition-transform duration-300 group-hover:translate-x-1 text-base">arrow_forward</span>
             </Link>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-            {featuredProducts.map((product) => (
-              <div
-                key={product.id}
-                className="flex flex-col gap-4 group cursor-pointer"
-                onClick={() => handleProductClick(product.id)}
-              >
+          {isLoading && <div className="text-center">Carregando produtos...</div>}
+          {error && <div className="text-center text-red-500">Ocorreu um erro ao carregar os produtos.</div>}
+          {featuredProducts.length > 0 && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+              {featuredProducts.map((product) => (
                 <div
-                  className="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300"
-                  style={{
-                    backgroundImage: `url("${product.images?.[0]?.url || ''}")`,
-                  }}
-                  title={product.images?.[0]?.altText}
-                />
-                <div className="flex flex-col items-start">
-                  <h3 className="text-base font-semibold leading-snug hover:text-primary transition-colors">{product.title}</h3>
-                  <p className="text-sm font-normal leading-normal text-gray-500 dark:text-gray-400 mt-1">
-                    R$ {product.price.toFixed(2).replace('.', ',')}
-                  </p>
+                  key={product.id}
+                  className="flex flex-col gap-4 group cursor-pointer"
+                  onClick={() => handleProductClick(product.id.toString())}
+                >
+                  <div
+                    className="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300"
+                    style={{
+                      backgroundImage: `url("${product.images?.[0]?.url || ''}")`,
+                    }}
+                    title={product.images?.[0]?.altText}
+                  />
+                  <div className="flex flex-col items-start">
+                    <h3 className="text-base font-semibold leading-snug hover:text-primary transition-colors">{product.title}</h3>
+                    <p className="text-sm font-normal leading-normal text-gray-500 dark:text-gray-400 mt-1">
+                      R$ {product.price.toFixed(2).replace('.', ',')}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
 
         {/* Newsletter */}

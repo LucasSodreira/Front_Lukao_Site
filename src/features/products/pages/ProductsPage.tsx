@@ -1,20 +1,11 @@
-/**
- * Página de Produtos - Listagem com Filtros e Paginação
- * Localização: src/features/products/pages/ProductsPage.tsx
- */
-
 import { useState, useMemo } from 'react';
-import { useQuery } from '@apollo/client/react';
+import { useQuery } from '@tanstack/react-query';
+import { catalogService } from '@/services';
 import { FilterSidebar, ProductCard, ActiveFilters } from '../components';
 import { Breadcrumb, Pagination } from '@/shared/components/common';
-import { GET_PRODUCTS, GET_SIZES, GET_COLORS, GET_CATEGORIES } from '@/graphql/queries';
 import type { Product, FilterState, Size, Color, Category } from '@/types';
-import { ErrorHandler, logger } from '@/utils';
+import { logger } from '@/utils';
 import { Button } from '@/ui/Button';
-
-interface ProductsQueryResult {
-  products: Product[];
-}
 
 interface SortOption {
   label: string;
@@ -46,25 +37,36 @@ export const ProductsPage = () => {
   const [selectedSort, setSelectedSort] = useState<SortOption>(SORT_OPTIONS[0]);
   const pageSize = 12;
 
-  const { data, loading, error } = useQuery<ProductsQueryResult>(GET_PRODUCTS);
-  const { data: sizesData } = useQuery<{ sizes: Size[] }>(GET_SIZES);
-  const { data: colorsData } = useQuery<{ colors: Color[] }>(GET_COLORS);
-  const { data: categoriesData } = useQuery<{ categories: Category[] }>(GET_CATEGORIES);
+  const { data: products = [], isLoading: productsLoading, error: productsError } = useQuery({
+    queryKey: ['allProducts'],
+    queryFn: catalogService.getProducts,
+  });
 
-  const sizes = sizesData?.sizes || [];
-  const colors = colorsData?.colors || [];
-  const categories = categoriesData?.categories || [];
+  const { data: sizes = [] } = useQuery({
+    queryKey: ['sizes'],
+    queryFn: catalogService.getSizes,
+  });
+
+  const { data: colors = [] } = useQuery({
+    queryKey: ['colors'],
+    queryFn: catalogService.getColors,
+  });
+
+  const { data: categories = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: catalogService.getCategories,
+  });
 
   // Filtrar e ordenar produtos no frontend
   const filteredProducts = useMemo(() => {
-    if (!data?.products) return [];
+    if (!products || products.length === 0) return [];
     
-    let result = [...data.products];
+    let result = [...products];
 
     // Filtro de busca
     if (filters.search) {
       const searchLower = filters.search.toLowerCase();
-      result = result.filter(p => 
+      result = result.filter((p: Product) => 
         p.title?.toLowerCase().includes(searchLower) ||
         p.description?.toLowerCase().includes(searchLower)
       );
@@ -72,22 +74,22 @@ export const ProductsPage = () => {
 
     // Filtro de categoria
     if (filters.categoryId) {
-      result = result.filter(p => p.categoryId === filters.categoryId);
+      result = result.filter((p: Product) => p.categoryId === filters.categoryId);
     }
 
     // Filtro de preço
-    result = result.filter(p => {
+    result = result.filter((p: Product) => {
       const price = typeof p.price === 'string' ? parseFloat(p.price) : p.price;
       return price >= filters.priceRange[0] && price <= filters.priceRange[1];
     });
 
     // Filtro de estoque
     if (filters.inStock) {
-      result = result.filter(p => (p.inventory || 0) > 0);
+      result = result.filter((p: Product) => (p.inventory || 0) > 0);
     }
 
     // Ordenação
-    result.sort((a, b) => {
+    result.sort((a: Product, b: Product) => {
       const field = selectedSort.field;
       const order = selectedSort.order === 'ASC' ? 1 : -1;
 
@@ -111,7 +113,7 @@ export const ProductsPage = () => {
     });
 
     return result;
-  }, [data?.products, filters, selectedSort]);
+  }, [products, filters, selectedSort]);
 
   // Paginação no frontend
   const totalPages = Math.ceil(filteredProducts.length / pageSize);
@@ -141,11 +143,11 @@ export const ProductsPage = () => {
     const newFilters = { ...filters };
     
     if (key === 'sizes' && typeof value === 'string') {
-      newFilters.sizes = newFilters.sizes.filter(s => s !== value);
+      newFilters.sizes = newFilters.sizes.filter((s: string) => s !== value);
     } else if (key === 'colors' && typeof value === 'string') {
-      newFilters.colors = newFilters.colors.filter(c => c !== value);
+      newFilters.colors = newFilters.colors.filter((c: string) => c !== value);
     } else if (key === 'brands' && typeof value === 'string') {
-      newFilters.brands = newFilters.brands.filter(b => b !== value);
+      newFilters.brands = newFilters.brands.filter((b: string) => b !== value);
     } else if (key === 'categoryId') {
       newFilters.categoryId = undefined;
     } else if (key === 'priceRange') {
@@ -179,7 +181,7 @@ export const ProductsPage = () => {
           filters={filters}
           onFiltersChange={handleFiltersChange}
           onClearFilters={handleClearFilters}
-          categories={categories}
+          categories={categories as Category[]}
         />
 
         {/* Conteúdo Principal */}
@@ -194,9 +196,9 @@ export const ProductsPage = () => {
           {/* Filtros Ativos */}
           <ActiveFilters
             filters={filters}
-            categories={categories}
-            sizes={sizes}
-            colors={colors}
+            categories={categories as Category[]}
+            sizes={sizes as Size[]}
+            colors={colors as Color[]}
             onRemoveFilter={handleRemoveFilter}
           />
 
@@ -223,17 +225,17 @@ export const ProductsPage = () => {
           </div>
 
           {/* Grid de Produtos */}
-          {loading ? (
+          {productsLoading ? (
             <div className="text-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
               <p className="text-gray-600 dark:text-gray-400">Carregando produtos...</p>
             </div>
-          ) : error ? (
+          ) : productsError ? (
             <div className="text-center py-12 space-y-4">
               <div className="text-red-600 dark:text-red-400 text-lg font-semibold">
                 {(() => {
-                  logger.error('Erro ao carregar produtos', { error: error.message });
-                  return ErrorHandler.getUserFriendlyMessage(error);
+                  logger.error('Erro ao carregar produtos', { error: productsError });
+                  return 'Erro ao carregar produtos';
                 })()}
               </div>
               <Button onClick={() => window.location.reload()}>

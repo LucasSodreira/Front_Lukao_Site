@@ -16,6 +16,16 @@ export interface CartItem {
   };
   quantity: number;
   totalPrice?: number | string;
+  attributes?: {
+    size?: string;
+    color?: string;
+  };
+  variation?: {
+    id: string;
+    sku: string;
+    size: string; // code
+    color: string; // name
+  };
 }
 
 export interface Cart {

@@ -1,15 +1,8 @@
 import { Navigate, useLocation } from 'react-router-dom';
-import { useQuery } from '@apollo/client/react';
-import { GET_MY_CART } from '@/graphql/queries';
 import { useIsAuthenticated } from '@/shared/hooks';
-import type { Cart } from '@/types';
 
 interface CheckoutRouteProps {
   children: React.ReactNode;
-}
-
-interface CartQueryResult {
-  myCart: Cart;
 }
 
 /**
@@ -24,28 +17,12 @@ export const CheckoutRoute = ({ children }: CheckoutRouteProps) => {
   const isAuthenticated = useIsAuthenticated();
   const location = useLocation();
 
-  const { data, loading: cartLoading } = useQuery<CartQueryResult>(GET_MY_CART, {
-    skip: !isAuthenticated,
-    fetchPolicy: 'network-only',
-  });
+  // TODO: Implementar hook useCart() para buscar dados do carrinho
+  // Por enquanto, permitimos acesso se autenticado
 
   // Se não estiver autenticado, redireciona para login
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-
-  // Se ainda está carregando, mostra loading
-  if (cartLoading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
-
-  // Se não tem carrinho ou carrinho está vazio, redireciona para o carrinho
-  if (!data?.myCart || !data.myCart.items || data.myCart.items.length === 0) {
-    return <Navigate to="/cart" replace />;
   }
 
   return <>{children}</>;

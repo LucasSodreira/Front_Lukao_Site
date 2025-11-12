@@ -1,24 +1,20 @@
 import { useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client/react';
-import { GET_MY_ADDRESSES, DELETE_ADDRESS, SET_PRIMARY_ADDRESS } from '@/graphql/queries';
+import { useQuery } from '@tanstack/react-query';
+import { addressService } from '@/services';
 import type { Address } from '@/types';
 import { Card, CardBody, CardTitle } from '@/ui/Card';
 import { Button } from '@/ui/Button';
+import { logger } from '@/utils';
 import AddressModal from './AddressModal';
-
-interface AddressesQueryResult {
-  myAddresses: Address[];
-}
 
 const AddressList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState<Address | undefined>();
 
-  const { loading, error, data, refetch } = useQuery<AddressesQueryResult>(GET_MY_ADDRESSES);
-  const [deleteAddress] = useMutation(DELETE_ADDRESS);
-  const [setPrimaryAddress] = useMutation(SET_PRIMARY_ADDRESS);
-
-  const addresses = data?.myAddresses || [];
+  const { data: addresses = [], isLoading, error, refetch } = useQuery({
+    queryKey: ['myAddresses'],
+    queryFn: addressService.getMyAddresses,
+  });
 
   const handleAddNew = () => {
     setSelectedAddress(undefined);
@@ -35,12 +31,10 @@ const AddressList = () => {
     if (!confirm('Tem certeza que deseja deletar este endereço?')) return;
 
     try {
-      await deleteAddress({
-        variables: { id },
-        refetchQueries: ['GetMyAddresses']
-      });
-    } catch (err) {
-      console.error('Erro ao deletar endereço:', err);
+      await addressService.deleteAddress(id);
+      refetch();
+    } catch (err: unknown) {
+      logger.error('Erro ao deletar endereço:', err);
       alert('Erro ao deletar endereço');
     }
   };
@@ -48,17 +42,15 @@ const AddressList = () => {
   const handleSetPrimary = async (id: string | undefined) => {
     if (!id) return;
     try {
-      await setPrimaryAddress({
-        variables: { id },
-        refetchQueries: ['GetMyAddresses']
-      });
-    } catch (err) {
-      console.error('Erro ao definir endereço principal:', err);
+      await addressService.setPrimaryAddress(id);
+      refetch();
+    } catch (err: unknown) {
+      logger.error('Erro ao definir endereço principal:', err);
       alert('Erro ao definir endereço principal');
     }
   };
 
-  if (loading) return <div className="text-gray-600 dark:text-gray-300">Carregando endereços...</div>;
+  if (isLoading) return <div className="text-gray-600 dark:text-gray-300">Carregando endereços...</div>;
 
   return (
     <>
@@ -71,7 +63,7 @@ const AddressList = () => {
             </Button>
           </div>
 
-          {error && <p className="text-sm text-red-600 mb-4">Erro ao carregar endereços: {error.message}</p>}
+          {error && <p className="text-sm text-red-600 mb-4">Erro ao carregar endereços</p>}
 
           {addresses.length === 0 ? (
             <div className="text-center py-8">
@@ -80,7 +72,7 @@ const AddressList = () => {
             </div>
           ) : (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {addresses.map((address) => (
+              {addresses.map((address: Address) => (
                 <div
                   key={address.id}
                   className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800"
@@ -135,7 +127,7 @@ const AddressList = () => {
           setSelectedAddress(undefined);
         }}
         onSuccess={() => {
-          refetch?.();
+          refetch();
         }}
         address={selectedAddress}
       />

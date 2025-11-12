@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client/react';
-import { CREATE_PRODUCT_WITH_VARIATIONS, GET_CATEGORIES, GET_SIZES, GET_COLORS } from '../../../graphql/queries';
+import { useQuery } from '@tanstack/react-query';
+import { catalogService } from '@/services';
 import type { Product, Category, Size, Color } from '../../../types/domain/product';
 import Button from '../../../ui/Button';
 import Input from '../../../ui/Input';
@@ -20,22 +20,6 @@ interface FormData {
   price: string;
 }
 
-interface CategoriesData {
-  categories: Category[];
-}
-
-interface SizesData {
-  sizes: Size[];
-}
-
-interface ColorsData {
-  colors: Color[];
-}
-
-interface CreateProductData {
-  createProductWithVariations: Product;
-}
-
 interface ProductCreationFormProps {
   onSuccess?: (product: Product) => void;
   onError?: (error: string) => void;
@@ -43,12 +27,20 @@ interface ProductCreationFormProps {
 
 export const ProductCreationForm: React.FC<ProductCreationFormProps> = ({ onSuccess, onError }) => {
   // Queries
-  const { data: categoriesData, loading: categoriesLoading } = useQuery<CategoriesData>(GET_CATEGORIES);
-  const { data: sizesData, loading: sizesLoading } = useQuery<SizesData>(GET_SIZES);
-  const { data: colorsData, loading: colorsLoading } = useQuery<ColorsData>(GET_COLORS);
+  const { data: categories = [], isLoading: categoriesLoading } = useQuery<Category[]>({
+    queryKey: ['categories'],
+    queryFn: catalogService.getCategories,
+  });
 
-  // Mutation
-  const [createProduct, { loading: creating }] = useMutation<CreateProductData>(CREATE_PRODUCT_WITH_VARIATIONS);
+  const { data: sizes = [], isLoading: sizesLoading } = useQuery<Size[]>({
+    queryKey: ['sizes'],
+    queryFn: catalogService.getSizes,
+  });
+
+  const { data: colors = [], isLoading: colorsLoading } = useQuery<Color[]>({
+    queryKey: ['colors'],
+    queryFn: catalogService.getColors,
+  });
 
   // State
   const [formData, setFormData] = useState<FormData>({
@@ -63,11 +55,7 @@ export const ProductCreationForm: React.FC<ProductCreationFormProps> = ({ onSucc
   ]);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  // Dados processados
-  const categories: Category[] = categoriesData?.categories || [];
-  const sizes: Size[] = sizesData?.sizes?.filter((s: Size) => s.isActive) || [];
-  const colors: Color[] = colorsData?.colors?.filter((c: Color) => c.isActive) || [];
+  const [creating, setCreating] = useState(false);
 
   // Validação
   const validateForm = (): boolean => {
@@ -134,35 +122,34 @@ export const ProductCreationForm: React.FC<ProductCreationFormProps> = ({ onSucc
 
     if (!validateForm()) return;
 
-    try {
-      const variationInputs = variations.map(v => ({
-        sizeName: v.sizeName,
-        colorName: v.colorName,
-        quantity: v.quantity,
-      }));
+    setCreating(true);
 
-      const { data } = await createProduct({
-        variables: {
-          categoryId: formData.categoryId,
-          title: formData.title,
-          description: formData.description || null,
-          price: parseFloat(formData.price),
-          variations: variationInputs,
-        },
+    try {
+      const product = await catalogService.createProduct({
+        categoryId: formData.categoryId,
+        title: formData.title,
+        description: formData.description || undefined,
+        price: parseFloat(formData.price),
+        // @ts-expect-error - Type mismatch between ProductVariationRow and ProductVariation
+        variations: variations.map(v => ({
+          sizeName: v.sizeName,
+          colorName: v.colorName,
+          quantity: v.quantity,
+        })),
       });
 
-      if (data?.createProductWithVariations) {
-        onSuccess?.(data.createProductWithVariations);
-        // Reset form
-        setFormData({ categoryId: '', title: '', description: '', price: '' });
-        setVariations([{ tempId: '1', sizeName: '', colorName: '', quantity: 0 }]);
-        setErrors({});
-      }
+      onSuccess?.(product);
+      // Reset form
+      setFormData({ categoryId: '', title: '', description: '', price: '' });
+      setVariations([{ tempId: '1', sizeName: '', colorName: '', quantity: 0 }]);
+      setErrors({});
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Erro ao criar produto';
       logger.error('ProductCreationForm: ' + message, err);
       onError?.(message);
       setErrors({ submit: message });
+    } finally {
+      setCreating(false);
     }
   };
 

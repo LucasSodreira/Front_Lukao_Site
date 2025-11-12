@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useMutation } from '@apollo/client/react';
-import { CREATE_ADDRESS, UPDATE_ADDRESS } from '@/graphql/queries';
+import { addressService } from '@/services';
 import type { Address, CreateAddressInput } from '@/types';
 import { Button } from '@/ui/Button';
+import { logger } from '@/utils';
 import Input from '@/ui/Input';
 
 interface AddressModalProps {
@@ -10,10 +10,9 @@ interface AddressModalProps {
   onClose: () => void;
   onSuccess: () => void;
   address?: Address;
-  isLoading?: boolean;
 }
 
-const AddressModal = ({ isOpen, onClose, onSuccess, address, isLoading = false }: AddressModalProps) => {
+const AddressModal = ({ isOpen, onClose, onSuccess, address }: AddressModalProps) => {
   const [formData, setFormData] = useState<CreateAddressInput>({
     street: '',
     city: '',
@@ -24,9 +23,7 @@ const AddressModal = ({ isOpen, onClose, onSuccess, address, isLoading = false }
   });
 
   const [formError, setFormError] = useState('');
-
-  const [createAddress] = useMutation(CREATE_ADDRESS);
-  const [updateAddress] = useMutation(UPDATE_ADDRESS);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (address) {
@@ -68,29 +65,22 @@ const AddressModal = ({ isOpen, onClose, onSuccess, address, isLoading = false }
       return;
     }
 
+    setIsLoading(true);
+
     try {
-      if (address) {
-        await updateAddress({
-          variables: {
-            id: address.id,
-            input: formData
-          },
-          refetchQueries: ['GetMyAddresses']
-        });
+      if (address?.id) {
+        await addressService.updateAddress(address.id, formData);
       } else {
-        await createAddress({
-          variables: {
-            input: formData
-          },
-          refetchQueries: ['GetMyAddresses']
-        });
+        await addressService.createAddress(formData);
       }
 
       onSuccess();
       onClose();
-    } catch (err) {
-      console.error('Erro ao salvar endereço:', err);
+    } catch (err: unknown) {
+      logger.error('Erro ao salvar endereço:', err);
       setFormError('Erro ao salvar endereço. Tente novamente.');
+    } finally {
+      setIsLoading(false);
     }
   };
 

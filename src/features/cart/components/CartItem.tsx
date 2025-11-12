@@ -3,8 +3,8 @@ import type { CartItem as CartItemType } from '@/types';
 
 interface CartItemProps {
   item: CartItemType;
-  onUpdateQuantity: (productId: string, quantity: number) => void;
-  onRemove: (productId: string) => void;
+  onUpdateQuantity: (itemId: string, quantity: number) => void;
+  onRemove: (itemId: string) => void;
 }
 
 export const CartItem: React.FC<CartItemProps> = ({ item, onUpdateQuantity, onRemove }) => {
@@ -21,8 +21,8 @@ export const CartItem: React.FC<CartItemProps> = ({ item, onUpdateQuantity, onRe
   // Produto no carrinho pode não ter todas as informações
   // Vamos usar valores padrão quando não disponível
   const brandName = 'Marca';
-  const colorName = '';
-  const sizeName = '';
+  const colorName = item.attributes?.color || '';
+  const sizeName = item.attributes?.size || '';
 
   return (
     <div className="flex flex-col sm:flex-row gap-6 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
@@ -66,7 +66,7 @@ export const CartItem: React.FC<CartItemProps> = ({ item, onUpdateQuantity, onRe
         <div className="flex items-center justify-between mt-4">
           <div className="flex items-center gap-3 text-gray-800 dark:text-white bg-gray-100 dark:bg-gray-700 rounded-full py-1 px-2">
             <button
-              onClick={() => onUpdateQuantity(item.product.id, Math.max(1, item.quantity - 1))}
+              onClick={() => onUpdateQuantity(item.id, Math.max(1, item.quantity - 1))}
               disabled={item.quantity <= 1}
               className="text-xl font-medium flex h-7 w-7 items-center justify-center rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               aria-label="Diminuir quantidade"
@@ -75,7 +75,7 @@ export const CartItem: React.FC<CartItemProps> = ({ item, onUpdateQuantity, onRe
             </button>
             <span className="text-base font-medium w-6 text-center">{item.quantity}</span>
             <button
-              onClick={() => onUpdateQuantity(item.product.id, item.quantity + 1)}
+              onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
               disabled={item.quantity >= 999}
               className="text-xl font-medium flex h-7 w-7 items-center justify-center rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               aria-label="Aumentar quantidade"
@@ -84,7 +84,7 @@ export const CartItem: React.FC<CartItemProps> = ({ item, onUpdateQuantity, onRe
             </button>
           </div>
           <button
-            onClick={() => onRemove(item.product.id)}
+            onClick={() => onRemove(item.id)}
             className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-500 transition-colors font-medium"
           >
             <span className="material-symbols-outlined text-base">delete</span>

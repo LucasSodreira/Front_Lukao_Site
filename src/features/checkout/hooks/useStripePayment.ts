@@ -1,51 +1,58 @@
-import { useMutation } from '@apollo/client/react';
-import { PROCESS_STRIPE_PAYMENT, CREATE_PAYMENT_INTENT } from '@/graphql/checkoutQueries';
+import { environment } from '@/config/environment';
 
-interface CreatePaymentIntentResponse {
-  createPaymentIntent: {
-    paymentIntentId: string;
-    clientSecret: string;
-    status: string;
-    amount: number;
-    currency: string;
-  };
-}
+type PaymentIntentResponse = {
+  paymentIntentId: string;
+  clientSecret: string;
+  status: string;
+  amount: number;
+  currency: string;
+};
 
-interface ProcessStripePaymentResponse {
-  processStripePayment: {
-    success: boolean;
-    message: string;
-    orderId: string;
-    paymentIntentId: string;
-    status: string;
-    amount: number;
-  };
-}
+type ProcessPaymentResponse = {
+  success: boolean;
+  message: string;
+  orderId: number;
+  paymentIntentId: string;
+  status: string;
+  amount: number;
+};
 
 export const useStripePayment = () => {
-  const [createPaymentIntentMutation, { loading: creatingIntent }] = 
-    useMutation<CreatePaymentIntentResponse>(CREATE_PAYMENT_INTENT);
+  const apiBase = environment.apiUrl;
 
-  const [processPaymentMutation, { loading: processing }] = 
-    useMutation<ProcessStripePaymentResponse>(PROCESS_STRIPE_PAYMENT);
+  function getCookie(name: string): string | null {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+    return null;
+  }
 
   /**
    * Cria uma intenção de pagamento no Stripe
    */
   const createPaymentIntent = async (orderId: string) => {
     try {
-      const { data } = await createPaymentIntentMutation({
-        variables: { orderId },
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      const csrf = getCookie('XSRF-TOKEN');
+      if (csrf) headers['X-XSRF-TOKEN'] = csrf;
+      const resp = await fetch(`${apiBase}/api/payments/intent`, {
+        method: 'POST',
+        credentials: 'include',
+        headers,
+        body: JSON.stringify({ orderId }),
       });
-
-      if (data?.createPaymentIntent) {
+      if (!resp.ok) {
+        return { success: false, error: 'Falha ao criar intenção de pagamento' };
+      }
+      const data: PaymentIntentResponse = await resp.json();
+      if (data?.paymentIntentId) {
         return {
           success: true,
-          paymentIntentId: data.createPaymentIntent.paymentIntentId,
-          clientSecret: data.createPaymentIntent.clientSecret,
-          status: data.createPaymentIntent.status,
-          amount: data.createPaymentIntent.amount,
-          currency: data.createPaymentIntent.currency,
+          paymentIntentId: data.paymentIntentId,
+          clientSecret: data.clientSecret,
+          status: data.status,
+          amount: data.amount,
+          currency: data.currency,
         };
       }
 
@@ -76,26 +83,32 @@ export const useStripePayment = () => {
     paymentIntentId: string
   ) => {
     try {
-      const { data } = await processPaymentMutation({
-        variables: {
-          orderId,
-          paymentIntentId,
-        },
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      const csrf = getCookie('XSRF-TOKEN');
+      if (csrf) headers['X-XSRF-TOKEN'] = csrf;
+      const resp = await fetch(`${apiBase}/api/payments/process`, {
+        method: 'POST',
+        credentials: 'include',
+        headers,
+        body: JSON.stringify({ orderId: Number(orderId), paymentIntentId }),
       });
-
-      if (data?.processStripePayment.success) {
+      if (!resp.ok) {
+        return { success: false, error: 'Falha no processamento do pagamento' };
+      }
+      const data: ProcessPaymentResponse = await resp.json();
+      if (data?.success) {
         return {
           success: true,
-          orderId: data.processStripePayment.orderId,
-          paymentIntentId: data.processStripePayment.paymentIntentId,
-          status: data.processStripePayment.status,
-          message: data.processStripePayment.message,
+          orderId: String(data.orderId),
+          paymentIntentId: data.paymentIntentId,
+          status: data.status,
+          message: data.message,
         };
       }
 
       return {
         success: false,
-        error: data?.processStripePayment.message || 'Falha no processamento do pagamento',
+        error: data?.message || 'Falha no processamento do pagamento',
       };
     } catch (error) {
       console.error('Erro ao processar pagamento:', error);
@@ -109,6 +122,6 @@ export const useStripePayment = () => {
   return {
     createPaymentIntent,
     processPayment,
-    loading: creatingIntent || processing,
+    loading: false,
   };
 };

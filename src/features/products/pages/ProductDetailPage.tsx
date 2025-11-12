@@ -1,15 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery, useMutation } from '@apollo/client/react';
-import { GET_PRODUCT, ADD_TO_CART, GET_MY_CART } from '@/graphql/queries';
-import type { Product } from '@/types';
+import { useProduct } from '@/features/products/hooks/useProducts';
 import { Breadcrumb, QuantitySelector } from '@/shared/components/common';
 import { ProductGallery, ProductTabs, RelatedProducts } from '@/features/products/components';
-import { ErrorHandler, logger } from '@/utils';
-
-interface ProductQueryResult {
-  product: Product;
-}
+import { logger } from '@/utils';
+import { useCartRest } from '@/features/cart/hooks/useCartRest';
 
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,16 +16,9 @@ const ProductDetailPage = () => {
 
   const numericId = id && /^\d+$/.test(id) ? id : undefined;
   
-  const { loading, error, data } = useQuery<ProductQueryResult>(GET_PRODUCT, {
-    variables: { id: numericId },
-    skip: !numericId,
-    fetchPolicy: 'network-only',
-  });
-
-  const [addToCart, { loading: adding }] = useMutation(ADD_TO_CART, {
-    refetchQueries: [{ query: GET_MY_CART }],
-    awaitRefetchQueries: true,
-  });
+  const { data: product, isLoading: loading, error } = useProduct(numericId || '');
+  const [adding, setAdding] = useState(false);
+  const { addItem } = useCartRest();
 
   useEffect(() => {
     if (!toast) return;
@@ -68,12 +56,12 @@ const ProductDetailPage = () => {
   }
 
   if (error) {
-    logger.error('Erro ao carregar produto', { productId: numericId, error: error.message });
+    logger.error('Erro ao carregar produto', { productId: numericId, error });
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center space-y-4">
           <div className="text-red-600 dark:text-red-400 text-lg font-semibold">
-            {ErrorHandler.getUserFriendlyMessage(error)}
+            Erro ao carregar o produto
           </div>
           <button
             onClick={() => navigate('/products')}
@@ -86,8 +74,6 @@ const ProductDetailPage = () => {
     );
   }
 
-  const product = data?.product;
-
   if (!product) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -98,12 +84,24 @@ const ProductDetailPage = () => {
 
   const handleAddToCart = async () => {
     try {
-      await addToCart({ variables: { productId: Number(numericId), quantity } });
+      setAdding(true);
+      if (!product) return;
+      // Resolve variationId com base em cor/tamanho selecionados (se disponível)
+      const variationId = Array.isArray(product.variations)
+        ? product.variations.find(v => v.color?.name === selectedColor && v.size?.name === selectedSize)?.id
+        : undefined;
+      await addItem(
+        { id: product.id as unknown as string },
+        quantity,
+        { variationId: variationId ? Number(variationId) : undefined }
+      );
       setToast('✓ Adicionado ao carrinho!');
       setQuantity(1);
     } catch (e) {
       logger.error('Erro ao adicionar ao carrinho', { productId: numericId, quantity, error: e });
-      setToast(ErrorHandler.getUserFriendlyMessage(e));
+      setToast('Erro ao adicionar ao carrinho');
+    } finally {
+      setAdding(false);
     }
   };
 

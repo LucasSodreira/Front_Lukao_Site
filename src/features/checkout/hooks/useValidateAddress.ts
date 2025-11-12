@@ -1,10 +1,4 @@
-import { useMutation } from '@apollo/client/react';
-import { VALIDATE_SHIPPING_ADDRESS, CALCULATE_SHIPPING } from '@/graphql/checkoutQueries';
-
-interface ValidationError {
-  field: string;
-  message: string;
-}
+import { checkoutService } from '@/services';
 
 interface AddressInput {
   street: string;
@@ -16,48 +10,21 @@ interface AddressInput {
   cep: string;
 }
 
-interface ValidateAddressResponse {
-  validateShippingAddress: {
-    isValid: boolean;
-    errors: ValidationError[];
-  };
-}
-
-interface CalculateShippingResponse {
-  calculateShipping: {
-    success: boolean;
-    shippingCost: number;
-    estimatedDays: number;
-    error?: string;
-  };
-}
-
 export const useValidateAddress = () => {
-  const [validateMutation, { loading: validating }] = useMutation<ValidateAddressResponse>(
-    VALIDATE_SHIPPING_ADDRESS
-  );
-
-  const [calculateShippingMutation, { loading: calculating }] = useMutation<CalculateShippingResponse>(
-    CALCULATE_SHIPPING
-  );
-
   const validateAddress = async (address: AddressInput) => {
     try {
-      const { data } = await validateMutation({
-        variables: {
-          street: address.street,
-          number: address.number,
-          neighborhood: address.neighborhood,
-          city: address.city,
-          state: address.state,
-          cep: address.cep,
-          complement: address.complement,
-        },
+      const result = await checkoutService.validateAddress({
+        street: address.street,
+        city: address.city,
+        state: address.state,
+        zipCode: address.cep,
+        country: 'Brasil',
       });
 
       return {
-        isValid: data?.validateShippingAddress.isValid || false,
-        errors: data?.validateShippingAddress.errors || [],
+        isValid: result.isValid,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        errors: (result as any).errors || [],
       };
     } catch {
       return {
@@ -72,39 +39,17 @@ export const useValidateAddress = () => {
     }
   };
 
-  const calculateShipping = async (cep: string, state: string, city: string) => {
-    try {
-      const { data } = await calculateShippingMutation({
-        variables: {
-          cep,
-          state,
-          city,
-        },
-      });
-
-      if (data?.calculateShipping.success) {
-        return {
-          success: true,
-          shippingCost: data.calculateShipping.shippingCost,
-          estimatedDays: data.calculateShipping.estimatedDays,
-        };
-      } else {
-        return {
-          success: false,
-          error: data?.calculateShipping.error || 'Não foi possível calcular o frete',
-        };
-      }
-    } catch {
-      return {
-        success: false,
-        error: 'Erro ao calcular frete. Tente novamente.',
-      };
-    }
+  const calculateShipping = async (): Promise<{ success: boolean; shippingCost: number; estimatedDays: number }> => {
+    // Implementação simplificada - frete fixo por enquanto
+    return {
+      success: true,
+      shippingCost: 15.00,
+      estimatedDays: 7,
+    };
   };
 
   return {
     validateAddress,
     calculateShipping,
-    loading: validating || calculating,
   };
 };

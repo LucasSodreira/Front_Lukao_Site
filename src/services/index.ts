@@ -4,4 +4,7 @@
 
 export { authService } from './auth.service';
 export { storageService } from './storage.service';
-export { createApolloClient } from './apollo-client';
+export { catalogService } from './catalog.service';
+export { addressService } from './address.service';
+export { orderService } from './order.service';
+export { checkoutService } from './checkout.service';

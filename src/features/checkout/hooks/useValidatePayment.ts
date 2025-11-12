@@ -1,6 +1,5 @@
-import { useMutation } from '@apollo/client/react';
-import { VALIDATE_PAYMENT_INFO } from '@/graphql/checkoutQueries';
 import type { PaymentInfo } from './CheckoutContext';
+import { environment } from '@/config/environment';
 
 interface ValidationError {
   field: string;
@@ -8,16 +7,12 @@ interface ValidationError {
 }
 
 interface ValidatePaymentResponse {
-  validatePaymentInfo: {
-    isValid: boolean;
-    errors: ValidationError[];
-  };
+  isValid: boolean;
+  errors: ValidationError[];
 }
 
 export const useValidatePayment = () => {
-  const [validateMutation, { loading: validating }] = useMutation<ValidatePaymentResponse>(
-    VALIDATE_PAYMENT_INFO
-  );
+  const apiBase = environment.apiUrl;
 
   const validatePayment = async (payment: PaymentInfo) => {
     try {
@@ -33,19 +28,29 @@ export const useValidatePayment = () => {
       // Caso futuro de adição de novos métodos (ex: APPLE_PAY), basta incluir no METHOD_MAP.
       // O backend atualmente valida apenas os métodos explícitos via equals().
 
-      const { data } = await validateMutation({
-        variables: {
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      const csrfToken = getCookie('XSRF-TOKEN');
+      if (csrfToken) headers['X-XSRF-TOKEN'] = csrfToken;
+
+      const resp = await fetch(`${apiBase}/api/payments/validate`, {
+        method: 'POST',
+        credentials: 'include',
+        headers,
+        body: JSON.stringify({
           method: normalizedMethod,
           cardNumber: payment.cardNumber,
           cardExpiry: payment.cardExpiry,
           cardCvv: payment.cardCvv,
           installments: payment.installments,
-        },
+        }),
       });
-
+      if (!resp.ok) {
+        throw new Error('Erro ao validar pagamento');
+      }
+      const data: ValidatePaymentResponse = await resp.json();
       return {
-        isValid: data?.validatePaymentInfo.isValid || false,
-        errors: data?.validatePaymentInfo.errors || [],
+        isValid: data?.isValid || false,
+        errors: data?.errors || [],
       };
     } catch {
       return {
@@ -60,8 +65,15 @@ export const useValidatePayment = () => {
     }
   };
 
+  function getCookie(name: string): string | null {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+    return null;
+  }
+
   return {
     validatePayment,
-    loading: validating,
+    loading: false,
   };
 };

@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from '@apollo/client/react';
-import type { AuthResponse } from '@/types';
-import { SIGN_UP } from '@/graphql/queries';
+import { authService } from '@/services/auth.service';
 import { Card, CardBody, CardTitle } from '@/ui/Card';
 import Input from '@/ui/Input';
 import { Button } from '@/ui/Button';
 import { MESSAGES } from '@/constants';
 import { validateEmail, validatePassword } from '@/utils/validators';
-import { logger, InputSanitizer, rateLimiter, ErrorHandler } from '@/utils';
+import { logger, InputSanitizer, rateLimiter } from '@/utils';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -20,9 +18,6 @@ const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-
-  type SignUpResult = { signUp: AuthResponse };
-  const [signUp] = useMutation<SignUpResult>(SIGN_UP);
   const navigate = useNavigate();
 
   const validateForm = (): boolean => {
@@ -93,31 +88,26 @@ const RegisterPage = () => {
     setError('');
 
     try {
-      const { data } = await signUp({
-        variables: {
-          input: {
-            name: formData.name,
-            email: formData.email,
-            password: formData.password,
-            phone: formData.phone || undefined
-          }
-        }
+      const response = await authService.signup({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        phone: formData.phone || undefined
       });
 
-      if (data?.signUp) {
-        // Salvar tokens
-        localStorage.setItem('authToken', data.signUp.accessToken);
-        localStorage.setItem('refreshToken', data.signUp.refreshToken);
-        
-        // Reset rate limit em caso de sucesso
-        rateLimiter.reset(rateLimitKey);
-        
-        // Redirecionar para login para buscar dados do usuário
-        navigate('/login');
-      }
-    } catch (err) {
+      // Salvar tokens
+      authService.setAuthToken(response.accessToken);
+      authService.setRefreshToken(response.refreshToken);
+      
+      // Reset rate limit em caso de sucesso
+      rateLimiter.reset(rateLimitKey);
+      
+      // Redirecionar para home após criar conta
+      navigate('/');
+    } catch (err: unknown) {
       logger.error('Erro ao criar conta', { email: formData.email, error: err });
-      setError(ErrorHandler.getUserFriendlyMessage(err));
+      const errorMessage = err instanceof Error ? err.message : 'Erro ao criar conta';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

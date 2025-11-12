@@ -1,32 +1,15 @@
 import { useState } from 'react';
-import { useQuery, useMutation } from '@apollo/client/react';
 import { useNavigate, Link } from 'react-router-dom';
-import { GET_MY_CART, UPDATE_CART_ITEM, REMOVE_FROM_CART } from '@/graphql/queries';
-import type { Cart } from '@/types';
 import { CartItem, OrderSummary, ShippingCalculator } from '../components';
 import { logger, ErrorHandler, InputValidator } from '@/utils';
-
-interface CartQueryResult {
-  myCart: Cart;
-}
+import { useCartRest } from '../hooks/useCartRest';
 
 const DEFAULT_SHIPPING = 15.0;
 
 export const CartPage = () => {
   const navigate = useNavigate();
   const [shippingCost, setShippingCost] = useState(DEFAULT_SHIPPING);
-
-  const { loading, error, data } = useQuery<CartQueryResult>(GET_MY_CART, { 
-    fetchPolicy: 'network-only' 
-  });
-
-  const [updateCartItem] = useMutation(UPDATE_CART_ITEM, { 
-    refetchQueries: [{ query: GET_MY_CART }] 
-  });
-  
-  const [removeFromCart] = useMutation(REMOVE_FROM_CART, { 
-    refetchQueries: [{ query: GET_MY_CART }] 
-  });
+  const { cart, loading, error, updateQuantity, removeItem } = useCartRest();
 
   if (loading) {
     return (
@@ -49,12 +32,12 @@ export const CartPage = () => {
   }
 
   if (error) {
-    logger.error('Erro ao carregar carrinho', { error: error.message });
+    logger.error('Erro ao carregar carrinho', { error });
     return (
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center space-y-4">
           <div className="text-red-600 dark:text-red-400 text-lg font-semibold">
-            {ErrorHandler.getUserFriendlyMessage(error)}
+            {ErrorHandler.getUserFriendlyMessage(new Error(error))}
           </div>
           <button
             onClick={() => window.location.reload()}
@@ -66,8 +49,6 @@ export const CartPage = () => {
       </div>
     );
   }
-
-  const cart = data?.myCart;
 
   if (!cart || cart.items.length === 0) {
     return (
@@ -116,9 +97,8 @@ export const CartPage = () => {
       alert('Quantidade inválida. Mínimo: 1, Máximo: 999');
       return;
     }
-
-    updateCartItem({
-      variables: { productId, quantity: newQuantity },
+    updateQuantity(productId, newQuantity).catch(() => {
+      alert('Falha ao atualizar item do carrinho');
     });
   };
 
@@ -128,8 +108,8 @@ export const CartPage = () => {
       return;
     }
 
-    removeFromCart({
-      variables: { productId },
+    removeItem(productId).catch(() => {
+      alert('Falha ao remover item do carrinho');
     });
   };
 

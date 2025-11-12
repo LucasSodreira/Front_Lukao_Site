@@ -1,68 +1,39 @@
-import { useQuery } from '@apollo/client/react';
-import { gql } from '@apollo/client';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { orderService } from '@/services';
 import { Container } from '@/ui/Container';
 import { Card, CardBody, CardTitle } from '@/ui/Card';
 import Badge from '@/ui/Badge';
 import { Button } from '@/ui/Button';
-import { ErrorHandler, logger } from '@/utils';
-
-const GET_MY_ORDERS = gql`
-  query GetMyOrders($page: Int, $size: Int) {
-    myOrders(page: $page, size: $size) {
-      orders {
-        id
-        status
-        totalAmount
-        shippingCost
-        notes
-        createdAt
-        updatedAt
-        items {
-          id
-          productTitle
-          productPrice
-          quantity
-          totalPrice
-        }
-      }
-      totalCount
-      totalPages
-    }
-  }
-`;
+import { logger } from '@/utils';
 
 interface OrderItem {
   id: string;
   productTitle: string;
-  productPrice: string;
+  productPrice: string | number;
   quantity: number;
-  totalPrice: string;
+  totalPrice: string | number;
 }
 
 interface Order {
   id: string;
   status: string;
-  totalAmount: string;
-  shippingCost: string;
+  totalAmount: string | number;
+  shippingCost?: string | number;
   notes?: string;
   createdAt: string;
   updatedAt: string;
   items: OrderItem[];
 }
 
-interface OrdersData {
-  myOrders: {
-    orders: Order[];
-    totalCount: number;
-    totalPages: number;
-  };
-}
-
 const OrdersPage = () => {
   const navigate = useNavigate();
-  const { loading, error, data } = useQuery<OrdersData>(GET_MY_ORDERS, {
-    variables: { page: 0, size: 10 }
+  const { data: orders = [], isLoading, error } = useQuery({
+    queryKey: ['myOrders'],
+    queryFn: async () => {
+      const result = await orderService.getMyOrders();
+      return result as unknown as Order[];
+    },
   });
 
   const getStatusBadge = (status: string) => {
@@ -88,14 +59,15 @@ const OrdersPage = () => {
     });
   };
 
-  const formatPrice = (price: string) => {
-    return parseFloat(price).toLocaleString('pt-BR', {
+  const formatPrice = (price: string | number) => {
+    const numPrice = typeof price === 'string' ? parseFloat(price) : price;
+    return numPrice.toLocaleString('pt-BR', {
       style: 'currency',
       currency: 'BRL'
     });
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <Container className="py-8">
         <div className="text-center space-y-4">
@@ -107,12 +79,12 @@ const OrdersPage = () => {
   }
 
   if (error) {
-    logger.error('Erro ao carregar pedidos', { error: error.message });
+    logger.error('Erro ao carregar pedidos', { error });
     return (
       <Container className="py-8">
         <div className="text-center space-y-4">
           <div className="text-red-600 dark:text-red-400 text-lg font-semibold">
-            {ErrorHandler.getUserFriendlyMessage(error)}
+            Erro ao carregar pedidos
           </div>
           <Button onClick={() => window.location.reload()}>
             Tentar Novamente
@@ -121,8 +93,6 @@ const OrdersPage = () => {
       </Container>
     );
   }
-
-  const orders = data?.myOrders?.orders || [];
 
   return (
     <Container className="py-8">
@@ -178,14 +148,19 @@ const OrdersPage = () => {
                     <span className="text-gray-600 dark:text-gray-400">Subtotal</span>
                     <span className="text-gray-900 dark:text-white">
                       {formatPrice(
-                        order.items.reduce((sum, item) => sum + parseFloat(item.totalPrice), 0).toString()
+                        order.items.reduce((sum: number, item: OrderItem) => {
+                          const price = typeof item.totalPrice === 'string' ? parseFloat(item.totalPrice) : item.totalPrice;
+                          return sum + price;
+                        }, 0)
                       )}
                     </span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600 dark:text-gray-400">Frete</span>
-                    <span className="text-gray-900 dark:text-white">{formatPrice(order.shippingCost)}</span>
-                  </div>
+                  {order.shippingCost !== undefined && (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600 dark:text-gray-400">Frete</span>
+                      <span className="text-gray-900 dark:text-white">{formatPrice(order.shippingCost)}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between text-lg font-bold pt-2 border-t border-gray-200 dark:border-gray-700">
                     <span className="text-gray-900 dark:text-white">Total</span>
                     <span className="text-gray-900 dark:text-white">{formatPrice(order.totalAmount)}</span>

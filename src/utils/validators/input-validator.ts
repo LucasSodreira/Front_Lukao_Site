@@ -16,11 +16,11 @@ export class InputValidator {
   }
 
   /**
-   * Valida ID de produto (UUID v4 format)
+   * Valida ID de produto (número inteiro positivo ou string numérica)
    */
-  static validateProductId(id: string): boolean {
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-    return uuidRegex.test(id);
+  static validateProductId(id: string | number): boolean {
+    const numericId = typeof id === 'string' ? parseInt(id, 10) : id;
+    return Number.isInteger(numericId) && numericId > 0;
   }
 
   /**

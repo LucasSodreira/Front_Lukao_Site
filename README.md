@@ -126,13 +126,44 @@ export const MyComponent = () => {
 };
 ```
 
-## 🔗 GraphQL e Autenticação
+## 🔗 API (GraphQL + REST) e Autenticação
 
-- **Cliente Apollo** — Configurado em `src/services/apollo-client.ts`
-- **URL padrão** — `http://localhost:8080/graphql`
-- **Token JWT** — Armazenado e lido de `localStorage` como `authToken`
-- **Contexto** — `src/core/context/AuthProvider.tsx` (login, logout, isAuthenticated)
-- **Queries** — Centralizadas em `src/graphql/queries.ts`
+### GraphQL
+* Cliente Apollo: `src/services/apollo-client.ts`
+* Endpoint padrão desenvolvimento: `http://localhost:8080/graphql`
+* Mutations de pagamento foram removidas (fluxo agora via REST)
+* Queries e mutations restantes: `src/graphql/queries.ts` / `src/graphql/checkoutQueries.ts`
+
+### REST (Pagamentos)
+* Endpoints consumidos diretamente via `fetch` em hooks:
+  * `POST /api/payments/intent` – cria PaymentIntent
+  * `POST /api/payments/process` – finaliza pagamento / atualiza pedido
+  * `POST /api/payments/validate` – valida dados do cartão
+  * (Opcional futuro) `POST /api/payments/checkout-session` – sessão do Stripe Checkout
+* Implementação dos hooks: `src/features/checkout/hooks/useStripePayment.ts` e `useValidatePayment.ts`
+
+### Autenticação
+* Contexto: `src/core/context/` (Auth)
+* JWT / Cookies enviados com `credentials: 'include'`
+* CSRF: Header automático `X-XSRF-TOKEN` (quando existente no cookie)
+
+### Variáveis de Ambiente
+Arquivo `src/config/environment.ts` centraliza o acesso. Valores vêm de `import.meta.env`.
+
+| Variável                | .env.development                           | .env.production             | Uso |
+|-------------------------|---------------------------------------------|-----------------------------|-----|
+| `VITE_API_URL`          | `http://localhost:8080`                     | (vazia = same-origin)       | Base REST & GraphQL quando relativo |
+| `VITE_GRAPHQL_ENDPOINT` | `http://localhost:8080/graphql`             | `/graphql`                  | Endpoint GraphQL |
+
+#### Comportamento
+* Produção com `VITE_API_URL` vazio => chamadas REST usam same-origin (evita CORS).
+* Para backend em domínio separado, definir: `VITE_API_URL=https://api.seudominio.com`.
+
+#### Exemplo de Uso
+```ts
+import { environment } from '@/config/environment';
+fetch(`${environment.apiUrl}/api/payments/intent`, { method: 'POST' });
+```
 
 ## 🚀 Como Rodar
 
@@ -219,7 +250,26 @@ npm run build && npm run lint
 - CSS modules + Tailwind
 
 ### Tailwind CSS
-- v4 com import direto
-- Dark mode funcional
-- Sem CSS local
+* v4 com import direto
+* Dark mode funcional
+* Sem CSS local
+
+## 🔐 Segurança & Boas Práticas
+* Sempre usar `credentials: 'include'` nas requisições REST autenticadas.
+* Incluir header `X-XSRF-TOKEN` automaticamente via hook (já implementado).
+* Não versionar `.env.production` com valores sensíveis.
+* Em produção, usar HTTPS para proteger dados de pagamento.
+
+## 🧾 Referência Rápida dos Endpoints de Pagamento (REST)
+| Endpoint | Método | Descrição |
+|---------|--------|-----------|
+| `/api/payments/intent` | POST | Cria PaymentIntent e retorna clientSecret |
+| `/api/payments/process` | POST | Verifica status e atualiza pedido (limpa carrinho) |
+| `/api/payments/validate` | POST | Valida dados de cartão/método |
+| `/api/payments/checkout-session` | POST | (Opcional futuro) Cria sessão Stripe Checkout |
+
+## ✅ Status da Migração de Pagamentos
+* GraphQL (mutations de pagamento) removidas.
+* Hooks atualizados para REST.
+* Documentação de variáveis e endpoints concluída.
 

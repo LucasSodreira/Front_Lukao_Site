@@ -16,7 +16,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/graphql': {
+      '/api': {
         target: 'http://localhost:8080',
         changeOrigin: true,
         secure: false,
@@ -24,16 +24,17 @@ export default defineConfig({
     },
   },
   build: {
+    
     rollupOptions: {
       output: {
         // Divisão de chunks por vendor e por feature
         manualChunks: (id) => {
           // Vendor chunks
           if (id.includes('@stripe')) return 'vendor-stripe';
-          if (id.includes('@apollo')) return 'vendor-apollo';
           if (id.includes('node_modules/react') || id.includes('node_modules/react-dom') || id.includes('node_modules/react-router-dom')) {
             return 'vendor-react';
           }
+          if (id.includes('@tanstack/react-query')) return 'vendor-query';
           if (id.includes('lucide-react') || id.includes('tailwindcss')) {
             return 'vendor-ui';
           }
@@ -55,9 +56,6 @@ export default defineConfig({
             return 'shared-components';
           }
           
-          // GraphQL separado
-          if (id.includes('src/graphql')) return 'graphql';
-          
           // Types separado
           if (id.includes('src/types')) return 'types';
           
@@ -68,5 +66,6 @@ export default defineConfig({
     },
     chunkSizeWarningLimit: 600,
     minify: 'terser',
+    sourcemap: false,
   },
 })

@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import { useAuth, useTheme } from '@/shared/hooks';
+import { useCartRest } from '@/features/cart/hooks/useCartRest';
 
 const Navbar = () => {
   const { user, logout, isAuthenticated } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { cart } = useCartRest();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -86,8 +88,13 @@ const Navbar = () => {
               </button>
 
               {/* Cart Button */}
-              <Link to="/cart" className="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 min-w-0 px-2.5 transition-colors" title="Carrinho">
+              <Link to="/cart" className="relative flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 min-w-0 px-2.5 transition-colors" title="Carrinho">
                 <span className="material-symbols-outlined text-base">shopping_cart</span>
+                {cart && cart.items.length > 0 && (
+                  <span className="absolute -top-1 -right-1 h-5 min-w-5 px-1 rounded-full bg-primary text-white text-[10px] leading-5 text-center font-bold">
+                    {cart.items.length}
+                  </span>
+                )}
               </Link>
             </div>
 

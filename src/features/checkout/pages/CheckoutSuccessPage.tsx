@@ -2,13 +2,12 @@ import type { FC } from 'react';
 import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CheckCircle2 } from 'lucide-react';
-import { useQuery } from '@apollo/client/react';
+import { useQuery } from '@tanstack/react-query';
 import { Container } from '@/ui/Container';
 import { Button } from '@/ui/Button';
 import { OrderConfirmationDetails } from '../components/OrderConfirmationDetails';
-import { GET_ORDER_BY_ID } from '@/graphql/checkoutQueries';
+import { orderService } from '@/services';
 import { useCheckoutState } from '../hooks';
-import { logger } from '@/utils';
 
 interface Order {
   id: string;
@@ -40,10 +39,6 @@ interface Order {
   estimatedDelivery?: string;
 }
 
-interface OrderQueryResult {
-  order: Order;
-}
-
 export const CheckoutSuccessPage: FC = () => {
   const { orderId } = useParams<{ orderId: string }>();
   const navigate = useNavigate();
@@ -55,20 +50,11 @@ export const CheckoutSuccessPage: FC = () => {
   }, [clearCheckout]);
 
   // Buscar dados do pedido da API
-  const { data: orderData, loading, error: queryError } = useQuery<OrderQueryResult>(
-    GET_ORDER_BY_ID,
-    {
-      variables: { orderId },
-      skip: !orderId,
-      fetchPolicy: 'network-only',
-    }
-  );
-
-  if (queryError) {
-    logger.error('Erro ao carregar pedido para confirmação', { orderId, error: queryError.message });
-  }
-
-  const order = orderData?.order;
+  const { data: order, isLoading: loading, error: queryError } = useQuery({
+    queryKey: ['order', orderId],
+    queryFn: () => orderId ? orderService.getOrderById(orderId) as unknown as Promise<Order> : Promise.reject(new Error('Order ID não fornecido')),
+    enabled: !!orderId,
+  }) as { data: Order | undefined; isLoading: boolean; error: Error | null };
 
   // Mostrar loading
   if (loading) {
