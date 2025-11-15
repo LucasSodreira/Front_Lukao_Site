@@ -1,4 +1,6 @@
+import { useCallback } from 'react';
 import { environment } from '@/config/environment';
+import { ensureCsrfToken } from '@/utils/csrf';
 
 type PaymentIntentResponse = {
   paymentIntentId: string;
@@ -20,29 +22,32 @@ type ProcessPaymentResponse = {
 export const useStripePayment = () => {
   const apiBase = environment.apiUrl;
 
-  function getCookie(name: string): string | null {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
-    return null;
-  }
-
   /**
    * Cria uma intenção de pagamento no Stripe
    */
-  const createPaymentIntent = async (orderId: string) => {
+  const createPaymentIntent = useCallback(async (orderId: string) => {
     try {
       const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-      const csrf = getCookie('XSRF-TOKEN');
+      const csrf = await ensureCsrfToken();
       if (csrf) headers['X-XSRF-TOKEN'] = csrf;
       const resp = await fetch(`${apiBase}/api/payments/intent`, {
         method: 'POST',
         credentials: 'include',
         headers,
-        body: JSON.stringify({ orderId }),
+        body: JSON.stringify({ orderId: Number(orderId) }),
       });
+      
       if (!resp.ok) {
-        return { success: false, error: 'Falha ao criar intenção de pagamento' };
+        const errorText = await resp.text();
+        let errorMessage = 'Falha ao criar intenção de pagamento';
+        try {
+          const errorData = JSON.parse(errorText);
+          errorMessage = errorData.message || errorData.error || errorMessage;
+        } catch {
+          if (errorText) errorMessage = errorText;
+        }
+        console.error('Erro ao criar payment intent:', { status: resp.status, error: errorMessage });
+        return { success: false, error: errorMessage };
       }
       const data: PaymentIntentResponse = await resp.json();
       if (data?.paymentIntentId) {
@@ -67,24 +72,18 @@ export const useStripePayment = () => {
         error: 'Erro ao criar intenção de pagamento. Tente novamente.',
       };
     }
-  };
+  }, [apiBase]);
 
   /**
-   * Processa o pagamento com Stripe
-   * 
-   * Fluxo:
-   * 1. Valida dados do cartão
-   * 2. Cria intenção de pagamento no Stripe
-   * 3. Processa o pagamento
-   * 4. Retorna resultado
+   * Processa o pagamento consultando status no backend
    */
-  const processPayment = async (
+  const processPayment = useCallback(async (
     orderId: string,
     paymentIntentId: string
   ) => {
     try {
       const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-      const csrf = getCookie('XSRF-TOKEN');
+      const csrf = await ensureCsrfToken();
       if (csrf) headers['X-XSRF-TOKEN'] = csrf;
       const resp = await fetch(`${apiBase}/api/payments/process`, {
         method: 'POST',
@@ -92,8 +91,18 @@ export const useStripePayment = () => {
         headers,
         body: JSON.stringify({ orderId: Number(orderId), paymentIntentId }),
       });
+      
       if (!resp.ok) {
-        return { success: false, error: 'Falha no processamento do pagamento' };
+        const errorText = await resp.text();
+        let errorMessage = 'Falha no processamento do pagamento';
+        try {
+          const errorData = JSON.parse(errorText);
+          errorMessage = errorData.message || errorData.error || errorMessage;
+        } catch {
+          if (errorText) errorMessage = errorText;
+        }
+        console.error('Erro ao processar pagamento:', { status: resp.status, error: errorMessage });
+        return { success: false, error: errorMessage };
       }
       const data: ProcessPaymentResponse = await resp.json();
       if (data?.success) {
@@ -117,7 +126,7 @@ export const useStripePayment = () => {
         error: 'Erro ao processar pagamento. Tente novamente.',
       };
     }
-  };
+  }, [apiBase]);
 
   return {
     createPaymentIntent,

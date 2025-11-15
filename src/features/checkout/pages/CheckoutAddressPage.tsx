@@ -1,28 +1,43 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShippingForm } from '../components/ShippingForm';
 import type { ShippingFormData } from '../components/ShippingFormFields';
 import { useCheckoutState, useValidateAddress } from '../hooks';
 import { useAuth } from '@/shared/hooks';
+import { useCartRest } from '@/features/cart/hooks/useCartRest';
+import { addressService } from '@/services';
 
 export const CheckoutAddressPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { setShippingAddress, setSelectedAddressId, selectedAddressId, setCurrentStep } = useCheckoutState();
-  const { validateAddress } = useValidateAddress();
+  const { validateAddress, calculateShipping } = useValidateAddress();
   const [showNewAddressForm, setShowNewAddressForm] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [isProcessing, setIsProcessing] = useState(false);
+  const [addresses, setAddresses] = useState<any[]>([]);
+  const [addressLoading, setAddressLoading] = useState(true);
 
-  // Buscar endereços do usuário (simplificado por enquanto)
-  const addressLoading = false;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const addresses: any[] = [];
+  // Carregar endereços do usuário
+  useEffect(() => {
+    const loadAddresses = async () => {
+      try {
+        setAddressLoading(true);
+        const userAddresses = await addressService.getMyAddresses();
+        setAddresses(userAddresses);
+      } catch (error) {
+        console.error('Erro ao carregar endereços:', error);
+        setAddresses([]);
+      } finally {
+        setAddressLoading(false);
+      }
+    };
 
-  // Buscar carrinho do usuário (simplificado por enquanto)
-  const cartLoading = false;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const cart: any = null;
+    loadAddresses();
+  }, []);
+
+  // Buscar carrinho do usuário
+  const { cart, loading: cartLoading } = useCartRest();
   const hasAddresses = addresses.length > 0;
 
   const handleSelectAddress = (addressId: string) => {
@@ -71,12 +86,12 @@ export const CheckoutAddressPage = () => {
         return;
       }
 
-      // Calcular frete (simplificado)
-      const shippingCalculation = { success: true, shippingCost: 15.00, estimatedDays: 7 };
+      // Calcular frete usando o endpoint do backend
+      const shippingCalculation = await calculateShipping(data.cep, data.state, data.city);
 
       if (!shippingCalculation.success) {
         setValidationErrors({
-          shipping: 'Não foi possível calcular o frete',
+          shipping: shippingCalculation.error || 'Não foi possível calcular o frete',
         });
         setIsProcessing(false);
         return;
@@ -143,12 +158,12 @@ export const CheckoutAddressPage = () => {
         return;
       }
 
-      // Calcular frete (simplificado)
-      const shippingCalculation = { success: true, shippingCost: 15.00, estimatedDays: 7 };
+      // Calcular frete usando o endpoint do backend
+      const shippingCalculation = await calculateShipping(address.zipCode, address.state, address.city);
 
       if (!shippingCalculation.success) {
         setValidationErrors({
-          shipping: 'Não foi possível calcular o frete',
+          shipping: shippingCalculation.error || 'Não foi possível calcular o frete',
         });
         setIsProcessing(false);
         return;

@@ -1,5 +1,6 @@
 import type { PaymentInfo } from './CheckoutContext';
 import { environment } from '@/config/environment';
+import { ensureCsrfToken } from '@/utils/csrf';
 
 interface ValidationError {
   field: string;
@@ -29,7 +30,7 @@ export const useValidatePayment = () => {
       // O backend atualmente valida apenas os métodos explícitos via equals().
 
       const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-      const csrfToken = getCookie('XSRF-TOKEN');
+      const csrfToken = await ensureCsrfToken();
       if (csrfToken) headers['X-XSRF-TOKEN'] = csrfToken;
 
       const resp = await fetch(`${apiBase}/api/payments/validate`, {
@@ -64,13 +65,6 @@ export const useValidatePayment = () => {
       };
     }
   };
-
-  function getCookie(name: string): string | null {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
-    return null;
-  }
 
   return {
     validatePayment,

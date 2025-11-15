@@ -255,10 +255,11 @@ npm run build && npm run lint
 * Sem CSS local
 
 ## 🔐 Segurança & Boas Práticas
-* Sempre usar `credentials: 'include'` nas requisições REST autenticadas.
-* Incluir header `X-XSRF-TOKEN` automaticamente via hook (já implementado).
-* Não versionar `.env.production` com valores sensíveis.
-* Em produção, usar HTTPS para proteger dados de pagamento.
+* Sessões autenticadas vivem apenas em cookies HttpOnly (`ACCESS_TOKEN` / `REFRESH_TOKEN`). Nenhum token fica em `localStorage`.
+* Hooks chamam `GET /api/csrf-token` antes de mutações e preenchem o header `X-XSRF-TOKEN` automaticamente.
+* O carrinho envia também `X-Integrity-Token` (HMAC) e usa `cartItemId` para PUT/DELETE, impedindo hijacking entre usuários.
+* Todas as chamadas protegidas usam `credentials: 'include'` por padrão.
+* Não versionar `.env.production` com valores sensíveis e sempre servir o app em HTTPS em produção.
 
 ## 🧾 Referência Rápida dos Endpoints de Pagamento (REST)
 | Endpoint | Método | Descrição |

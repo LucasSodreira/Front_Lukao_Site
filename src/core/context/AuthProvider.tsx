@@ -9,34 +9,68 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let active = true;
     const loadUser = async () => {
-      const token = authService.getAuthToken();
-      if (token) {
-        try {
-          const userData = await authService.getMe(token);
+      // Verifica se há cookies de autenticação antes de tentar carregar o usuário
+      const hasAuthCookies = document.cookie.includes('access_token') || document.cookie.includes('refresh_token');
+      
+      if (!hasAuthCookies) {
+        // Sem cookies de autenticação, não faz sentido tentar carregar usuário
+        if (active) {
+          setUser(null);
+          setLoading(false);
+        }
+        return;
+      }
+
+      try {
+        const userData = await authService.getMe();
+        if (active) {
           setUser({ ...userData } as User);
-        } catch {
-          authService.clearTokens();
+        }
+      } catch (error) {
+        const shouldAttemptRefresh = error instanceof Error && error.message === 'UNAUTHORIZED';
+        if (shouldAttemptRefresh) {
+          try {
+            const refreshed = await authService.refreshSession();
+            if (refreshed) {
+              const userData = await authService.getMe();
+              if (active) {
+                setUser({ ...userData } as User);
+              }
+              return;
+            }
+          } catch {
+            // Silenciosamente falha e trata como não autenticado
+            // Isso é esperado quando o backend reinicia e invalida os tokens
+            console.debug('Sessão expirada, usuário será tratado como não autenticado');
+          }
+        }
+        if (active) {
+          setUser(null);
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
         }
       }
-      setLoading(false);
     };
+
     loadUser();
+    return () => {
+      active = false;
+    };
   }, []);
 
   const login = async (email: string, password: string) => {
-    const response = await authService.login({ email, password });
-    authService.setAuthToken(response.accessToken);
-    authService.setRefreshToken(response.refreshToken);
-    const userData = await authService.getMe(response.accessToken);
+    await authService.login({ email, password });
+    const userData = await authService.getMe();
     setUser({ ...userData } as User);
   };
 
   const signup = async (name: string, email: string, password: string, phone?: string) => {
-    const response = await authService.signup({ name, email, password, phone });
-    authService.setAuthToken(response.accessToken);
-    authService.setRefreshToken(response.refreshToken);
-    const userData = await authService.getMe(response.accessToken);
+    await authService.signup({ name, email, password, phone });
+    const userData = await authService.getMe();
     setUser({ ...userData } as User);
   };
 
@@ -46,7 +80,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (e) {
       console.error('Erro ao fazer logout', e);
     } finally {
-      authService.clearTokens();
       setUser(null);
     }
   };

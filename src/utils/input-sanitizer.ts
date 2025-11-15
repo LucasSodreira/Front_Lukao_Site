@@ -12,12 +12,12 @@ export class InputSanitizer {
    */
   static sanitizeHTML(input: string): string {
     return input
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#x27;')
-      .replace(/\//g, '&#x2F;');
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#x27;")
+      .replace(/\//g, "&#x2F;");
   }
 
   /**
@@ -27,12 +27,12 @@ export class InputSanitizer {
     try {
       const url = new URL(input);
       // Apenas permite http e https
-      if (!['http:', 'https:'].includes(url.protocol)) {
-        return '';
+      if (!["http:", "https:"].includes(url.protocol)) {
+        return "";
       }
       return url.toString();
     } catch {
-      return '';
+      return "";
     }
   }
 
@@ -40,9 +40,7 @@ export class InputSanitizer {
    * Remove espaços em branco excessivos
    */
   static normalizeWhitespace(input: string): string {
-    return input
-      .trim()
-      .replace(/\s+/g, ' ');
+    return input.trim().replace(/\s+/g, " ");
   }
 
   /**
@@ -50,8 +48,8 @@ export class InputSanitizer {
    */
   static sanitizeText(input: string): string {
     return input
-      .replace(/<[^>]*>/g, '') // Remove tags HTML
-      .replace(/[<>"']/g, '')  // Remove caracteres perigosos
+      .replace(/<[^>]*>/g, "") // Remove tags HTML
+      .replace(/[<>"']/g, "") // Remove caracteres perigosos
       .trim();
   }
 
@@ -59,7 +57,7 @@ export class InputSanitizer {
    * Sanitiza número de telefone
    */
   static sanitizePhone(input: string): string {
-    return input.replace(/[^\d+\-() ]/g, '');
+    return input.replace(/[^\d+\-() ]/g, "");
   }
 
   /**
@@ -69,7 +67,7 @@ export class InputSanitizer {
     return input
       .toLowerCase()
       .trim()
-      .replace(/[^a-z0-9@._-]/g, '');
+      .replace(/[^a-z0-9@._-]/g, "");
   }
 
   /**
@@ -84,9 +82,7 @@ export class InputSanitizer {
    */
   static sanitizeFormInput(input: string, maxLength = 1000): string {
     return this.limitLength(
-      this.normalizeWhitespace(
-        this.sanitizeText(input)
-      ),
+      this.normalizeWhitespace(this.sanitizeText(input)),
       maxLength
     );
   }

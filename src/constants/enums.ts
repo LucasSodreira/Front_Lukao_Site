@@ -15,9 +15,8 @@ export const ORDER_STATUS = {
 export type OrderStatus = typeof ORDER_STATUS[keyof typeof ORDER_STATUS];
 
 export const USER_ROLE = {
-  CUSTOMER: 'CUSTOMER',
+  BUYER: 'BUYER',
   ADMIN: 'ADMIN',
-  ARTISAN: 'ARTISAN',
 } as const;
 
 export type UserRole = typeof USER_ROLE[keyof typeof USER_ROLE];

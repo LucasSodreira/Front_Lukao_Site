@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useProduct } from '@/features/products/hooks/useProducts';
 import { Breadcrumb, QuantitySelector } from '@/shared/components/common';
 import { ProductGallery, ProductTabs, RelatedProducts } from '@/features/products/components';
-import { logger } from '@/utils';
 import { useCartRest } from '@/features/cart/hooks/useCartRest';
 
 const ProductDetailPage = () => {
@@ -56,7 +55,6 @@ const ProductDetailPage = () => {
   }
 
   if (error) {
-    logger.error('Erro ao carregar produto', { productId: numericId, error });
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center space-y-4">
@@ -97,8 +95,7 @@ const ProductDetailPage = () => {
       );
       setToast('✓ Adicionado ao carrinho!');
       setQuantity(1);
-    } catch (e) {
-      logger.error('Erro ao adicionar ao carrinho', { productId: numericId, quantity, error: e });
+    } catch {
       setToast('Erro ao adicionar ao carrinho');
     } finally {
       setAdding(false);
@@ -116,18 +113,28 @@ const ProductDetailPage = () => {
     ? Array.from(new Set(product.variations.map(v => v.color?.name).filter(Boolean)))
     : [];
 
+  // Todos os tamanhos únicos do produto
+  const allSizes = product.variations
+    ? Array.from(new Set(product.variations.map(v => v.size?.name).filter(Boolean)))
+    : [];
+
   // Tamanhos disponíveis para a cor selecionada
-  const availableSizes = product.variations
+  const availableSizesForColor = product.variations
     ? product.variations
         .filter(v => v.color?.name === selectedColor)
         .map(v => v.size?.name)
         .filter(Boolean)
     : [];
 
+  // Função para verificar se um tamanho está disponível para a cor selecionada
+  const isSizeAvailable = (sizeName: string): boolean => {
+    return availableSizesForColor.includes(sizeName);
+  };
+
   const breadcrumbItems = [
     { label: 'Home', href: '/' },
-    { label: 'Roupas', href: '/products' },
-    { label: 'Camisetas', href: '/products?category=camisetas' },
+    { label: 'Produtos', href: '/products' },
+    ...(product.category ? [{ label: product.category.name, href: `/products?category=${product.category.id}` }] : []),
     { label: product.title }
   ];
 
@@ -152,39 +159,44 @@ const ProductDetailPage = () => {
           <div className="flex flex-col gap-6">
             <div>
               {product.brand && typeof product.brand === 'object' && 'name' in product.brand && (
-                <p className="text-sm font-semibold text-primary">
+                <p className="text-xs font-bold text-primary uppercase tracking-widest">
                   {product.brand.name}
                 </p>
               )}
-              <h1 className="text-text-light dark:text-text-dark text-4xl font-bold leading-tight tracking-tight mt-1">
+              <h1 className="text-text-light dark:text-text-dark text-3xl lg:text-4xl font-bold leading-tight tracking-tight mt-2">
                 {product.title}
               </h1>
-              <div className="flex items-center gap-2 mt-3">
-                <div className="flex text-primary">
+              <div className="flex items-center gap-3 mt-4">
+                <div className="flex text-yellow-400 gap-0.5">
                   {[...Array(5)].map((_, i) => (
-                    <span key={i} className="material-symbols-outlined !text-xl">
-                      star
+                    <span key={i} className="material-symbols-outlined !text-lg">
+                      {i < Math.round(product.rating ?? 0) ? 'star' : 'star_outline'}
                     </span>
                   ))}
                 </div>
-                <p className="text-sm text-subtle-light dark:text-subtle-dark">
-                  (123 avaliações)
+                <p className="text-sm text-subtle-light dark:text-subtle-dark font-medium">
+                  ({Math.round(product.rating ?? 0)}/5 - 123 avaliações)
                 </p>
               </div>
             </div>
 
-            <p className="text-4xl font-bold text-text-light dark:text-text-dark">
-              {priceBRL}
-            </p>
+            <div className="space-y-1 py-4 border-y border-border-light dark:border-border-dark">
+              <p className="text-xs text-subtle-light dark:text-subtle-dark uppercase tracking-widest font-semibold">
+                Preço
+              </p>
+              <p className="text-4xl lg:text-5xl font-black text-text-light dark:text-text-dark">
+                {priceBRL}
+              </p>
+            </div>
 
             {/* Seleção de Cor e Tamanho */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-5 bg-gray-50 dark:bg-slate-900/30 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
               {availableColors.length > 0 && (
-                <div>
-                  <label className="text-sm font-medium text-text-light dark:text-text-dark">
-                    Cor: <span className="font-bold">{selectedColor}</span>
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-text-light dark:text-text-dark block">
+                    Cor: <span className="text-primary font-bold">{selectedColor}</span>
                   </label>
-                  <div className="flex gap-3 mt-2">
+                  <div className="flex gap-3 flex-wrap">
                     {availableColors.map((color) => {
                       const variation = product.variations?.find(v => v.color?.name === color);
                       const hexCode = variation?.color?.hexCode || '#cccccc';
@@ -194,7 +206,7 @@ const ProductDetailPage = () => {
                         <button
                           key={color}
                           onClick={() => setSelectedColor(color as string)}
-                          className={`w-10 h-10 rounded-full border-2 transition-all ${
+                          className={`w-10 h-10 rounded-full border-2 transition-all hover:scale-110 ${
                             isSelected
                               ? 'border-primary ring-2 ring-primary ring-offset-2'
                               : 'border-border-light dark:border-border-dark hover:border-primary'
@@ -208,47 +220,59 @@ const ProductDetailPage = () => {
                 </div>
               )}
 
-              {availableSizes.length > 0 && (
-                <div>
+              {allSizes.length > 0 && (
+                <div className="space-y-2 pt-3 border-t border-gray-300 dark:border-gray-600">
                   <div className="flex justify-between items-baseline">
-                    <label className="text-sm font-medium text-text-light dark:text-text-dark">
+                    <label className="text-sm font-semibold text-text-light dark:text-text-dark">
                       Tamanho
                     </label>
                     <a
                       href="#"
-                      className="text-xs text-subtle-light dark:text-subtle-dark hover:text-primary"
+                      className="text-xs text-subtle-light dark:text-subtle-dark hover:text-primary transition-colors"
                     >
                       Guia de tamanhos
                     </a>
                   </div>
-                  <div className="flex flex-wrap gap-3 mt-2">
-                    {availableSizes.map((size) => {
+                  <div className="flex flex-wrap gap-2">
+                    {allSizes.map((size: string) => {
                       const isSelected = selectedSize === size;
+                      const isAvailable = isSizeAvailable(size);
                       
                       return (
                         <button
                           key={size}
-                          onClick={() => setSelectedSize(size as string)}
-                          className={`flex items-center justify-center rounded-lg h-10 px-4 text-sm font-bold transition-all ${
-                            isSelected
+                          onClick={() => isAvailable && setSelectedSize(size)}
+                          disabled={!isAvailable}
+                          className={`flex items-center justify-center rounded-lg h-10 px-4 text-sm font-bold transition-all relative ${
+                            isSelected && isAvailable
                               ? 'border-2 border-primary bg-primary/10 text-primary'
-                              : 'border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark hover:border-primary'
+                              : isAvailable
+                              ? 'border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark hover:border-primary'
+                              : 'border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed'
                           }`}
+                          title={isAvailable ? `${size} disponível` : `${size} indisponível para ${selectedColor}`}
                         >
                           {size}
+                          {!isAvailable && (
+                            <span className="absolute inset-0 flex items-center justify-center bg-gradient-to-r from-transparent to-red-500/20 rounded-lg">
+                              <span className="text-xs font-bold text-gray-500 dark:text-gray-400">✕</span>
+                            </span>
+                          )}
                         </button>
                       );
                     })}
                   </div>
+                  {availableSizesForColor.length > 0 && (
+                    <p className="text-xs text-subtle-light dark:text-subtle-dark mt-2">
+                      Disponíveis para {selectedColor}: {availableSizesForColor.join(', ')}
+                    </p>
+                  )}
                 </div>
               )}
             </div>
 
             {/* Quantidade */}
             <div className="flex flex-col">
-              <label className="text-sm font-normal text-text-light dark:text-text-dark mb-2">
-                Quantidade
-              </label>
               <QuantitySelector
                 value={quantity}
                 onChange={setQuantity}
@@ -262,12 +286,12 @@ const ProductDetailPage = () => {
               <button
                 onClick={handleAddToCart}
                 disabled={adding || product.inventory === 0}
-                className="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-primary text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-primary text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span className="material-symbols-outlined">shopping_bag</span>
                 {adding ? 'Adicionando...' : 'Adicionar ao Carrinho'}
               </button>
-              <button className="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-transparent text-primary border-2 border-primary gap-2 text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/10 transition-colors">
+              <button className="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-transparent text-primary border-2 border-primary gap-2 text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/10 active:scale-95 transition-all">
                 <span className="material-symbols-outlined">favorite</span>
                 Adicionar à Lista de Desejos
               </button>
@@ -275,10 +299,10 @@ const ProductDetailPage = () => {
 
             {/* Calcular Frete */}
             <div className="border-t border-border-light dark:border-border-dark pt-4">
-              <p className="text-sm font-medium text-text-light dark:text-text-dark">
+              <p className="text-sm font-semibold text-text-light dark:text-text-dark mb-2.5">
                 Calcular frete e prazo
               </p>
-              <div className="flex items-start gap-2 mt-2">
+              <div className="flex items-start gap-2">
                 <div className="relative flex-grow">
                   <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-subtle-light dark:text-subtle-dark !text-xl">
                     local_shipping
@@ -286,16 +310,16 @@ const ProductDetailPage = () => {
                   <input
                     type="text"
                     placeholder="Digite seu CEP"
-                    className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-light dark:text-text-dark focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark h-12 placeholder:text-subtle-light dark:placeholder:text-subtle-dark pl-10 pr-4 text-sm font-normal leading-normal"
+                    className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-light dark:text-text-dark focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark h-10 placeholder:text-subtle-light dark:placeholder:text-subtle-dark pl-10 pr-4 text-sm font-normal leading-normal"
                   />
                 </div>
-                <button className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 shrink-0 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+                <button className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 shrink-0 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 active:scale-95 transition-all">
                   Simular
                 </button>
               </div>
               <a
                 href="#"
-                className="text-xs text-subtle-light dark:text-subtle-dark hover:text-primary mt-1 inline-block"
+                className="text-xs text-subtle-light dark:text-subtle-dark hover:text-primary mt-1.5 inline-block transition-colors"
               >
                 Não sei meu CEP
               </a>

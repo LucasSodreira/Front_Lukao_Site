@@ -3,14 +3,15 @@
  */
 
 export interface User {
-  id: string;
+  id: number;
   name: string;
   email: string;
   role: string;
   phone?: string;
+  birthDate?: string;
   status: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface AuthResponse {

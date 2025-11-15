@@ -11,7 +11,7 @@ interface BreadcrumbProps {
 
 export const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
   return (
-    <nav className="flex flex-wrap gap-2 pb-8">
+    <nav className="flex flex-wrap gap-2">
       {items.map((item, index) => (
         <div key={index} className="flex items-center gap-2">
           {item.href ? (

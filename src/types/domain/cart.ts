@@ -35,4 +35,5 @@ export interface Cart {
   itemCount?: number;
   createdAt?: string;
   updatedAt?: string;
+  integrityToken?: string;
 }

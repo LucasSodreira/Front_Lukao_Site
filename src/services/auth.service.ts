@@ -3,8 +3,7 @@
  * Gerencia tokens, autenticação e chamadas à API REST
  */
 
-import { STORAGE_KEYS } from '@/constants';
-import { environment } from '@/config/environment';
+import { environment } from "@/config/environment";
 
 export interface TokenData {
   token: string;
@@ -24,32 +23,73 @@ export interface SignUpRequest {
 }
 
 export interface AuthResponse {
-  accessToken: string;
-  refreshToken: string;
+  tokenType: string;
   expiresIn: number;
+  httpOnlyCookies: boolean;
 }
 
 export interface UserResponse {
-  id: string;
+  id: number;
   name: string;
   email: string;
   phone?: string;
   role: string;
   status: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 class AuthService {
   private baseUrl = `${environment.apiUrl}/api/auth`;
 
   /**
+   * Obtém o token CSRF do cookie
+   */
+  private getCsrfToken(): string | null {
+    const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
+    return match ? match[1] : null;
+  }
+
+  /**
+   * Garante que o token CSRF existe, fazendo uma requisição se necessário
+   */
+  private async ensureCsrfToken(): Promise<void> {
+    if (this.getCsrfToken()) {
+      return; // Já tem o token
+    }
+
+    // Faz uma requisição GET para obter o token CSRF
+    try {
+      await fetch(`${environment.apiUrl}/api/csrf-token`, {
+        method: "GET",
+        credentials: "include",
+      });
+    } catch {
+      // Ignora erros aqui; o token pode não ser necessário
+    }
+  }
+
+  /**
+   * Constrói os headers incluindo CSRF token se disponível
+   */
+  private buildHeaders(): HeadersInit {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+    const csrfToken = this.getCsrfToken();
+    if (csrfToken) {
+      headers["X-XSRF-TOKEN"] = csrfToken;
+    }
+    return headers;
+  }
+
+  /**
    * Realiza login com email e senha
    */
   async login(credentials: LoginRequest): Promise<AuthResponse> {
+    await this.ensureCsrfToken();
     const response = await fetch(`${this.baseUrl}/signin`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: this.buildHeaders(),
+      credentials: "include",
       body: JSON.stringify(credentials),
     });
     if (!response.ok) {
@@ -62,9 +102,11 @@ class AuthService {
    * Realiza signup
    */
   async signup(data: SignUpRequest): Promise<AuthResponse> {
+    await this.ensureCsrfToken();
     const response = await fetch(`${this.baseUrl}/signup`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: this.buildHeaders(),
+      credentials: "include",
       body: JSON.stringify(data),
     });
     if (!response.ok) {
@@ -76,13 +118,15 @@ class AuthService {
   /**
    * Obtém dados do usuário autenticado
    */
-  async getMe(token: string): Promise<UserResponse> {
+  async getMe(): Promise<UserResponse> {
     const response = await fetch(`${this.baseUrl}/me`, {
-      headers: { 
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
+      method: "GET",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
     });
+    if (response.status === 401) {
+      throw new Error("UNAUTHORIZED");
+    }
     if (!response.ok) {
       throw new Error(`Get user failed: ${response.statusText}`);
     }
@@ -94,63 +138,48 @@ class AuthService {
    */
   async logout(): Promise<void> {
     const response = await fetch(`${this.baseUrl}/logout`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: this.buildHeaders(),
+      credentials: "include",
     });
     if (!response.ok) {
       throw new Error(`Logout failed: ${response.statusText}`);
     }
   }
 
-  /**
-   * Salva o token de acesso
-   */
-  setAuthToken(token: string): void {
-    localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
+  async refreshSession(): Promise<boolean> {
+    try {
+      const response = await fetch(`${this.baseUrl}/refresh`, {
+        method: "POST",
+        headers: this.buildHeaders(),
+        credentials: "include",
+        body: JSON.stringify({}),
+      });
+
+      // Se o refresh falhar, limpa os cookies inválidos
+      if (!response.ok) {
+        this.clearAuthCookies();
+        return false;
+      }
+
+      return true;
+    } catch {
+      // Falha ao renovar sessão (esperado após reinício do backend)
+      this.clearAuthCookies();
+      return false;
+    }
   }
 
   /**
-   * Obtem o token de acesso
+   * Limpa os cookies de autenticação do lado do cliente
+   * Útil quando os tokens são inválidos
    */
-  getAuthToken(): string | null {
-    return localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
-  }
-
-  /**
-   * Salva o token de refresh
-   */
-  setRefreshToken(token: string): void {
-    localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, token);
-  }
-
-  /**
-   * Obtem o token de refresh
-   */
-  getRefreshToken(): string | null {
-    return localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
-  }
-
-  /**
-   * Limpa todos os tokens
-   */
-  clearTokens(): void {
-    localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
-    localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-  }
-
-  /**
-   * Verifica se o usuário está autenticado
-   */
-  isAuthenticated(): boolean {
-    return !!this.getAuthToken();
-  }
-
-  /**
-   * Verifica se o token está próximo de expirar (menos de 5 minutos)
-   */
-  isTokenExpiring(expiresIn: number): boolean {
-    const fiveMinutesInSeconds = 5 * 60;
-    return expiresIn < fiveMinutesInSeconds;
+  private clearAuthCookies(): void {
+    const cookiesToClear = ["access_token", "refresh_token"];
+    cookiesToClear.forEach((name) => {
+      document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax`;
+      document.cookie = `${name}=; path=/; domain=localhost; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax`;
+    });
   }
 }
 

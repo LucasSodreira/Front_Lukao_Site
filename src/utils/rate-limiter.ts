@@ -18,7 +18,11 @@ class RateLimiter {
    * @param windowMs Janela de tempo em milissegundos (padrão: 15 minutos)
    * @returns true se pode executar, false se excedeu o limite
    */
-  canExecute(key: string, maxAttempts: number = 5, windowMs: number = 900000): boolean {
+  canExecute(
+    key: string,
+    maxAttempts: number = 5,
+    windowMs: number = 900000
+  ): boolean {
     const now = Date.now();
     const record = this.attempts.get(key);
 
@@ -47,7 +51,7 @@ class RateLimiter {
   getTimeUntilReset(key: string): number {
     const record = this.attempts.get(key);
     if (!record) return 0;
-    
+
     const remaining = Math.max(0, record.resetTime - Date.now());
     return Math.ceil(remaining / 1000);
   }

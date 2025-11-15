@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '@/services/auth.service';
+import { useAuth } from '@/shared/hooks';
 import { Card, CardBody, CardTitle } from '@/ui/Card';
 import Input from '@/ui/Input';
 import { Button } from '@/ui/Button';
 import { MESSAGES } from '@/constants';
 import { validateEmail, validatePassword } from '@/utils/validators';
-import { logger, InputSanitizer, rateLimiter } from '@/utils';
+import { InputSanitizer, rateLimiter } from '@/utils';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -19,6 +19,7 @@ const RegisterPage = () => {
   const [error, setError] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const navigate = useNavigate();
+  const { signup } = useAuth();
 
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {};
@@ -88,16 +89,12 @@ const RegisterPage = () => {
     setError('');
 
     try {
-      const response = await authService.signup({
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        phone: formData.phone || undefined
-      });
-
-      // Salvar tokens
-      authService.setAuthToken(response.accessToken);
-      authService.setRefreshToken(response.refreshToken);
+      await signup(
+        formData.name,
+        formData.email,
+        formData.password,
+        formData.phone || undefined
+      );
       
       // Reset rate limit em caso de sucesso
       rateLimiter.reset(rateLimitKey);
@@ -105,7 +102,6 @@ const RegisterPage = () => {
       // Redirecionar para home após criar conta
       navigate('/');
     } catch (err: unknown) {
-      logger.error('Erro ao criar conta', { email: formData.email, error: err });
       const errorMessage = err instanceof Error ? err.message : 'Erro ao criar conta';
       setError(errorMessage);
     } finally {

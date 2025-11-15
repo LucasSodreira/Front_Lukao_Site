@@ -1,143 +1,210 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import { CheckoutBreadcrumb } from '../components/CheckoutBreadcrumb';
-import { CreditCardForm, type CreditCardData } from '../components/CreditCardForm';
-import { useCheckoutState, useValidatePayment, useStripePayment } from '../hooks';
-import { logger } from '@/utils';
+import { StripePaymentForm } from '../components/StripePaymentForm';
+import { useCheckoutState, useStripePayment } from '../hooks';
+import { useCartRest } from '@/features/cart/hooks/useCartRest';
+import { orderService } from '@/services';
+import { environment } from '@/config/environment';
+
+const stripePromise = loadStripe(environment.stripePublicKey);
 
 export const CheckoutPaymentPage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { shippingAddress, orderId, setPaymentInfo, setCurrentStep } = useCheckoutState();
-  const { validatePayment } = useValidatePayment();
   const { createPaymentIntent, processPayment } = useStripePayment();
   
+  // Obter orderId da query string se vindo de detalhes do pedido
+  const queryOrderId = searchParams.get('orderId');
+  const effectiveOrderId = queryOrderId ? parseInt(queryOrderId, 10) : orderId;
+  
   const [isProcessing, setIsProcessing] = useState(false);
-  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [paymentError, setPaymentError] = useState<string>('');
+  const [clientSecret, setClientSecret] = useState<string>('');
+  const paymentIntentCreated = useRef(false);
 
-  // Carrinho será obtido do contexto ou estado (simplificado por enquanto)
-  const cartLoading = false;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const cart: any = null;
+  // Buscar dados reais do carrinho (apenas se não vindo de detalhes do pedido)
+  const { cart, loading: cartLoading } = useCartRest();
+
+  // Buscar dados do pedido se vindo de detalhes do pedido
+  const { 
+    data: orderData, 
+    isLoading: orderLoading 
+  } = useQuery({
+    queryKey: ['order', effectiveOrderId],
+    queryFn: () => {
+      if (!effectiveOrderId) throw new Error('Order ID inválido');
+      return orderService.getOrderById(Number(effectiveOrderId));
+    },
+    enabled: !!queryOrderId && !!effectiveOrderId,
+  });
 
   // Garantir pré-condições: endereço e orderId
   useEffect(() => {
-    if (!shippingAddress && !cartLoading) {
+    if (!queryOrderId && !shippingAddress && !cartLoading) {
+      // Se não vindo de detalhes do pedido e sem endereço, volta para endereço
       navigate('/checkout/address');
-    } else if (shippingAddress && !orderId && !cartLoading) {
+    } else if (!queryOrderId && shippingAddress && !orderId && !cartLoading) {
       // Sem orderId (não criou pedido na revisão) volta para revisão
       navigate('/checkout/review');
     }
-  }, [shippingAddress, orderId, cartLoading, navigate]);
+  }, [shippingAddress, orderId, cartLoading, navigate, queryOrderId]);
 
-  if (cartLoading || !cart) {
+  // Criar Payment Intent quando a página carregar
+  useEffect(() => {
+    const initPayment = async () => {
+      // Evitar múltiplas criações
+      if (!effectiveOrderId || clientSecret || paymentIntentCreated.current) return;
+      
+      paymentIntentCreated.current = true;
+      setIsProcessing(true);
+    
+      
+      const intentResult = await createPaymentIntent(String(effectiveOrderId));
+      
+      if (!intentResult.success) {
+        setPaymentError(intentResult.error || 'Falha ao criar intenção de pagamento');
+        paymentIntentCreated.current = false; // Permitir retry em caso de erro
+        setIsProcessing(false);
+        return;
+      }
+
+      setClientSecret(intentResult.clientSecret || '');
+      setIsProcessing(false);
+    };
+
+    initPayment();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [effectiveOrderId]);
+
+  if (cartLoading || (queryOrderId && orderLoading)) {
     return (
       <main className="container mx-auto px-4 py-8 md:py-12">
         <div className="text-center space-y-4 py-12">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Carregando...</h1>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+            {queryOrderId ? 'Carregando detalhes do pedido...' : 'Carregando carrinho...'}
+          </h1>
         </div>
       </main>
     );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const subtotal = cart.items.reduce((sum: number, item: any) => sum + Number(item.totalPrice || 0), 0);
-  const shipping = 20.0; // TODO: Calcular frete real do backend
-  const total = subtotal + shipping;
+  // Se vindo de detalhes do pedido
+  if (queryOrderId && !orderData) {
+    return (
+      <main className="container mx-auto px-4 py-8 md:py-12">
+        <div className="text-center space-y-4 py-12">
+          <div className="text-red-600 dark:text-red-400 text-lg font-semibold">
+            Erro ao carregar pedido
+          </div>
+          <button
+            onClick={() => navigate(`/orders/${effectiveOrderId}`)}
+            className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700"
+          >
+            Voltar para Detalhes do Pedido
+          </button>
+        </div>
+      </main>
+    );
+  }
+
+  // Se no fluxo normal e carrinho vazio
+  if (!queryOrderId && (!cart || cart.items.length === 0)) {
+    return (
+      <main className="container mx-auto px-4 py-8 md:py-12">
+        <div className="text-center space-y-4 py-12">
+          <div className="text-gray-600 dark:text-gray-400 text-lg">
+            Carrinho vazio
+          </div>
+          <button
+            onClick={() => navigate('/cart')}
+            className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700"
+          >
+            Voltar para Carrinho
+          </button>
+        </div>
+      </main>
+    );
+  }
+
+  // Calcular totais baseado se é pedido ou carrinho
+  let subtotal = 0;
+  let shipping = 0;
+  let total = 0;
+
+  if (queryOrderId && orderData) {
+    // Usando dados do pedido
+    subtotal = orderData.items.reduce((sum, item) => sum + Number(item.totalPrice || 0), 0);
+    shipping = Number(orderData.shippingCost || 0);
+    total = Number(orderData.totalAmount || 0);
+  } else if (cart) {
+    // Usando dados do carrinho
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    subtotal = cart.items.reduce((sum: number, item: any) => sum + Number(item.totalPrice || 0), 0);
+    shipping = 20.0; // TODO: Calcular frete real do backend
+    total = subtotal + shipping;
+  }
 
   /**
-   * Processa o pagamento com cartão de crédito via Stripe
-   * 
-   * Fluxo:
-   * 1. Valida dados do cartão
-   * 2. Cria intenção de pagamento no Stripe
-   * 3. Processa o pagamento
-   * 4. Se sucesso, navega para revisão
+   * Callback chamado quando o pagamento é confirmado com sucesso pelo Stripe Elements
    */
-  const handleCreditCardSubmit = async (cardData: CreditCardData) => {
+  const handlePaymentSuccess = async (confirmedPaymentIntentId: string) => {
     setIsProcessing(true);
-    setValidationErrors({});
+    setPaymentError('');
 
     try {
-
-      // 1. Validar dados do cartão no backend
-      const paymentValidation = await validatePayment({
-        method: 'credit_card',
-        ...cardData,
-      });
-
-      if (!paymentValidation.isValid) {
-        const errors: Record<string, string> = {};
-        paymentValidation.errors.forEach(error => {
-          errors[error.field] = error.message;
-        });
-        setValidationErrors(errors);
-        logger.warn('Validação de cartão falhou', { errors });
+      if (!effectiveOrderId) {
+        setPaymentError('Pedido não encontrado. Volte para revisão.');
         setIsProcessing(false);
+        if (!queryOrderId) {
+          navigate('/checkout/review');
+        } else {
+          navigate(`/orders/${effectiveOrderId}`);
+        }
         return;
       }
 
-      logger.info('Cartão validado com sucesso');
-
-      // 2. Criar intenção de pagamento no Stripe usando orderId persistido
-      if (!orderId) {
-        setValidationErrors({ general: 'Pedido não encontrado. Volte para revisão.' });
-        setIsProcessing(false);
-        navigate('/checkout/review');
-        return;
-      }
-
-      const intentResult = await createPaymentIntent(orderId);
-      
-      if (!intentResult.success) {
-        setValidationErrors({
-          general: intentResult.error || 'Falha ao criar intenção de pagamento',
-        });
-        logger.error('Erro ao criar intenção de pagamento', { error: intentResult.error });
-        setIsProcessing(false);
-        return;
-      }
-
-      // 3. Processar pagamento
-    const paymentResult = await processPayment(orderId, intentResult.paymentIntentId || '');
+      // Processar pagamento no backend (atualiza status do pedido)
+      const paymentResult = await processPayment(String(effectiveOrderId), confirmedPaymentIntentId);
 
       if (!paymentResult.success) {
-        setValidationErrors({
-          general: paymentResult.error || 'Falha ao processar pagamento',
-        });
-        logger.error('Erro ao processar pagamento', { error: paymentResult.error });
+        setPaymentError(paymentResult.error || 'Falha ao processar pagamento');
         setIsProcessing(false);
         return;
       }
 
-      logger.info('Pagamento processado com sucesso', { 
-        paymentIntentId: paymentResult.paymentIntentId,
-        status: paymentResult.status 
-      });
-
-      // 4. Salvar dados do pagamento
+      // Salvar dados do pagamento
       setPaymentInfo({
         method: 'credit_card',
-        ...cardData,
+        cardNumber: '',
+        cardExpiry: '',
+        cardCvv: '',
+        installments: 1,
       });
       
-      // orderId já existente; resposta pode confirmar
+      // Atualizar etapa atual para pagamento concluído
+      setCurrentStep('payment');
+      
+      // Navegar para sucesso com orderId na URL
+      navigate(`/checkout/success/${paymentResult.orderId}`);
 
-  // Atualizar etapa atual para pagamento concluído antes de sucesso
-  setCurrentStep('payment');
-  // 5. Navegar para sucesso
-      navigate('/checkout/success', {
-        state: { orderId: paymentResult.orderId },
-      });
-
-    } catch (error) {
-      logger.error('Erro durante processamento de pagamento', { error });
-      setValidationErrors({
-        general: 'Erro ao processar pagamento. Tente novamente.',
-      });
+    } catch {
+      setPaymentError('Erro ao processar pagamento. Tente novamente.');
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  /**
+   * Callback chamado quando há erro no pagamento
+   */
+  const handlePaymentError = (error: string) => {
+    setPaymentError(error);
   };
 
   const breadcrumbItems = [
@@ -163,45 +230,38 @@ export const CheckoutPaymentPage = () => {
             </p>
           </div>
 
-          {/* Aviso de processamento */}
-          {isProcessing && (
+          {/* Aviso de inicialização */}
+          {!clientSecret && isProcessing && (
             <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
               <div className="flex items-center gap-3">
                 <div className="animate-spin rounded-full h-5 w-5 border-2 border-blue-600 border-t-transparent"></div>
                 <p className="text-blue-700 dark:text-blue-300 text-sm font-semibold">
-                  Processando seu pagamento... Por favor, aguarde.
+                  Preparando pagamento... Por favor, aguarde.
                 </p>
               </div>
             </div>
           )}
 
-          {/* Formulário de Cartão de Crédito */}
-          <div className="bg-white dark:bg-background-dark/80 p-6 md:p-8 rounded-xl shadow-sm border border-transparent dark:border-gray-800 mb-6">
-            <CreditCardForm
-              onSubmit={handleCreditCardSubmit}
-              totalAmount={total}
-              isLoading={isProcessing}
-            />
-
-            {/* Informação de segurança e bandeiras */}
-            <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
-              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                <span className="material-symbols-outlined text-lg">lock</span>
-                <span>Seus dados estão protegidos. Compra 100% segura.</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <img alt="Visa" className="h-6" src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" />
-                <img alt="Mastercard" className="h-6" src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" />
-              </div>
+          {/* Erro de Pagamento */}
+          {paymentError && (
+            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+              <p className="text-red-700 dark:text-red-300 text-sm font-semibold">❌ {paymentError}</p>
             </div>
+          )}
 
-            {/* Erro de Validação */}
-            {validationErrors.general && (
-              <div className="mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                <p className="text-red-700 dark:text-red-300 text-sm font-semibold">{validationErrors.general}</p>
-              </div>
-            )}
-          </div>
+          {/* Formulário de Pagamento Stripe */}
+          {clientSecret && (
+            <Elements stripe={stripePromise}>
+              <StripePaymentForm
+                clientSecret={clientSecret}
+                orderId={String(effectiveOrderId)}
+                amount={total}
+                onSuccess={handlePaymentSuccess}
+                onError={handlePaymentError}
+                isLoading={isProcessing}
+              />
+            </Elements>
+          )}
 
           {/* Informação de Segurança */}
           <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-start gap-3">
@@ -216,10 +276,10 @@ export const CheckoutPaymentPage = () => {
 
           {/* Botão Voltar */}
           <button
-            onClick={() => navigate('/checkout/review')}
+            onClick={() => queryOrderId ? navigate(`/orders/${effectiveOrderId}`) : navigate('/checkout/review')}
             className="w-full mt-6 border-2 border-gray-300 dark:border-gray-600 text-[#0e121b] dark:text-white font-bold py-3 rounded-xl text-base hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors"
           >
-            Voltar para Revisão
+            {queryOrderId ? 'Voltar para Detalhes do Pedido' : 'Voltar para Revisão'}
           </button>
         </div>
 

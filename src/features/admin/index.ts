@@ -1,0 +1,14 @@
+export { default as DashboardPage } from './pages/DashboardPage';
+export { default as AdminLoginPage } from './pages/AdminLoginPage';
+export { default as CreateAccountPage } from './pages/CreateAccountPage';
+export { default as CustomersPage } from './pages/CustomersPage';
+export { default as EditCustomerPage } from './pages/EditCustomerPage';
+export { default as OrderDetailsPage } from './pages/OrderDetailsPage';
+export { default as OrderInvoicePage } from './pages/OrderInvoicePage';
+export { default as OrdersPage } from './pages/OrdersPage';
+export { default as PaymentsPage } from './pages/PaymentsPage';
+export { default as ProductManagementPage } from './pages/ProductManagementPage';
+export { default as ProductFormPage } from './pages/ProductFormPage';
+export { default as ReportsPage } from './pages/ReportsPage';
+export { default as ReviewsManagementPage } from './pages/ReviewsManagementPage';
+export { default as SettingsPage } from './pages/SettingsPage';

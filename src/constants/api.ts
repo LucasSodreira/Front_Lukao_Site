@@ -33,8 +33,6 @@ export const CACHE_KEYS = {
 } as const;
 
 export const STORAGE_KEYS = {
-  AUTH_TOKEN: 'authToken',
-  REFRESH_TOKEN: 'refreshToken',
   THEME: 'theme',
   LANGUAGE: 'language',
   USER_PREFERENCES: 'userPreferences',

@@ -3,7 +3,7 @@
  * Gerencia dados persistidos no localStorage
  */
 
-import { STORAGE_KEYS } from '@/constants';
+import { STORAGE_KEYS } from "@/constants";
 
 class StorageService {
   /**
@@ -52,7 +52,7 @@ class StorageService {
     try {
       localStorage.clear();
     } catch (error) {
-      console.error('Erro ao limpar localStorage:', error);
+      console.error("Erro ao limpar localStorage:", error);
     }
   }
 

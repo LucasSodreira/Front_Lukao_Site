@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CheckCircle2 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
@@ -8,41 +8,17 @@ import { Button } from '@/ui/Button';
 import { OrderConfirmationDetails } from '../components/OrderConfirmationDetails';
 import { orderService } from '@/services';
 import { useCheckoutState } from '../hooks';
-
-interface Order {
-  id: string;
-  status: string;
-  totalAmount: number;
-  shippingCost: number;
-  items: Array<{
-    id: string;
-    product: {
-      id: string;
-      title: string;
-      image?: string;
-    };
-    quantity: number;
-    totalPrice: number;
-  }>;
-  createdAt: string;
-  address?: {
-    fullName: string;
-    street: string;
-    number: string;
-    complement?: string;
-    neighborhood: string;
-    city: string;
-    state: string;
-    cep: string;
-  };
-  paymentMethod?: string;
-  estimatedDelivery?: string;
-}
+import type { Order } from '@/types/domain/order';
 
 export const CheckoutSuccessPage: FC = () => {
   const { orderId } = useParams<{ orderId: string }>();
   const navigate = useNavigate();
   const { clearCheckout } = useCheckoutState();
+  const numericOrderId = useMemo(() => {
+    if (!orderId) return undefined;
+    const parsed = Number.parseInt(orderId, 10);
+    return Number.isNaN(parsed) ? undefined : parsed;
+  }, [orderId]);
 
   // Limpar dados de checkout quando chegar na página de sucesso
   useEffect(() => {
@@ -50,11 +26,16 @@ export const CheckoutSuccessPage: FC = () => {
   }, [clearCheckout]);
 
   // Buscar dados do pedido da API
-  const { data: order, isLoading: loading, error: queryError } = useQuery({
-    queryKey: ['order', orderId],
-    queryFn: () => orderId ? orderService.getOrderById(orderId) as unknown as Promise<Order> : Promise.reject(new Error('Order ID não fornecido')),
-    enabled: !!orderId,
-  }) as { data: Order | undefined; isLoading: boolean; error: Error | null };
+  const { data: order, isLoading: loading, error: queryError } = useQuery<Order, Error>({
+    queryKey: ['order', numericOrderId],
+    enabled: typeof numericOrderId === 'number',
+    queryFn: () => {
+      if (typeof numericOrderId !== 'number') {
+        return Promise.reject(new Error('Order ID não fornecido'));
+      }
+      return orderService.getOrderById(numericOrderId);
+    },
+  });
 
   // Mostrar loading
   if (loading) {

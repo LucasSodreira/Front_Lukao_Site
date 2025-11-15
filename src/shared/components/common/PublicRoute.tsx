@@ -11,10 +11,15 @@ interface PublicRouteProps {
 }
 
 export const PublicRoute = ({ children }: PublicRouteProps) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
-  // Se o usuário já está autenticado, redireciona para a home
+  // Se o usuário já está autenticado, redireciona
   if (isAuthenticated) {
+    // Se é admin e está na rota de admin login, redireciona para dashboard admin
+    if (user?.role === 'ADMIN' && window.location.pathname.includes('admin/login')) {
+      return <Navigate to="/admin/dashboard" replace />;
+    }
+    // Caso contrário, redireciona para home normal
     return <Navigate to="/" replace />;
   }
 

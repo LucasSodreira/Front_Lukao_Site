@@ -148,14 +148,14 @@ export function CheckoutProvider({ children }: CheckoutProviderProps) {
     switch (step) {
       case 'address':
         return true; // Sempre pode acessar a primeira etapa
-      case 'payment':
-        return !!shippingAddress; // Precisa ter endereço para acessar pagamento
       case 'review':
-        return !!shippingAddress && !!paymentInfo; // Precisa ter endereço e pagamento
+        return !!shippingAddress; // Precisa ter endereço para acessar revisão
+      case 'payment':
+        return !!shippingAddress; // Precisa ter endereço para acessar pagamento (orderId é criado na review)
       default:
         return false;
     }
-  }, [shippingAddress, paymentInfo]);
+  }, [shippingAddress]);
 
   // Limpar dados de checkout (chamado após sucesso)
   const clearCheckout = useCallback(() => {

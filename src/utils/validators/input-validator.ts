@@ -24,6 +24,13 @@ export class InputValidator {
   }
 
   /**
+   * Valida ID de item no carrinho (mesma regra de IDs numéricos positivos)
+   */
+  static validateCartItemId(id: string | number): boolean {
+    return InputValidator.validateProductId(id);
+  }
+
+  /**
    * Valida string para prevenir injection
    */
   static sanitizeString(input: string): string {

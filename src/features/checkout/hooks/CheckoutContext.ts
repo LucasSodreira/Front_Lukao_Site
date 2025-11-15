@@ -20,6 +20,7 @@ export interface PaymentInfo {
   cardCvv?: string;
   installments?: number;
   saveCard?: boolean;
+  paymentIntentId?: string;
 }
 
 export type CheckoutStep = 'address' | 'review' | 'payment' | null;

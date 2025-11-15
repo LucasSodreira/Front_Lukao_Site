@@ -1,4 +1,5 @@
-import { checkoutService } from '@/services';
+import { environment } from '@/config/environment';
+import { ensureCsrfToken } from '@/utils/csrf';
 
 interface AddressInput {
   street: string;
@@ -13,18 +14,40 @@ interface AddressInput {
 export const useValidateAddress = () => {
   const validateAddress = async (address: AddressInput) => {
     try {
-      const result = await checkoutService.validateAddress({
-        street: address.street,
-        city: address.city,
-        state: address.state,
-        zipCode: address.cep,
-        country: 'Brasil',
+      const csrfToken = await ensureCsrfToken();
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+      };
+      
+      if (csrfToken) {
+        headers['X-XSRF-TOKEN'] = csrfToken;
+      }
+
+      // Chamar o endpoint correto: /api/checkout/validate-shipping
+      const response = await fetch(`${environment.apiUrl}/api/checkout/validate-shipping`, {
+        method: 'POST',
+        headers,
+        credentials: 'include',
+        body: JSON.stringify({
+          street: address.street,
+          number: address.number,
+          neighborhood: address.neighborhood,
+          city: address.city,
+          state: address.state,
+          cep: address.cep,
+          complement: address.complement || '',
+        }),
       });
+
+      if (!response.ok) {
+        throw new Error(`Erro na validação: ${response.statusText}`);
+      }
+
+      const result = await response.json();
 
       return {
         isValid: result.isValid,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        errors: (result as any).errors || [],
+        errors: result.errors || [],
       };
     } catch {
       return {
@@ -39,13 +62,40 @@ export const useValidateAddress = () => {
     }
   };
 
-  const calculateShipping = async (): Promise<{ success: boolean; shippingCost: number; estimatedDays: number }> => {
-    // Implementação simplificada - frete fixo por enquanto
-    return {
-      success: true,
-      shippingCost: 15.00,
-      estimatedDays: 7,
-    };
+  const calculateShipping = async (cep: string, state: string, city: string): Promise<{ success: boolean; shippingCost?: number; estimatedDays?: number; error?: string }> => {
+    try {
+      const csrfToken = await ensureCsrfToken();
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+      };
+      
+      if (csrfToken) {
+        headers['X-XSRF-TOKEN'] = csrfToken;
+      }
+
+      const response = await fetch(`${environment.apiUrl}/api/checkout/calculate-shipping`, {
+        method: 'POST',
+        headers,
+        credentials: 'include',
+        body: JSON.stringify({
+          cep,
+          state,
+          city,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erro no cálculo do frete: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      return result;
+    } catch {
+      return {
+        success: false,
+        error: 'Erro ao calcular frete. Tente novamente.',
+      };
+    }
   };
 
   return {

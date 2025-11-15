@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { CartItem, OrderSummary, ShippingCalculator } from '../components';
-import { logger, ErrorHandler, InputValidator } from '@/utils';
+import { ErrorHandler, InputValidator } from '@/utils';
 import { useCartRest } from '../hooks/useCartRest';
 
 const DEFAULT_SHIPPING = 15.0;
@@ -32,7 +32,6 @@ export const CartPage = () => {
   }
 
   if (error) {
-    logger.error('Erro ao carregar carrinho', { error });
     return (
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center space-y-4">
@@ -86,10 +85,9 @@ export const CartPage = () => {
     navigate('/checkout');
   };
 
-  const handleUpdateQuantity = (productId: string, newQuantity: number) => {
-    if (!InputValidator.validateProductId(productId)) {
-      logger.error('ID de produto inválido', { productId });
-      alert('Erro: ID de produto inválido');
+  const handleUpdateQuantity = (cartItemId: string, newQuantity: number) => {
+    if (!InputValidator.validateCartItemId(cartItemId)) {
+      alert('Erro: ID de item inválido');
       return;
     }
 
@@ -97,18 +95,17 @@ export const CartPage = () => {
       alert('Quantidade inválida. Mínimo: 1, Máximo: 999');
       return;
     }
-    updateQuantity(productId, newQuantity).catch(() => {
+    updateQuantity(cartItemId, newQuantity).catch(() => {
       alert('Falha ao atualizar item do carrinho');
     });
   };
 
-  const handleRemoveItem = (productId: string) => {
-    if (!InputValidator.validateProductId(productId)) {
-      logger.error('ID de produto inválido', { productId });
+  const handleRemoveItem = (cartItemId: string) => {
+    if (!InputValidator.validateCartItemId(cartItemId)) {
       return;
     }
 
-    removeItem(productId).catch(() => {
+    removeItem(cartItemId).catch(() => {
       alert('Falha ao remover item do carrinho');
     });
   };

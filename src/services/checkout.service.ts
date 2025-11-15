@@ -1,19 +1,6 @@
-import { environment } from '@/config/environment';
+import { environment } from "@/config/environment";
 
 const BASE_URL = `${environment.apiUrl}/api/checkout`;
-
-export interface ValidateAddressRequest {
-  street: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  country: string;
-}
-
-export interface ValidateAddressResponse {
-  isValid: boolean;
-  message: string;
-}
 
 export interface ValidatePaymentRequest {
   amount: number;
@@ -39,25 +26,13 @@ export interface ProcessPaymentResponse {
 }
 
 export const checkoutService = {
-  async validateAddress(data: ValidateAddressRequest): Promise<ValidateAddressResponse> {
-    const response = await fetch(`${BASE_URL}/validate-address`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    if (!response.ok) {
-      throw new Error(`Failed to validate address: ${response.statusText}`);
-    }
-    return await response.json();
-  },
-
-  async validatePayment(data: ValidatePaymentRequest): Promise<ValidatePaymentResponse> {
+  async validatePayment(
+    data: ValidatePaymentRequest
+  ): Promise<ValidatePaymentResponse> {
     const response = await fetch(`${BASE_URL}/validate-payment`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
@@ -67,14 +42,15 @@ export const checkoutService = {
     return await response.json();
   },
 
-  async processPayment(data: ProcessPaymentRequest): Promise<ProcessPaymentResponse> {
-    const token = localStorage.getItem('authToken');
+  async processPayment(
+    data: ProcessPaymentRequest
+  ): Promise<ProcessPaymentResponse> {
     const response = await fetch(`${BASE_URL}/process-payment`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(data),
     });
     if (!response.ok) {

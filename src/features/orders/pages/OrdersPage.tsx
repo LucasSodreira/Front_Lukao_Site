@@ -5,7 +5,6 @@ import { Container } from '@/ui/Container';
 import { Card, CardBody, CardTitle } from '@/ui/Card';
 import Badge from '@/ui/Badge';
 import { Button } from '@/ui/Button';
-import { logger } from '@/utils';
 
 interface OrderItem {
   id: string;
@@ -79,7 +78,6 @@ const OrdersPage = () => {
   }
 
   if (error) {
-    logger.error('Erro ao carregar pedidos', { error });
     return (
       <Container className="py-8">
         <div className="text-center space-y-4">

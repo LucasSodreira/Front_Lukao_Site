@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { addressService } from '@/services';
-import type { Address } from '@/types';
+import type { Address as AddressDTO } from '@/services/address.service';
 import { Card, CardBody, CardTitle } from '@/ui/Card';
 import { Button } from '@/ui/Button';
-import { logger } from '@/utils';
 import AddressModal from './AddressModal';
 
 const AddressList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState<Address | undefined>();
+  const [selectedAddress, setSelectedAddress] = useState<AddressDTO | undefined>();
+  const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
 
-  const { data: addresses = [], isLoading, error, refetch } = useQuery({
+  const { data: addresses = [], isLoading, error, refetch } = useQuery<AddressDTO[]>({
     queryKey: ['myAddresses'],
     queryFn: addressService.getMyAddresses,
   });
@@ -21,31 +21,55 @@ const AddressList = () => {
     setIsModalOpen(true);
   };
 
-  const handleEdit = (address: Address) => {
+  const handleEdit = (address: AddressDTO) => {
     setSelectedAddress(address);
     setIsModalOpen(true);
   };
 
-  const handleDelete = async (id: string | undefined) => {
-    if (!id) return;
+  const handleDelete = async (id: string) => {
+    if (deletingIds.has(id)) return; // Previne cliques múltiplos
     if (!confirm('Tem certeza que deseja deletar este endereço?')) return;
+
+    // Marca como "deletando"
+    setDeletingIds(prev => new Set(prev).add(id));
 
     try {
       await addressService.deleteAddress(id);
-      refetch();
+
+      
+      // Aguardar um pouco antes de refazer a consulta
+      await new Promise(resolve => setTimeout(resolve, 300));
+      await refetch();
     } catch (err: unknown) {
-      logger.error('Erro ao deletar endereço:', err);
-      alert('Erro ao deletar endereço');
+      
+      // Verificar se é um erro de integridade de dados
+      const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido';
+      
+      if (errorMessage.includes('sendo utilizado em pedidos') || 
+          errorMessage.includes('DATA_INTEGRITY_ERROR') ||
+          errorMessage.includes('foreign key constraint')) {
+        alert(
+          'Este endereço não pode ser deletado pois está sendo utilizado em pedidos existentes.\n\n' +
+          'Para removê-lo, primeiro cancele ou atualize os pedidos relacionados.'
+        );
+      } else {
+        alert(`Erro ao deletar endereço: ${errorMessage}`);
+      }
+    } finally {
+      // Remove do set de "deletando"
+      setDeletingIds(prev => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
     }
   };
 
-  const handleSetPrimary = async (id: string | undefined) => {
-    if (!id) return;
+  const handleSetPrimary = async (id: string) => {
     try {
       await addressService.setPrimaryAddress(id);
       refetch();
-    } catch (err: unknown) {
-      logger.error('Erro ao definir endereço principal:', err);
+    } catch  {
       alert('Erro ao definir endereço principal');
     }
   };
@@ -72,7 +96,7 @@ const AddressList = () => {
             </div>
           ) : (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {addresses.map((address: Address) => (
+              {addresses.map((address) => (
                 <div
                   key={address.id}
                   className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800"
@@ -106,11 +130,12 @@ const AddressList = () => {
                     >
                       Editar
                     </button>
-                    <button
-                      onClick={() => handleDelete(address.id)}
-                      className="flex-1 text-xs px-2 py-1 rounded bg-red-500 hover:bg-red-600 text-white transition"
+                      <button
+                        onClick={() => handleDelete(address.id)}
+                      disabled={deletingIds.has(address.id)}
+                      className="flex-1 text-xs px-2 py-1 rounded bg-red-500 hover:bg-red-600 text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Deletar
+                      {deletingIds.has(address.id) ? 'Deletando...' : 'Deletar'}
                     </button>
                   </div>
                 </div>

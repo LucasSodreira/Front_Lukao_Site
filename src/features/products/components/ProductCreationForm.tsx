@@ -4,7 +4,6 @@ import { catalogService } from '@/services';
 import type { Product, Category, Size, Color } from '../../../types/domain/product';
 import Button from '../../../ui/Button';
 import Input from '../../../ui/Input';
-import { logger } from '../../../utils/logger';
 
 interface ProductVariationRow {
   tempId: string;
@@ -145,7 +144,6 @@ export const ProductCreationForm: React.FC<ProductCreationFormProps> = ({ onSucc
       setErrors({});
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Erro ao criar produto';
-      logger.error('ProductCreationForm: ' + message, err);
       onError?.(message);
       setErrors({ submit: message });
     } finally {

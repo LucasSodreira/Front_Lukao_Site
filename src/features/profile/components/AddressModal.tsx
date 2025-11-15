@@ -1,19 +1,18 @@
 import { useState, useEffect } from 'react';
 import { addressService } from '@/services';
-import type { Address, CreateAddressInput } from '@/types';
+import type { Address as AddressDTO, CreateAddressRequest } from '@/services/address.service';
 import { Button } from '@/ui/Button';
-import { logger } from '@/utils';
 import Input from '@/ui/Input';
 
 interface AddressModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
-  address?: Address;
+  address?: AddressDTO;
 }
 
 const AddressModal = ({ isOpen, onClose, onSuccess, address }: AddressModalProps) => {
-  const [formData, setFormData] = useState<CreateAddressInput>({
+  const [formData, setFormData] = useState<CreateAddressRequest>({
     street: '',
     city: '',
     state: '',
@@ -76,8 +75,7 @@ const AddressModal = ({ isOpen, onClose, onSuccess, address }: AddressModalProps
 
       onSuccess();
       onClose();
-    } catch (err: unknown) {
-      logger.error('Erro ao salvar endereço:', err);
+    } catch {
       setFormError('Erro ao salvar endereço. Tente novamente.');
     } finally {
       setIsLoading(false);

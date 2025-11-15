@@ -1,18 +1,18 @@
 import { useNavigate } from 'react-router-dom';
 import { CheckoutBreadcrumb } from '../components/CheckoutBreadcrumb';
 import { useCheckoutState } from '../hooks';
+import { useCartRest } from '@/features/cart/hooks/useCartRest';
+import { useState } from 'react';
+import { environment } from '@/config/environment';
+import { ensureCsrfToken } from '@/utils/csrf';
 
 export const CheckoutReviewPage = () => {
   const navigate = useNavigate();
   const { shippingAddress, selectedAddressId, setOrderId, setCurrentStep } = useCheckoutState();
   
-  // Dados do carrinho (simplificado por enquanto)
-  const loading = false;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const data: any = null;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const cart: any = data?.myCart;
-  const checkoutLoading = false;
+  // Buscar dados reais do carrinho
+  const { cart, loading } = useCartRest();
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   if (loading) {
     return (
@@ -43,28 +43,75 @@ export const CheckoutReviewPage = () => {
   const total = subtotal + shipping;
 
   const handleProceedToPayment = async () => {
+    setCheckoutLoading(true);
     try {
-      let createdOrderId: string | undefined;
-
-      if (selectedAddressId) {
-        // Fluxo com endereço salvo
-        // TODO: implementar checkout service call
-        createdOrderId = selectedAddressId;
-      } else if (shippingAddress) {
-        // Fluxo inline: criar pedido com dados do endereço preenchidos no formulário
-        // TODO: implementar checkout service call
-        createdOrderId = 'temp-order-id-' + Date.now();
-      } else {
-        // Sem address id e sem shippingAddress no contexto
+      if (!shippingAddress) {
         alert('Informe um endereço para continuar.');
         navigate('/checkout/address');
         return;
       }
 
-      if (!createdOrderId) {
-        alert('Não foi possível criar o pedido. Tente novamente.');
+      if (!cart || !cart.items || cart.items.length === 0) {
+        alert('Seu carrinho está vazio.');
+        navigate('/cart');
         return;
       }
+
+      // Criar pedido no backend
+      const csrfToken = await ensureCsrfToken();
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+      };
+      
+      if (csrfToken) {
+        headers['X-XSRF-TOKEN'] = csrfToken;
+      }
+
+      // Se tem addressId selecionado, usar endpoint /checkout
+      // Se não, criar novo endereço com /checkout-with-address
+      let response;
+      
+      if (selectedAddressId) {
+        // Usar endereço existente
+        response = await fetch(`${environment.apiUrl}/api/orders/checkout`, {
+          method: 'POST',
+          headers,
+          credentials: 'include',
+          body: JSON.stringify({
+            shippingAddressId: Number(selectedAddressId),
+            notes: '',
+          }),
+        });
+      } else {
+        // Criar novo endereço
+        response = await fetch(`${environment.apiUrl}/api/orders/checkout-with-address`, {
+          method: 'POST',
+          headers,
+          credentials: 'include',
+          body: JSON.stringify({
+            address: {
+              street: shippingAddress.street,
+              city: shippingAddress.city,
+              state: shippingAddress.state,
+              zipCode: shippingAddress.cep,
+              country: 'Brasil',
+              primary: false,
+            },
+            notes: '',
+          }),
+        });
+      }
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Erro ao criar pedido:', { status: response.status, error: errorText });
+        alert('Erro ao criar pedido. Tente novamente.');
+        setCheckoutLoading(false);
+        return;
+      }
+
+      const orderData = await response.json();
+      const createdOrderId = String(orderData.id);
 
       // Salvar orderId para uso no pagamento
       setOrderId(createdOrderId);
@@ -74,6 +121,8 @@ export const CheckoutReviewPage = () => {
     } catch (error) {
       console.error('Erro ao criar pedido antes do pagamento:', error);
       alert('Erro ao prosseguir. Tente novamente.');
+    } finally {
+      setCheckoutLoading(false);
     }
   };
 

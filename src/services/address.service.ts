@@ -1,6 +1,7 @@
 import { environment } from '@/config/environment';
+import { buildHeadersWithCsrf } from '@/utils/csrf';
 
-const BASE_URL = `${environment.apiUrl}/api/address`;
+const BASE_URL = `${environment.apiUrl}/api/addresses`;
 
 export interface Address {
   id: string;
@@ -25,28 +26,25 @@ export interface CreateAddressRequest {
 
 export const addressService = {
   async getMyAddresses(): Promise<Address[]> {
-    const token = localStorage.getItem('authToken');
-    const response = await fetch(`${BASE_URL}/me`, {
+    const response = await fetch(`${BASE_URL}`, {
       headers: {
-        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
     });
     if (!response.ok) {
       throw new Error(`Failed to fetch addresses: ${response.statusText}`);
     }
     const data = await response.json();
-    return data.addresses || [];
+
+    return Array.isArray(data) ? data : [];
   },
 
   async createAddress(data: CreateAddressRequest): Promise<Address> {
-    const token = localStorage.getItem('authToken');
     const response = await fetch(`${BASE_URL}`, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
+      headers: await buildHeadersWithCsrf(),
+      credentials: 'include',
       body: JSON.stringify(data),
     });
     if (!response.ok) {
@@ -56,13 +54,10 @@ export const addressService = {
   },
 
   async updateAddress(id: string, data: CreateAddressRequest): Promise<Address> {
-    const token = localStorage.getItem('authToken');
     const response = await fetch(`${BASE_URL}/${id}`, {
       method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
+      headers: await buildHeadersWithCsrf(),
+      credentials: 'include',
       body: JSON.stringify(data),
     });
     if (!response.ok) {
@@ -72,27 +67,32 @@ export const addressService = {
   },
 
   async deleteAddress(id: string): Promise<void> {
-    const token = localStorage.getItem('authToken');
     const response = await fetch(`${BASE_URL}/${id}`, {
       method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
+      headers: await buildHeadersWithCsrf(),
+      credentials: 'include',
     });
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Erro ao deletar endereço:', { status: response.status, error: errorText });
+      
+      // Se for erro de autenticação, não propagar (evita logout forçado)
+      if (response.status === 401 || response.status === 403) {
+        throw new Error('Sessão expirada. Faça login novamente.');
+      }
+      
       throw new Error(`Failed to delete address: ${response.statusText}`);
     }
+    
+
+    await response.json().catch(() => {});
   },
 
   async setPrimaryAddress(id: string): Promise<Address> {
-    const token = localStorage.getItem('authToken');
     const response = await fetch(`${BASE_URL}/${id}/primary`, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
+      headers: await buildHeadersWithCsrf(),
+      credentials: 'include',
     });
     if (!response.ok) {
       throw new Error(`Failed to set primary address: ${response.statusText}`);

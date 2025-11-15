@@ -1,11 +1,12 @@
 import React from 'react';
-import type { FilterState, Category, Size, Color } from '@/types';
+import type { FilterState, Category, Size, Color, Brand } from '@/types';
 
 interface ActiveFiltersProps {
   filters: FilterState;
   categories: Category[];
   sizes: Size[];
   colors: Color[];
+  brands: Brand[];
   onRemoveFilter: (key: keyof FilterState, value?: string | number | boolean | [number, number]) => void;
 }
 
@@ -14,6 +15,7 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
   categories,
   sizes,
   colors,
+  brands,
   onRemoveFilter,
 }) => {
   const getCategoryName = (categoryId: string) => {
@@ -29,6 +31,11 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
   const getColorName = (colorId: string) => {
     const color = colors.find(c => c.id === colorId);
     return color?.name || colorId;
+  };
+
+  const getBrandName = (brandId: string) => {
+    const brand = brands.find((b) => b.id === brandId);
+    return brand?.name || brandId;
   };
 
   const activeFilters = [];
@@ -84,7 +91,7 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
   filters.brands.forEach(brand => {
     activeFilters.push({
       key: 'brands',
-      label: `Marca: ${brand}`,
+      label: `Marca: ${getBrandName(brand)}`,
       value: brand,
     });
   });

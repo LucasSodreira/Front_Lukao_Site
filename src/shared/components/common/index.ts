@@ -1,6 +1,7 @@
 export { default as ErrorBoundary } from './ErrorBoundary';
 export { default as PrivateRoute } from './PrivateRoute';
 export { default as PublicRoute } from './PublicRoute';
+export { default as AdminRoute } from './AdminRoute';
 export { default as NotFoundPage } from './NotFoundPage';
 export { default as Breadcrumb } from './Breadcrumb';
 export { default as QuantitySelector } from './QuantitySelector';

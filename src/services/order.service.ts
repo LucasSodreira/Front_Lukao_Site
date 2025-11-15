@@ -1,101 +1,87 @@
 import { environment } from '@/config/environment';
+import { buildHeadersWithCsrf } from '@/utils/csrf';
+import { authenticatedFetch } from './http-interceptor';
+import type { Order, OrderConnection, CheckoutRequest } from '@/types/domain/order';
 
-const BASE_URL = `${environment.apiUrl}/api/order`;
+const BASE_URL = `${environment.apiUrl}/api/orders`;
 
-export interface OrderItem {
-  id: string;
-  productId: string;
-  productTitle: string;
-  quantity: number;
-  price: number;
-  totalPrice: number;
-}
-
-export interface Order {
-  id: string;
-  userId: string;
-  status: string;
-  items: OrderItem[];
-  totalAmount: number;
-  shippingAddress?: {
-    street: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    country: string;
-  };
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface CreateOrderRequest {
-  addressId: string;
-  items: Array<{
-    productId: string;
-    quantity: number;
-    price: number;
-  }>;
-  totalAmount: number;
+export interface OrderQueryParams {
+  page?: number;
+  size?: number;
 }
 
 export const orderService = {
-  async getMyOrders(): Promise<Order[]> {
-    const token = localStorage.getItem('authToken');
-    const response = await fetch(`${BASE_URL}/me`, {
+  /**
+   * Busca todos os pedidos do usuário autenticado
+   */
+  async getMyOrders(params: OrderQueryParams = {}): Promise<OrderConnection> {
+    const { page = 0, size = 10 } = params;
+    const url = new URL(BASE_URL);
+    url.searchParams.append('page', String(page));
+    url.searchParams.append('size', String(size));
+
+    const response = await authenticatedFetch(url.toString(), {
       headers: {
-        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
+    
     if (!response.ok) {
       throw new Error(`Failed to fetch orders: ${response.statusText}`);
     }
-    const data = await response.json();
-    return data.orders || [];
+    
+    return await response.json();
   },
 
-  async getOrderById(id: string): Promise<Order> {
-    const token = localStorage.getItem('authToken');
-    const response = await fetch(`${BASE_URL}/${id}`, {
+  /**
+   * Busca um pedido específico por ID
+   */
+  async getOrderById(id: number): Promise<Order> {
+    const response = await authenticatedFetch(`${BASE_URL}/${id}`, {
       headers: {
-        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
+    
     if (!response.ok) {
       throw new Error(`Failed to fetch order: ${response.statusText}`);
     }
+    
     return await response.json();
   },
 
-  async createOrder(data: CreateOrderRequest): Promise<Order> {
-    const token = localStorage.getItem('authToken');
-    const response = await fetch(`${BASE_URL}`, {
+  /**
+   * Realiza o checkout do carrinho
+   */
+  async checkout(data: CheckoutRequest): Promise<Order> {
+    const response = await authenticatedFetch(`${BASE_URL}/checkout`, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
+      headers: await buildHeadersWithCsrf(),
       body: JSON.stringify(data),
     });
+    
     if (!response.ok) {
-      throw new Error(`Failed to create order: ${response.statusText}`);
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `Failed to create order: ${response.statusText}`);
     }
+    
     return await response.json();
   },
 
-  async cancelOrder(id: string): Promise<Order> {
-    const token = localStorage.getItem('authToken');
-    const response = await fetch(`${BASE_URL}/${id}/cancel`, {
+  /**
+   * Cancela um pedido específico
+   */
+  async cancelOrder(id: number): Promise<Order> {
+    const response = await authenticatedFetch(`${BASE_URL}/${id}/cancel`, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
+      headers: await buildHeadersWithCsrf(),
     });
+    
     if (!response.ok) {
-      throw new Error(`Failed to cancel order: ${response.statusText}`);
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `Failed to cancel order: ${response.statusText}`);
     }
+    
     return await response.json();
   },
 };

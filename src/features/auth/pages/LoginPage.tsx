@@ -13,7 +13,7 @@ import { Button } from '@/ui/Button';
 import { Input } from '@/ui/Input';
 import { MESSAGES } from '@/constants';
 import { validateEmail, validatePassword } from '@/utils/validators';
-import { rateLimiter, InputSanitizer, logger } from '@/utils';
+import { rateLimiter, InputSanitizer } from '@/utils';
 
 export const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -74,7 +74,6 @@ export const LoginPage = () => {
       // Redireciona para a rota original ou para home
       navigate(from, { replace: true });
     } catch {
-      logger.error('Erro no login', { email });
       setError(MESSAGES.ERRORS.INVALID_CREDENTIALS);
     } finally {
       setLoading(false);

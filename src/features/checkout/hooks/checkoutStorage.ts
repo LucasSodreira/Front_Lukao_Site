@@ -1,5 +1,3 @@
-import { logger } from '@/utils';
-
 // Chaves do sessionStorage
 export const STORAGE_KEYS = {
   SHIPPING: 'checkout_shipping',
@@ -18,8 +16,7 @@ export function loadFromStorage<T>(key: string, defaultValue: T): T {
     const item = sessionStorage.getItem(key);
     if (!item) return defaultValue;
     return JSON.parse(item);
-  } catch (error) {
-    logger.error(`Erro ao carregar ${key} do sessionStorage`, { error });
+  } catch {
     return defaultValue;
   }
 }
@@ -27,8 +24,8 @@ export function loadFromStorage<T>(key: string, defaultValue: T): T {
 export function saveToStorage(key: string, value: unknown): void {
   try {
     sessionStorage.setItem(key, JSON.stringify(value));
-  } catch (error) {
-    logger.error(`Erro ao salvar ${key} no sessionStorage`, { error });
+  } catch {
+    // Falha ao salvar, ignora
   }
 }
 
